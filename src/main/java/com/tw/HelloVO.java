@@ -1,5 +1,8 @@
 package com.tw;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class HelloVO {
 
     private String name;
@@ -25,5 +28,14 @@ public class HelloVO {
 
     public void setSubPage1VO(SubPage1VO subPage1VO) {
         this.subPage1VO = subPage1VO;
+    }
+
+    public String toJson() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

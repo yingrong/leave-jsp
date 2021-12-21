@@ -12,7 +12,7 @@
 
 <div id="app">
     <p>{{ lpText }}</p>
-    <form action="demo_form.php">
+    <form action="index.jsp">
 
     <form-demo1 :form-data="formData" v-on:child-checked="parentHandle" v-on:change-text="changeText"></form-demo1>
     </form>

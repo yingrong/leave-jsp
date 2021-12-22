@@ -19,7 +19,7 @@ public class WishServlet extends HttpServlet {
             request.getRequestDispatcher("/receive-wish.jsp")
                     .forward(request, response);
         } else {
-            response.sendRedirect(response.encodeRedirectURL("/from-submit.jsp" + "?name" + name));
+            response.sendRedirect(response.encodeRedirectURL("/form-submit.jsp") + "?name=" + name);
         }
     }
 

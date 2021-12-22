@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<form action="receive-wish.jsp" method="post" class="form-example">
+<form action="/wish" method="post" class="form-example">
     <div class="form-example">
         <label for="name">Enter your name: </label>
         <input type="text" name="name" id="name" value="<%=name%>" required>

@@ -25,14 +25,14 @@
     </style>
 </head>
 <body>
-<div id="form-hook">
+<div id="app">
 </div>
-<script type="text/javascript" src="receive-wish.js"></script>
-<script type="text/javascript" src="form-submit.js"></script>
+<script type="text/javascript" src="wish-result.js"></script>
+<script type="text/javascript" src="wish-form.js"></script>
 <script>
 
     new Vue({
-        el: '#form-hook',
+        el: '#app',
         data: {
             wishNumber: 0
         },

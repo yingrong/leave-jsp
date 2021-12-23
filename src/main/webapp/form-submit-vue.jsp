@@ -27,6 +27,7 @@
 <body>
 <div id="form-hook">
 </div>
+<script type="text/javascript" src="receive-wish.js"></script>
 <script>
 
     new Vue({
@@ -73,10 +74,7 @@
         </div>
     </form>
 
-    <div v-if="hasWishNumber">
-        <h1>your wish submitted!</h1>
-        <p>your wish number is: {{wishNumber}}</p>
-    </div>
+    <wish-result :wish-number="wishNumber" v-if="hasWishNumber"></wish-result>
 </div>
 `,
         methods: {

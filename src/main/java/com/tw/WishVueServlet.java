@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -18,21 +17,7 @@ public class WishVueServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String body = request.getReader().lines().collect(Collectors.joining());
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap hashMap = objectMapper.readValue(body, HashMap.class);
-        String name = (String) hashMap.get("name");
-        request.setAttribute("wish", hashMap.get("wish"));
-        request.getParameterMap().put("wish", new String[]{(String) hashMap.get("wish")});
-//        String name = request.getParameter("name");
-        String believe = (String) hashMap.get("believe");
-        boolean promised = believe.equalsIgnoreCase("yes");
-        if (promised) {
-            request.getRequestDispatcher("/receive-wish.jsp")
-                    .forward(request, response);
-        } else {
-            response.sendRedirect(response.encodeRedirectURL("/form-submit-vue.jsp") + "?name=" + name);
-        }
+        response.sendRedirect(response.encodeRedirectURL("/form-submit-vue.jsp"));
     }
 
     @Override

@@ -94,6 +94,7 @@
                     .then(function (resp) {
                         console.log(resp.data.wishNumber);
                         _this.wishNumber = resp.data.wishNumber;
+                        history.replaceState({}, "", "wish-vue");
                     })
                     .catch(function (error) {
                         if (error.response) {
@@ -112,6 +113,11 @@
                         }
                         console.log(error.config);
                         _this.clearDataExceptName();
+                        var state = {
+                            name: _this.name
+                        }
+                        var url = "form-submit-vue.jsp?name="+state.name;
+                        history.pushState(state, "bl", url);
                     });
             },
             clearDataExceptName: function () {

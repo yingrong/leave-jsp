@@ -1,4 +1,4 @@
-Vue.component('wish-form', {
+let wishForm = {
     props: ['nameProp'],
     data: function () {
         return {
@@ -47,7 +47,11 @@ Vue.component('wish-form', {
                 .then(function (resp) {
                     console.log(resp.data.wishNumber);
                     _this.$emit('receiveWishNumber', resp.data.wishNumber)
-                    history.replaceState({}, "", "wish-vue");
+                    if (_this.$router) {
+                        _this.$router.push({name: "wishResult", params: {wishNumber: resp.data.wishNumber}});
+                    } else {
+                        history.replaceState({}, "", "wish-vue");
+                    }
                 })
                 .catch(function (error) {
                     if (error.response) {
@@ -70,7 +74,14 @@ Vue.component('wish-form', {
                         name: _this.name
                     }
                     var url = "form-submit-vue.jsp?name="+state.name;
-                    history.pushState(state, "bl", url);
+                    if (_this.$router) {
+                        console.log(_this.$route.path)
+                        if (_this.$route.path !== '/wish-form') {
+                            _this.$router.push({path:"", params:{name: _this.name}})
+                        }
+                    } else {
+                        history.pushState(state, "bl", url);
+                    }
                 });
         },
         clearDataExceptName: function () {
@@ -80,4 +91,5 @@ Vue.component('wish-form', {
         }
     }
 
-})
+};
+Vue.component('wish-form', wishForm)

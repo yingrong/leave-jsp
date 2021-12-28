@@ -1,4 +1,4 @@
-Vue.component('wish-result', {
+let wishResult = {
     props:[
         'wishNumber' // 注意这里时camelCase，使用时需要kebab-case
     ],
@@ -8,4 +8,5 @@ Vue.component('wish-result', {
     <p>your wish number is: {{this.wishNumber}}</p>
 </div>
     `
-})
+};
+Vue.component('wish-result', wishResult)

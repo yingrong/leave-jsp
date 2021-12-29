@@ -16,9 +16,6 @@
 <body>
 
 <div id="app">
-    <p>
-        <router-link to="/parent-page">Go to parent-page</router-link>
-    </p>
     <router-view></router-view>
 </div>
 <script>
@@ -58,7 +55,7 @@
 </script>
 <script>
     const routes = [
-        { path: '/parent-page', component: parentPage }
+        { path: '/window-parent-vue.jsp', component: parentPage }
         // { name:"subPage", path: '/sub-page', component: subPage, props: true}
     ]
     const router = new VueRouter({

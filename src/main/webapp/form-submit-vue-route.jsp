@@ -42,14 +42,6 @@
     })
     const app = new Vue({
         router:router,
-        // data: {
-        //     wishNumber: 0
-        // },
-        // computed: {
-        //     hasWishNumber: function () {
-        //         return this.wishNumber !== 0;
-        //     }
-        // },
         created: function () {
             let uri = window.location.search.substring(1);
             let params = new URLSearchParams(uri);
@@ -60,38 +52,6 @@
             }
         },
     }).$mount('#app')
-//     new Vue({
-//         el: '#app',
-//         router: router,
-//         data: {
-//             wishNumber: 0
-//         },
-//         computed: {
-//             hasWishNumber: function () {
-//                 return this.wishNumber !== 0;
-//             }
-//         },
-//         created: function () {
-//             let uri = window.location.search.substring(1);
-//             let params = new URLSearchParams(uri);
-//             this.name = params.get("name");
-//             this.$router.push({path:"wish-form", params:{name: this.name}})
-//         },
-//         template: `
-// <div>
-//     <router-view></router-view>
-// <!--    <wish-form v-if="!hasWishNumber" :name-prop="name" @receiveWishNumber="receiveWishNumber"></wish-form>-->
-// <!--    <wish-result :wish-number="wishNumber" v-if="hasWishNumber"></wish-result>-->
-// </div>
-// `,
-//         methods: {
-//             receiveWishNumber: function (wishNumber) {
-//                 this.wishNumber = wishNumber;
-//                 this.$router.push({path:'wish-vue', params:{wishNumber: wishNumber}})
-//                 // this.$router.push('wish-vue')
-//             }
-//         }
-//     })
 </script>
 </body>
 </html>

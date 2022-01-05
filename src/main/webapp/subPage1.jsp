@@ -1,10 +1,4 @@
-<%@ page import="com.tw.SubPage1VO" %><%--
-  Created by IntelliJ IDEA.
-  User: yingrong.hu
-  Date: 2021/12/6
-  Time: 1:11 下午
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.tw.SubPage1VO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <title>sub page 1</title>
     <%

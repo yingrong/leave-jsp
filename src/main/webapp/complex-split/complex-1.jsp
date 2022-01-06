@@ -49,5 +49,12 @@
     <p>------------------------------------------------- complex-0-2.jsp end</p>
 </form>
 
+<script>
+    function updateP111() {
+        console.log("updateP111 start")
+        form1.p111input.value = 1111;
+        console.log("updateP111 end")
+    }
+</script>
 </body>
 </html>

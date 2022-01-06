@@ -14,4 +14,15 @@
     <p>attributeFromRequest complex-0-1-2 is <%=attributeFromRequest%>
     </p>
     <input type="text" id="complex12input" value=""/>
+    <script>
+        var complex12 = (function () {
+            function updateInputValue(srcValue) {
+                form1.complex12input.value = srcValue;
+            }
+
+            return {
+                updateInputValue: updateInputValue
+            }
+        })();
+    </script>
 </div>

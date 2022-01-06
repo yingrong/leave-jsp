@@ -52,8 +52,9 @@
 <script>
     var complexRoot = (function () {
         function updatePage12(srcValue) {
-            form1.complex12input.value = srcValue;
+            complex12.updateInputValue(srcValue);
         }
+
         return {
             updateP111: function () {
                 complex11.updateChildValue();

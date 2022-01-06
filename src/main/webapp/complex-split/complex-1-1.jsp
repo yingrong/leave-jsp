@@ -21,4 +21,15 @@
     <p>include complex-0-1-2.jsp start--------------</p>
     <jsp:include page="complex-1-1-2.jsp"/>
     <p>include complex-0-1-2.jsp end--------------</p>
+    <script>
+        var complex11 = (function (){
+            function updateChildValue() {
+                form1.p111input.value = 1111;
+            }
+
+            return {
+                updateChildValue: updateChildValue
+            }
+        })();
+    </script>
 </div>

@@ -51,14 +51,10 @@
 
 <script>
     var complexRoot = (function () {
-        function updateP111() {
-            console.log("updateP111 start")
-            form1.p111input.value = 1111;
-            console.log("updateP111 end")
-        }
-
         return {
-            updateP111: updateP111
+            updateP111: function () {
+                complex11.updateChildValue();
+            }
         }
     })();
 

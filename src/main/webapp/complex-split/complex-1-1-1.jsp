@@ -6,20 +6,26 @@
     <h3>level 3</h3>
     <p>page 1-1-1</p>
     <input type="text" id="p111input" value="">
-    <input type="button" onclick="updatePage12()" value="update page 1-2 value"/>
+    <input type="button" onclick="complex111.updatePage12(complex111.getInputValue())" value="update page 1-2 value"/>
 </div>
 <script>
-    function updatePage12() {
-        console.log("updatePage12 start")
-        form1.complex12input.value = form1.p111input.value;
-        console.log("updatePage12 end")
-    }
 
     var complex111 = (function () {
+
+        function getInputValue() {
+            return form1.p111input.value;
+        }
+
+        function getUpdatePage12() {
+            return complex11.updatePage12();
+        }
+
         return {
+            getInputValue: getInputValue,
             updateInputValue: function () {
                 form1.p111input.value = 1111;
-            }
+            },
+            updatePage12: getUpdatePage12
         }
     })();
 </script>

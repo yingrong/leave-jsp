@@ -23,9 +23,20 @@
     <p>include complex-0-1-2.jsp end--------------</p>
     <script>
         var complex11 = (function () {
+            function updatePage12(srcValue) {
+                console.log("updatePage12 start")
+                form1.complex12input.value = srcValue;
+                console.log("updatePage12 end")
+            }
+
+            function complex111UpdateInputValue() {
+                complex111.updateInputValue();
+            }
             return {
-                updateChildValue: complex111.updateInputValue
+                updateChildValue: complex111UpdateInputValue,
+                updatePage12: updatePage12
             }
         })();
+
     </script>
 </div>

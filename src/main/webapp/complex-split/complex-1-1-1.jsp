@@ -11,7 +11,7 @@
 <script>
     function updatePage12() {
         console.log("updatePage12 start")
-        form1.complex12input.value = 222;
+        form1.complex12input.value = form1.p111input.value;
         console.log("updatePage12 end")
     }
 

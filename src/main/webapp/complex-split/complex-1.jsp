@@ -18,7 +18,7 @@
 <p>page 1</p>
 <div id="level0-1"></div>
 <form id="form1" name="from1" action="">
-    <input type="button" onclick="updateP111()" value="update page 1-1-1's value"/>
+    <input type="button" onclick="complexRoot.updateP111()" value="update page 1-1-1's value"/>
     <%
         request.setAttribute("currentHelloVO", currentHelloVO);
     %>
@@ -50,11 +50,18 @@
 </form>
 
 <script>
-    function updateP111() {
-        console.log("updateP111 start")
-        form1.p111input.value = 1111;
-        console.log("updateP111 end")
-    }
+    var complexRoot = (function () {
+        function updateP111() {
+            console.log("updateP111 start")
+            form1.p111input.value = 1111;
+            console.log("updateP111 end")
+        }
+
+        return {
+            updateP111: updateP111
+        }
+    })();
+
 </script>
 </body>
 </html>

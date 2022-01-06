@@ -13,7 +13,7 @@ public class ComplexRootServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("complexObjectVO", ComplexObjectVO.getInstance());
 
-        request.getRequestDispatcher("/complex-0.jsp")
+        request.getRequestDispatcher("/complex-1.jsp")
                 .forward(request, response);
     }
 

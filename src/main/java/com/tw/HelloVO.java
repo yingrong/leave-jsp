@@ -18,6 +18,10 @@ public class HelloVO {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean isShouldShow() {
         return shouldShow;
     }

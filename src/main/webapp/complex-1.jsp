@@ -10,6 +10,10 @@
     %>
 </head>
 <body style="background-color: antiquewhite">
+<div class="tushi" style="background-color: darkgoldenrod">page 1-1</div>
+<div class="tushi" style="background-color: chocolate">page 1-2</div>
+<div class="tushi" style="background-color: aqua">page 1-1-1</div>
+<div class="tushi" style="background-color: aquamarine">page 1-1-2</div>
 <h1>root level 1</h1>
 <p>page 1</p>
 <div id="level0-1"></div>

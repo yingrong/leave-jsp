@@ -17,7 +17,7 @@
         }
 
         function getUpdatePage12() {
-            return complex11.updatePage12();
+            return complex11.updatePage12(this.getInputValue());
         }
 
         return {

@@ -24,9 +24,7 @@
     <script>
         var complex11 = (function () {
             function updatePage12(srcValue) {
-                console.log("updatePage12 start")
-                form1.complex12input.value = srcValue;
-                console.log("updatePage12 end")
+                complexRoot.updatePage12(srcValue);
             }
 
             function complex111UpdateInputValue() {

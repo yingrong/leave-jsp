@@ -14,4 +14,12 @@
         form1.complex12input.value = 222;
         console.log("updatePage12 end")
     }
+
+    var complex111 = (function () {
+        return {
+            updateInputValue: function () {
+                form1.p111input.value = 1111;
+            }
+        }
+    })();
 </script>

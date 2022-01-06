@@ -22,13 +22,9 @@
     <jsp:include page="complex-1-1-2.jsp"/>
     <p>include complex-0-1-2.jsp end--------------</p>
     <script>
-        var complex11 = (function (){
-            function updateChildValue() {
-                form1.p111input.value = 1111;
-            }
-
+        var complex11 = (function () {
             return {
-                updateChildValue: updateChildValue
+                updateChildValue: complex111.updateInputValue
             }
         })();
     </script>

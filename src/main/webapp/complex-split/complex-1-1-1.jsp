@@ -6,7 +6,7 @@
     <h3>level 3</h3>
     <p>page 1-1-1</p>
     <input type="text" id="p111input" value="">
-    <input type="button" onclick="complex111.updatePage12(complex111.getInputValue())" value="update page 1-2 value"/>
+    <input type="button" onclick="complex111._updatePage12(complex111._getInputValue())" value="update page 1-2 value"/>
 </div>
 <script>
 
@@ -21,11 +21,11 @@
         }
 
         return {
-            getInputValue: getInputValue,
+            _getInputValue: getInputValue,
+            _updatePage12: getUpdatePage12,
             updateInputValue: function () {
                 form1.p111input.value = 1111;
-            },
-            updatePage12: getUpdatePage12
+            }
         }
     })();
 </script>

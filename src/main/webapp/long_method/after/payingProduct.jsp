@@ -76,55 +76,46 @@
 </ul>
 
 <script>
+    var productInfo = {
+        10010: "百万医疗保险",
+        100186: "重疾保险"
+    };
+
+    var liabilityInfo = {
+        201: "意外责任",
+        202: "非意外责任",
+        901: "轻症责任",
+        902: "重症责任"
+    };
+
+    var mutexedLiability = {
+        10010: {
+            201: 202,
+            202: 201
+        },
+        10086: {
+            901: 902,
+            902: 901
+        }
+    };
 
     function getMutexedLiability(productId, liabilityId) {
-        if (productId === 10010 && liabilityId === 201) {
-            return 202;
-        }
-
-        if (productId === 10010 && liabilityId === 202) {
-            return 201;
-        }
-
-        if (productId === 10086 && liabilityId === 901) {
-            return 902;
-        }
-
-        if (productId === 10010 && liabilityId === 902) {
-            return 901;
+        if (mutexedLiability[productId]) {
+            return mutexedLiability[productId][liabilityId]
         }
     }
 
     function getProductName(productId) {
-        if (productId === 10010) {
-            return "百万医疗保险";
-        }
-
-        if(productId === 100186) {
-            return "重疾保险";
-        }
+        return productInfo[productId];
     }
 
     function getLiabilityName(liabilityId) {
-        if (liabilityId === 201) {
-            return "意外责任";
-        }
-        if (liabilityId === 202) {
-            return "非意外责任";
-        }
-
-        if (liabilityId === 901) {
-            return "轻症责任";
-        }
-
-        if (liabilityId === 202) {
-            return "重症责任";
-        }
+        return liabilityInfo[liabilityId];
     }
 
     function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
         var mutextedLiability = getMutexedLiability(productId, liabilityId);
-        if(mutextedLiability) {
+        if (mutextedLiability) {
             var checkBox = document.getElementById("liability_" + mutextedLiability);
             if (checkBox && checkBox.checked) {
                 alert("在" + getProductName(productId) + "中，" + getLiabilityName(liabilityId) + "和" + getLiabilityName(mutextedLiability) + "不能同时赔付！");

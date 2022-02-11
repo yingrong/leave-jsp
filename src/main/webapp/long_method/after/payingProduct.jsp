@@ -85,11 +85,23 @@
         if (productId === 10010 && liabilityId === 202) {
             return 201;
         }
+
+        if (productId === 10086 && liabilityId === 901) {
+            return 902;
+        }
+
+        if (productId === 10010 && liabilityId === 902) {
+            return 901;
+        }
     }
 
     function getProductName(productId) {
         if (productId === 10010) {
             return "百万医疗保险";
+        }
+
+        if(productId === 100186) {
+            return "重疾保险";
         }
     }
 
@@ -100,13 +112,22 @@
         if (liabilityId === 202) {
             return "非意外责任";
         }
+
+        if (liabilityId === 901) {
+            return "轻症责任";
+        }
+
+        if (liabilityId === 202) {
+            return "重症责任";
+        }
     }
 
     function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
         var mutextedLiability;
         var checkBox;
 
-        if (productId === 10010 && (liabilityId === 201 || liabilityId === 202)) {
+        if ((productId === 10010 && (liabilityId === 201 || liabilityId === 202)) ||
+            (productId === 10086 && (liabilityId === 901 || liabilityId === 902))) {
             mutextedLiability = getMutexedLiability(productId, liabilityId);
             checkBox = document.getElementById("liability_" + mutextedLiability);
             if (checkBox && checkBox.checked) {
@@ -116,23 +137,6 @@
             }
         }
 
-        if (productId === 10086 && liabilityId === 901) {
-            var checkBox902 = document.getElementById("liability_902");
-            if (checkBox902 && checkBox902.checked) {
-                alert("在重疾保险中，轻症和重症不能同时赔付！");
-                liabilityCheckedObject.checked = false;
-                return false;
-            }
-        }
-
-        if (productId === 10086 && liabilityId === 902) {
-            var checkBox901 = document.getElementById("liability_901");
-            if (checkBox901 && checkBox901.checked) {
-                alert("在重疾保险中，重症和轻症不能同时赔付！");
-                liabilityCheckedObject.checked = false;
-                return false;
-            }
-        }
         return true;
     }
 

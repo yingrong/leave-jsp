@@ -99,26 +99,12 @@
         }
     };
 
-    function getMutexedLiability(productId, liabilityId) {
-        if (mutexedLiability[productId]) {
-            return mutexedLiability[productId][liabilityId]
-        }
-    }
-
-    function getProductName(productId) {
-        return productInfo[productId];
-    }
-
-    function getLiabilityName(liabilityId) {
-        return liabilityInfo[liabilityId];
-    }
-
     function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
-        var mutextedLiability = getMutexedLiability(productId, liabilityId);
+        var mutextedLiability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
         if (mutextedLiability) {
             var checkBox = document.getElementById("liability_" + mutextedLiability);
             if (checkBox && checkBox.checked) {
-                alert("在" + getProductName(productId) + "中，" + getLiabilityName(liabilityId) + "和" + getLiabilityName(mutextedLiability) + "不能同时赔付！");
+                alert("在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[mutextedLiability] + "不能同时赔付！");
                 liabilityCheckedObject.checked = false;
                 return false;
             }

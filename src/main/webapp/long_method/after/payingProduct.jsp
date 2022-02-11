@@ -77,20 +77,50 @@
 
 <script>
 
-    function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
+    function getMutexedLiability(productId, liabilityId) {
         if (productId === 10010 && liabilityId === 201) {
-            var checkBox202 = document.getElementById("liability_202");
-            if (checkBox202 && checkBox202.checked) {
-                alert("在百万医疗保险中，意外责任和非意外责任不能同时赔付！");
+            return 202;
+        }
+
+        if (productId === 10010 && liabilityId === 202) {
+            return 201;
+        }
+    }
+
+    function getProductName(productId) {
+        if (productId === 10010) {
+            return "百万医疗保险";
+        }
+    }
+
+    function getLiabilityName(liabilityId) {
+        if (liabilityId === 201) {
+            return "意外责任";
+        }
+        if (liabilityId === 202) {
+            return "非意外责任";
+        }
+    }
+
+    function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
+        var mutextedLiability;
+        var checkBox;
+
+        if (productId === 10010 && liabilityId === 201) {
+            mutextedLiability = getMutexedLiability(productId, liabilityId);
+            checkBox = document.getElementById("liability_" + mutextedLiability);
+            if (checkBox && checkBox.checked) {
+                alert("在" + getProductName(productId) + "中，" + getLiabilityName(liabilityId) + "和" + getLiabilityName(mutextedLiability) + "不能同时赔付！");
                 liabilityCheckedObject.checked = false;
                 return false;
             }
         }
 
         if (productId === 10010 && liabilityId === 202) {
-            var checkBox201 = document.getElementById("liability_201");
-            if (checkBox201 && checkBox201.checked) {
-                alert("在百万医疗保险中，非意外责任和意外责任不能同时赔付！");
+            mutextedLiability = getMutexedLiability(productId, liabilityId);
+            checkBox = document.getElementById("liability_" + mutextedLiability);
+            if (checkBox && checkBox.checked) {
+                alert("在" + getProductName(productId) + "中，" + getLiabilityName(liabilityId) + "和" + getLiabilityName(mutextedLiability) + "不能同时赔付！");
                 liabilityCheckedObject.checked = false;
                 return false;
             }
@@ -125,7 +155,7 @@
                 return;
             }
 
-            if(!validateMutexLiability(liabilityCheckedObject, productId, liabilityId)) {
+            if (!validateMutexLiability(liabilityCheckedObject, productId, liabilityId)) {
                 return;
             }
 

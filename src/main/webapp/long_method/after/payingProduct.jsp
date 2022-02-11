@@ -123,13 +123,9 @@
     }
 
     function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
-        var mutextedLiability;
-        var checkBox;
-
-        if ((productId === 10010 && (liabilityId === 201 || liabilityId === 202)) ||
-            (productId === 10086 && (liabilityId === 901 || liabilityId === 902))) {
-            mutextedLiability = getMutexedLiability(productId, liabilityId);
-            checkBox = document.getElementById("liability_" + mutextedLiability);
+        var mutextedLiability = getMutexedLiability(productId, liabilityId);
+        if(mutextedLiability) {
+            var checkBox = document.getElementById("liability_" + mutextedLiability);
             if (checkBox && checkBox.checked) {
                 alert("在" + getProductName(productId) + "中，" + getLiabilityName(liabilityId) + "和" + getLiabilityName(mutextedLiability) + "不能同时赔付！");
                 liabilityCheckedObject.checked = false;

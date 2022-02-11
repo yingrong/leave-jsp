@@ -77,12 +77,12 @@
 
 <script>
 
-    function clickLiabCheck(liablityCheckedObject, productId, liabilityId) {
-        if (liablityCheckedObject.checked) {
+    function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
+        if (liabilityCheckedObject.checked) {
             var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
             if (amountInput.value === "") {
                 alert("必须先填入理赔金额！");
-                liablityCheckedObject.checked = false;
+                liabilityCheckedObject.checked = false;
                 return;
             }
 
@@ -92,7 +92,7 @@
                 if (checkBox202 && checkBox202.checked) {
                     mutexError = true;
                     alert("在百万医疗保险中，意外责任和非意外责任不能同时赔付！");
-                    liablityCheckedObject.checked = false;
+                    liabilityCheckedObject.checked = false;
                 }
             }
 
@@ -101,7 +101,7 @@
                 if (checkBox201 && checkBox201.checked) {
                     mutexError = true;
                     alert("在百万医疗保险中，非意外责任和意外责任不能同时赔付！");
-                    liablityCheckedObject.checked = false;
+                    liabilityCheckedObject.checked = false;
                 }
             }
 
@@ -110,7 +110,7 @@
                 if (checkBox902 && checkBox902.checked) {
                     mutexError = true;
                     alert("在重疾保险中，轻症和重症不能同时赔付！");
-                    liablityCheckedObject.checked = false;
+                    liabilityCheckedObject.checked = false;
                 }
             }
 
@@ -119,7 +119,7 @@
                 if (checkBox901 && checkBox901.checked) {
                     mutexError = true;
                     alert("在重疾保险中，重症和轻症不能同时赔付！");
-                    liablityCheckedObject.checked = false;
+                    liabilityCheckedObject.checked = false;
                 }
             }
 
@@ -127,11 +127,11 @@
                 return;
             }
 
-            var result = payLiability(liablityCheckedObject, productId, liabilityId);
+            var result = payLiability(liabilityCheckedObject, productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 amountInput.value = "";
-                liablityCheckedObject.checked = false;
+                liabilityCheckedObject.checked = false;
                 return;
             }
 
@@ -139,7 +139,7 @@
         } else {
             var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
             amountInput.value = "";
-            liablityCheckedObject.checked = false;
+            liabilityCheckedObject.checked = false;
 
             if (productId === 10010 && liabilityId === 204) {
                 var checkBox201 = document.getElementById("liability_201");
@@ -155,7 +155,7 @@
                 }
             }
 
-            unPayLiability(liablityCheckedObject, productId, liabilityId);
+            unPayLiability(liabilityCheckedObject, productId, liabilityId);
             return;
         }
 

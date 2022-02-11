@@ -86,40 +86,45 @@
                 return;
             }
 
+            var mutexError = false;
             if (productId === 10010 && liabilityId === 201) {
                 var checkBox202 = document.getElementById("liability_202");
                 if (checkBox202 && checkBox202.checked) {
+                    mutexError = true;
                     alert("在百万医疗保险中，意外责任和非意外责任不能同时赔付！");
                     liablityCheckedObject.checked = false;
-                    return;
                 }
             }
 
             if (productId === 10010 && liabilityId === 202) {
                 var checkBox201 = document.getElementById("liability_201");
                 if (checkBox201 && checkBox201.checked) {
+                    mutexError = true;
                     alert("在百万医疗保险中，非意外责任和意外责任不能同时赔付！");
                     liablityCheckedObject.checked = false;
-                    return;
                 }
             }
 
             if (productId === 10086 && liabilityId === 901) {
                 var checkBox902 = document.getElementById("liability_902");
                 if (checkBox902 && checkBox902.checked) {
+                    mutexError = true;
                     alert("在重疾保险中，轻症和重症不能同时赔付！");
                     liablityCheckedObject.checked = false;
-                    return;
                 }
             }
 
             if (productId === 10086 && liabilityId === 902) {
                 var checkBox901 = document.getElementById("liability_901");
                 if (checkBox901 && checkBox901.checked) {
+                    mutexError = true;
                     alert("在重疾保险中，重症和轻症不能同时赔付！");
                     liablityCheckedObject.checked = false;
-                    return;
                 }
+            }
+
+            if(mutexError) {
+                return;
             }
 
             var result = payLiability(liablityCheckedObject, productId, liabilityId);

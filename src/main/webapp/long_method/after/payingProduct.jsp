@@ -104,17 +104,19 @@
         return {success: true};
     }
 
+    function validatePayingProduct(productId, liabilityId) {
+        let result = validateEmptyPayAmount(liabilityId);
+        if(!result.success) {
+            return result;
+        }
+
+        return validateMutexLiability(productId, liabilityId);
+    }
+
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
         if (liabilityCheckedObject.checked) {
-            let result = validateEmptyPayAmount(liabilityId);
+            let result = validatePayingProduct(productId, liabilityId);
             if(!result.success) {
-                alert(result.errorMessage);
-                liabilityCheckedObject.checked = false;
-                return;
-            }
-
-            result = validateMutexLiability(productId, liabilityId);
-            if (!result.success) {
                 alert(result.errorMessage);
                 liabilityCheckedObject.checked = false;
                 return;

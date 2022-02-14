@@ -92,16 +92,28 @@
         return {success: true};
     }
 
+    function validateEmptyPayAmount(liabilityId) {
+        var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
+        if (amountInput.value === "") {
+            return {
+                success: false,
+                errorMessage: "必须先填入理赔金额！"
+            }
+        }
+
+        return {success: true};
+    }
+
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
         if (liabilityCheckedObject.checked) {
-            var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-            if (amountInput.value === "") {
-                alert("必须先填入理赔金额！");
+            let result = validateEmptyPayAmount(liabilityId);
+            if(!result.success) {
+                alert(result.errorMessage);
                 liabilityCheckedObject.checked = false;
                 return;
             }
 
-            let result = validateMutexLiability(productId, liabilityId);
+            result = validateMutexLiability(productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 liabilityCheckedObject.checked = false;
@@ -111,6 +123,7 @@
             result = payLiability(liabilityCheckedObject, productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
+                var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
                 amountInput.value = "";
                 liabilityCheckedObject.checked = false;
                 return;

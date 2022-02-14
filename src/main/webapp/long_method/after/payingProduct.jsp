@@ -78,13 +78,13 @@
 <script>
 
     function validateMutexLiability(productId, liabilityId) {
-        var mutextedLiability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
-        if (mutextedLiability) {
-            var checkBox = document.getElementById("liability_" + mutextedLiability);
+        var liability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
+        if (liability) {
+            var checkBox = document.getElementById("liability_" + liability);
             if (checkBox && checkBox.checked) {
                 return {
                     success: false,
-                    errorMessage: "在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[mutextedLiability] + "不能同时赔付！"
+                    errorMessage: "在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[liability] + "不能同时赔付！"
                 }
             }
         }
@@ -122,6 +122,16 @@
         return sendPayLiabilityRequest(productId, liabilityId);
     }
 
+    function unPayMainLiability(productId, liabilityId) {
+        var liability = mainLiability[productId] && mainLiability[productId][liabilityId];
+        if (liability) {
+            var checkBox = document.getElementById("liability_" + liability);
+            if (checkBox && checkBox.checked) {
+                checkBox.click();
+            }
+        }
+    }
+
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
         if (liabilityCheckedObject.checked) {
             let result = payLiability(productId, liabilityId);
@@ -132,24 +142,12 @@
 
             return;
         } else {
+
+            unPayMainLiability(productId, liabilityId);
+
             var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
             amountInput.value = "";
             liabilityCheckedObject.checked = false;
-
-            if (productId === 10010 && liabilityId === 204) {
-                var checkBox201 = document.getElementById("liability_201");
-                if (checkBox201 && checkBox201.checked) {
-                    checkBox201.click();
-                }
-            }
-
-            if (productId === 10086 && liabilityId === 999) {
-                var checkBox998 = document.getElementById("liability_998");
-                if (checkBox998 && checkBox998.checked) {
-                    checkBox998.click();
-                }
-            }
-
             sendUnPayLiabilityRequest(productId, liabilityId);
             return;
         }

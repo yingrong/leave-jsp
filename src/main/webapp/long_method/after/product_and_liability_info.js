@@ -20,3 +20,12 @@ var mutexedLiability = {
         902: 901
     }
 };
+
+var mainLiability = {
+    10010: {
+        204: 201
+    },
+    10086: {
+        999: 998
+    }
+};

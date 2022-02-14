@@ -123,11 +123,11 @@
     }
 
     function unPayMainLiability(productId, liabilityId) {
-        var liability = mainLiability[productId] && mainLiability[productId][liabilityId];
-        if (liability) {
-            var checkBox = document.getElementById("liability_" + liability);
+        var theMainLiability = mainLiability[productId] && mainLiability[productId][liabilityId];
+        if (theMainLiability) {
+            var checkBox = document.getElementById("liability_" + theMainLiability);
             if (checkBox && checkBox.checked) {
-                checkBox.click();
+                unPayLiability(checkBox, productId, theMainLiability);
             }
         }
     }

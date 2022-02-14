@@ -113,20 +113,21 @@
         return validateMutexLiability(productId, liabilityId);
     }
 
+    function payLiability(productId, liabilityId) {
+        let result = validatePayingProduct(productId, liabilityId);
+        if(!result.success) {
+            return result;
+        }
+
+        return sendPayLiabilityRequest(productId, liabilityId);
+    }
+
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
         if (liabilityCheckedObject.checked) {
-            let result = validatePayingProduct(productId, liabilityId);
-            if(!result.success) {
-                alert(result.errorMessage);
-                liabilityCheckedObject.checked = false;
-                return;
-            }
-
-            result = payLiability(liabilityCheckedObject, productId, liabilityId);
+            let result = payLiability(productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 liabilityCheckedObject.checked = false;
-                return;
             }
 
             return;
@@ -149,14 +150,14 @@
                 }
             }
 
-            unPayLiability(liabilityCheckedObject, productId, liabilityId);
+            sendUnPayLiabilityRequest(productId, liabilityId);
             return;
         }
 
         return;
     }
 
-    function payLiability(liablityCheckedObject, productId, liabilityId) {
+    function sendPayLiabilityRequest(productId, liabilityId) {
         if (productId == 10010 && liabilityId == 203) {
             console.log('Check Liability with request:' + JSON.stringify({productId, liabilityId}) + " Failed.");
 
@@ -170,7 +171,7 @@
         return {success: true};
     }
 
-    function unPayLiability(liablityCheckedObject, productId, liabilityId) {
+    function sendUnPayLiabilityRequest(productId, liabilityId) {
         console.log('Uncheck liability with request:' + JSON.stringify({productId, liabilityId}) + " Successful.");
     }
 

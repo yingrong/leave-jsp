@@ -123,8 +123,6 @@
             result = payLiability(liabilityCheckedObject, productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
-                var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-                amountInput.value = "";
                 liabilityCheckedObject.checked = false;
                 return;
             }

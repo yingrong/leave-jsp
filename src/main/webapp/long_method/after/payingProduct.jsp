@@ -132,6 +132,18 @@
         }
     }
 
+    function unPaySingleLiability(liabilityCheckedObject, productId, liabilityId) {
+        var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
+        amountInput.value = "";
+        liabilityCheckedObject.checked = false;
+        sendUnPayLiabilityRequest(productId, liabilityId);
+    }
+
+    function unPayLiability(liabilityCheckedObject, productId, liabilityId) {
+        unPayMainLiability(productId, liabilityId);
+        unPaySingleLiability(liabilityCheckedObject, productId, liabilityId);
+    }
+
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
         if (liabilityCheckedObject.checked) {
             let result = payLiability(productId, liabilityId);
@@ -139,20 +151,9 @@
                 alert(result.errorMessage);
                 liabilityCheckedObject.checked = false;
             }
-
-            return;
         } else {
-
-            unPayMainLiability(productId, liabilityId);
-
-            var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-            amountInput.value = "";
-            liabilityCheckedObject.checked = false;
-            sendUnPayLiabilityRequest(productId, liabilityId);
-            return;
+            unPayLiability(liabilityCheckedObject, productId, liabilityId);
         }
-
-        return;
     }
 
     function sendPayLiabilityRequest(productId, liabilityId) {

@@ -77,18 +77,19 @@
 </ul>
 <script>
 
-    function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
+    function validateMutexLiability(productId, liabilityId) {
         var mutextedLiability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
         if (mutextedLiability) {
             var checkBox = document.getElementById("liability_" + mutextedLiability);
             if (checkBox && checkBox.checked) {
-                alert("在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[mutextedLiability] + "不能同时赔付！");
-                liabilityCheckedObject.checked = false;
-                return false;
+                return {
+                    success: false,
+                    errorMessage: "在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[mutextedLiability] + "不能同时赔付！"
+                }
             }
         }
 
-        return true;
+        return {success: true};
     }
 
     function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
@@ -100,11 +101,14 @@
                 return;
             }
 
-            if (!validateMutexLiability(liabilityCheckedObject, productId, liabilityId)) {
+            let result = validateMutexLiability(productId, liabilityId);
+            if (!result.success) {
+                alert(result.errorMessage);
+                liabilityCheckedObject.checked = false;
                 return;
             }
 
-            var result = payLiability(liabilityCheckedObject, productId, liabilityId);
+            result = payLiability(liabilityCheckedObject, productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 amountInput.value = "";

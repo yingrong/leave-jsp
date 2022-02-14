@@ -33,6 +33,7 @@
 <html>
 <head>
     <title>长函数拆分重构前</title>
+    <script type="text/javascript" src="./product_and_liability_info.js"></script>
 </head>
 <body>
 <h1 id="product_<%=product.getId()%>"><%=product.getName()%>
@@ -74,30 +75,7 @@
         </ul>
     </li>
 </ul>
-
 <script>
-    var productInfo = {
-        10010: "百万医疗保险",
-        100186: "重疾保险"
-    };
-
-    var liabilityInfo = {
-        201: "意外责任",
-        202: "非意外责任",
-        901: "轻症责任",
-        902: "重症责任"
-    };
-
-    var mutexedLiability = {
-        10010: {
-            201: 202,
-            202: 201
-        },
-        10086: {
-            901: 902,
-            902: 901
-        }
-    };
 
     function validateMutexLiability(liabilityCheckedObject, productId, liabilityId) {
         var mutextedLiability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];

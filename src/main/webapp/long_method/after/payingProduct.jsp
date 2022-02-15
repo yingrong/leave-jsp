@@ -33,6 +33,8 @@
 <html>
 <head>
     <title>长函数拆分重构前</title>
+    <script type="text/javascript" src="./product_and_liability_info.js"></script>
+    <script type="text/javascript" src="./liability_row.js"></script>
 </head>
 <body>
 <h1 id="product_<%=product.getId()%>"><%=product.getName()%>
@@ -47,7 +49,7 @@
     <%for (int i = 0; i < liabilities.size(); i++) {%>
     <tr>
         <td><input id="liability_<%=liabilities.get(i).getId()%>" type="checkbox"
-                   onclick="clickLiabCheck(this, <%=product.getId()%>, <%=liabilities.get(i).getId()%>)"></td>
+                   onclick="clickLiabCheck(<%=product.getId()%>, <%=liabilities.get(i).getId()%>)"></td>
         <td><span><%=liabilities.get(i).getName()%></span></td>
         <td><input id="liability_<%=liabilities.get(i).getId()%>_amount"></td>
     </tr>
@@ -74,90 +76,91 @@
         </ul>
     </li>
 </ul>
-
 <script>
-
-    function clickLiabCheck(liablityCheckedObject, productId, liabilityId) {
-        if (liablityCheckedObject.checked) {
-            var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-            if (amountInput.value === "") {
-                alert("必须先填入理赔金额！");
-                liablityCheckedObject.checked = false;
-                return;
-            }
-
-            if (productId === 10010 && liabilityId === 201) {
-                var checkBox202 = document.getElementById("liability_202");
-                if (checkBox202 && checkBox202.checked) {
-                    alert("在百万医疗保险中，意外责任和非意外责任不能同时赔付！");
-                    liablityCheckedObject.checked = false;
-                    return;
+    function validateMutexLiability(productId, liabilityId) {
+        var liability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
+        if (liability) {
+            var checkBox = document.getElementById("liability_" + liability);
+            if (checkBox && checkBox.checked) {
+                return {
+                    success: false,
+                    errorMessage: "在" + productInfo[productId] + "中，" + liabilityInfo[liabilityId] + "和" + liabilityInfo[liability] + "不能同时赔付！"
                 }
             }
-
-            if (productId === 10010 && liabilityId === 202) {
-                var checkBox201 = document.getElementById("liability_201");
-                if (checkBox201 && checkBox201.checked) {
-                    alert("在百万医疗保险中，非意外责任和意外责任不能同时赔付！");
-                    liablityCheckedObject.checked = false;
-                    return;
-                }
-            }
-
-            if (productId === 10086 && liabilityId === 901) {
-                var checkBox902 = document.getElementById("liability_902");
-                if (checkBox902 && checkBox902.checked) {
-                    alert("在重疾保险中，轻症和重症不能同时赔付！");
-                    liablityCheckedObject.checked = false;
-                    return;
-                }
-            }
-
-            if (productId === 10086 && liabilityId === 902) {
-                var checkBox901 = document.getElementById("liability_901");
-                if (checkBox901 && checkBox901.checked) {
-                    alert("在重疾保险中，重症和轻症不能同时赔付！");
-                    liablityCheckedObject.checked = false;
-                    return;
-                }
-            }
-
-            var result = payLiability(liablityCheckedObject, productId, liabilityId);
-            if (!result.success) {
-                alert(result.errorMessage);
-                amountInput.value = "";
-                liablityCheckedObject.checked = false;
-                return;
-            }
-
-            return;
-        } else {
-            var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-            amountInput.value = "";
-            liablityCheckedObject.checked = false;
-
-            if (productId === 10010 && liabilityId === 204) {
-                var checkBox201 = document.getElementById("liability_201");
-                if (checkBox201 && checkBox201.checked) {
-                    checkBox201.click();
-                }
-            }
-
-            if (productId === 10086 && liabilityId === 999) {
-                var checkBox998 = document.getElementById("liability_998");
-                if (checkBox998 && checkBox998.checked) {
-                    checkBox998.click();
-                }
-            }
-
-            unPayLiability(liablityCheckedObject, productId, liabilityId);
-            return;
         }
 
-        return;
+        return {success: true};
     }
 
-    function payLiability(liablityCheckedObject, productId, liabilityId) {
+    function validateEmptyPayAmount(liabilityId) {
+        var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
+        if (amountInput.value === "") {
+            return {
+                success: false,
+                errorMessage: "必须先填入理赔金额！"
+            }
+        }
+
+        return {success: true};
+    }
+
+    function validatePayingProduct(productId, liabilityId) {
+        let result = validateEmptyPayAmount(liabilityId);
+        if(!result.success) {
+            return result;
+        }
+
+        return validateMutexLiability(productId, liabilityId);
+    }
+
+    function payLiability(productId, liabilityId) {
+        let result = validatePayingProduct(productId, liabilityId);
+        if(!result.success) {
+            return result;
+        }
+
+        return sendPayLiabilityRequest(productId, liabilityId);
+    }
+
+    function unPayMainLiability(productId, liabilityId) {
+        var theMainLiability = mainLiability[productId] && mainLiability[productId][liabilityId];
+        if (theMainLiability) {
+            var mainLiabilityElementRow = new LiabilityElementRow(theMainLiability);
+            if (mainLiabilityElementRow.isChecked()) {
+                unPayLiability(mainLiabilityElementRow, productId, theMainLiability);
+            }
+        }
+    }
+
+    function unPaySingleLiability(liabilityElementRow, productId, liabilityId) {
+        liabilityElementRow.setChecked(false);
+        liabilityElementRow.clearAmount()
+        sendUnPayLiabilityRequest(productId, liabilityId);
+    }
+
+    function unPayLiability(liabilityElementRow, productId, liabilityId) {
+        unPayMainLiability(productId, liabilityId);
+        unPaySingleLiability(liabilityElementRow, productId, liabilityId);
+    }
+
+    function clickLiabCheck(productId, liabilityId) {
+        var liabilityElementRow = new LiabilityElementRow(liabilityId);
+        if(!liabilityElementRow.isExist()) {
+            throw Error('该元素不存在')
+        }
+
+        if (liabilityElementRow.isChecked()) {
+            let result = payLiability(productId, liabilityId);
+            if (!result.success) {
+                alert(result.errorMessage);
+                liabilityElementRow.setChecked(false);
+            }
+        } else {
+            unPayLiability(liabilityElementRow, productId, liabilityId);
+        }
+    }
+
+    function sendPayLiabilityRequest(productId, liabilityId) {
         if (productId == 10010 && liabilityId == 203) {
             console.log('Check Liability with request:' + JSON.stringify({productId, liabilityId}) + " Failed.");
 
@@ -171,7 +174,7 @@
         return {success: true};
     }
 
-    function unPayLiability(liablityCheckedObject, productId, liabilityId) {
+    function sendUnPayLiabilityRequest(productId, liabilityId) {
         console.log('Uncheck liability with request:' + JSON.stringify({productId, liabilityId}) + " Successful.");
     }
 

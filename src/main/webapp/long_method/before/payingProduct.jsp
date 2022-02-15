@@ -75,6 +75,15 @@
     </li>
 </ul>
 
+<h2>当前实现存在的问题：</h2>
+<ul style="color: red;">
+    <li>函数过长</li>
+    <li>重复代码多</li>
+    <li>if判断多</li>
+    <li>元素读写和业务判断耦合在一起</li>
+    <li>通过手动出发元素事件响应导致逻辑不明确</li>
+</ul>
+
 <script>
 
     function clickLiabCheck(liablityCheckedObject, productId, liabilityId) {

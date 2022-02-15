@@ -34,6 +34,7 @@
 <head>
     <title>长函数拆分重构前</title>
     <script type="text/javascript" src="./product_and_liability_info.js"></script>
+    <script type="text/javascript" src="./liability_row.js"></script>
 </head>
 <body>
 <h1 id="product_<%=product.getId()%>"><%=product.getName()%>
@@ -48,7 +49,7 @@
     <%for (int i = 0; i < liabilities.size(); i++) {%>
     <tr>
         <td><input id="liability_<%=liabilities.get(i).getId()%>" type="checkbox"
-                   onclick="clickLiabCheck(this, <%=product.getId()%>, <%=liabilities.get(i).getId()%>)"></td>
+                   onclick="clickLiabCheck(<%=product.getId()%>, <%=liabilities.get(i).getId()%>)"></td>
         <td><span><%=liabilities.get(i).getName()%></span></td>
         <td><input id="liability_<%=liabilities.get(i).getId()%>_amount"></td>
     </tr>
@@ -76,7 +77,6 @@
     </li>
 </ul>
 <script>
-
     function validateMutexLiability(productId, liabilityId) {
         var liability = mutexedLiability[productId] && mutexedLiability[productId][liabilityId];
         if (liability) {
@@ -125,34 +125,38 @@
     function unPayMainLiability(productId, liabilityId) {
         var theMainLiability = mainLiability[productId] && mainLiability[productId][liabilityId];
         if (theMainLiability) {
-            var checkBox = document.getElementById("liability_" + theMainLiability);
-            if (checkBox && checkBox.checked) {
-                unPayLiability(checkBox, productId, theMainLiability);
+            var mainLiabilityElementRow = new LiabilityElementRow(theMainLiability);
+            if (mainLiabilityElementRow.isChecked()) {
+                unPayLiability(mainLiabilityElementRow, productId, theMainLiability);
             }
         }
     }
 
-    function unPaySingleLiability(liabilityCheckedObject, productId, liabilityId) {
-        var amountInput = document.getElementById("liability_" + liabilityId + "_amount");
-        amountInput.value = "";
-        liabilityCheckedObject.checked = false;
+    function unPaySingleLiability(liabilityElementRow, productId, liabilityId) {
+        liabilityElementRow.setChecked(false);
+        liabilityElementRow.clearAmount()
         sendUnPayLiabilityRequest(productId, liabilityId);
     }
 
-    function unPayLiability(liabilityCheckedObject, productId, liabilityId) {
+    function unPayLiability(liabilityElementRow, productId, liabilityId) {
         unPayMainLiability(productId, liabilityId);
-        unPaySingleLiability(liabilityCheckedObject, productId, liabilityId);
+        unPaySingleLiability(liabilityElementRow, productId, liabilityId);
     }
 
-    function clickLiabCheck(liabilityCheckedObject, productId, liabilityId) {
-        if (liabilityCheckedObject.checked) {
+    function clickLiabCheck(productId, liabilityId) {
+        var liabilityElementRow = new LiabilityElementRow(liabilityId);
+        if(!liabilityElementRow.isExist()) {
+            throw Error('该元素不存在')
+        }
+
+        if (liabilityElementRow.isChecked()) {
             let result = payLiability(productId, liabilityId);
             if (!result.success) {
                 alert(result.errorMessage);
-                liabilityCheckedObject.checked = false;
+                liabilityElementRow.setChecked(false);
             }
         } else {
-            unPayLiability(liabilityCheckedObject, productId, liabilityId);
+            unPayLiability(liabilityElementRow, productId, liabilityId);
         }
     }
 

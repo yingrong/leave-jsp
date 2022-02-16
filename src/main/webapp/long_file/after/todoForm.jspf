@@ -3,3 +3,15 @@
     <input type="hidden" name="title"/>
     <input type="hidden" name="id"/>
 </form>
+<script>
+    var todoFormPage = (function () {
+        function deleteCompleted() {
+            todoForm.sAction.value = "deleteCompleted"
+            todoForm.submit();
+        }
+
+        return {
+            deleteCompleted: deleteCompleted
+        }
+    })();
+</script>

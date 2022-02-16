@@ -61,9 +61,14 @@
             todoForm.submit();
         }
 
+        function deleteCompleted() {
+            todoFormPage.deleteCompleted();
+        }
+
         return {
             toggleTodo: toggleTodo,
-            deleteTodo: deleteTodo
+            deleteTodo: deleteTodo,
+            deleteCompleted: deleteCompleted
         }
     })();
 </script>

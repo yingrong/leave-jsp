@@ -9,15 +9,14 @@
         }
     %>
     <%if(hasCompleted) {%>
-    <button class="clear-completed" onclick="todoFooterPage.deleteCompletedTodo()">Clear completed</button>
+    <button class="clear-completed" onclick="todoFooterPage._deleteCompletedTodo()">Clear completed</button>
     <%}%>
 </footer>
 <script>
     var todoFooterPage = (function () {
 
         function deleteCompletedTodo() {
-            todoForm.sAction.value = "deleteCompleted"
-            todoForm.submit();
+            rootPage.deleteCompleted();
         }
 
         return {

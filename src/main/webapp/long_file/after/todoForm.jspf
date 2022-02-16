@@ -10,7 +10,21 @@
             todoForm.submit();
         }
 
+        function toggleTodo(id, sAction) {
+            todoForm.sAction.value = sAction;
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
+        function deleteTodo(id) {
+            todoForm.sAction.value = "delete"
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
         return {
+            toggleTodo: toggleTodo,
+            deleteTodo: deleteTodo,
             deleteCompleted: deleteCompleted
         }
     })();

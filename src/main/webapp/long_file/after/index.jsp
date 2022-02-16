@@ -50,15 +50,11 @@
 
     var rootPage = (function () {
         function deleteTodo(id) {
-            todoForm.sAction.value = "delete"
-            todoForm.id.value = id;
-            todoForm.submit();
+            todoFormPage.deleteTodo(id);
         }
 
         function toggleTodo(id, sAction) {
-            todoForm.sAction.value = sAction;
-            todoForm.id.value = id;
-            todoForm.submit();
+            todoFormPage.toggleTodo(id, sAction);
         }
 
         function deleteCompleted() {

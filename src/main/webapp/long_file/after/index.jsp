@@ -21,7 +21,7 @@
         <h1>todos</h1>
         <input class="new-todo" placeholder="What needs to be done?" autofocus>
     </header>
-    <jsp:include page="todoList.jsp" />
+    <jsp:include page="todoList.jsp"/>
     <footer class="footer">
         <%
             boolean hasCompleted = false;
@@ -80,6 +80,19 @@
 
     // init
     $('.new-todo').on('keyup', addTodo);
+
+
+    var rootPage = (function () {
+        function deleteTodo(id) {
+            todoForm.sAction.value = "delete"
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
+        return {
+            deleteTodo: deleteTodo
+        }
+    })();
 </script>
 </body>
 </html>

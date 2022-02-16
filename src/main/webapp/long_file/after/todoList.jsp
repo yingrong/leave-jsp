@@ -15,7 +15,7 @@
                        type="checkbox" <%if (todo.getCompleted()) {%> checked <%}%> />
                 <label><%=todo.getTitle()%>
                 </label>
-                <button class="destroy" onclick="deleteTodo(this)"></button>
+                <button class="destroy" onclick="todoListPage.deleteTodo(this)"></button>
             </div>
             <%--            <input class="edit" value="<%=todo.getTitle()%>">--%>
         </li>
@@ -23,10 +23,14 @@
     </ul>
 </section>
 <script>
-    function deleteTodo(el) {
-        var id = el.parentElement.id.substr(5);
-        todoForm.sAction.value = "delete"
-        todoForm.id.value = id;
-        todoForm.submit();
-    }
+    var todoListPage = (function () {
+        function deleteTodo(el) {
+            var id = el.parentElement.id.substr(5);
+            rootPage.deleteTodo(id);
+        }
+
+        return {
+            deleteTodo: deleteTodo
+        }
+    })();
 </script>

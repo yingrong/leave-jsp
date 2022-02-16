@@ -11,7 +11,7 @@
         %>
         <li <%if (todo.getCompleted()) {%> class="completed"<%}%> data-id="<%=todo.getId()%>">
             <div class="view" id="todo_<%=todo.getId()%>">
-                <input class="toggle" id="todo_toggle_<%=todo.getId()%>" onchange="toogle(this)"
+                <input class="toggle" id="todo_toggle_<%=todo.getId()%>" onchange="todoListPage.toogle(this)"
                        type="checkbox" <%if (todo.getCompleted()) {%> checked <%}%> />
                 <label><%=todo.getTitle()%>
                 </label>
@@ -29,8 +29,21 @@
             rootPage.deleteTodo(id);
         }
 
+        function toogle(el) {
+            console.log(el)
+            var completed = el.checked;
+            var sAction = "markDone";
+            var id = el.id.substr(12);
+            if (!completed) {
+                sAction = "markUnfinished";
+            }
+
+            rootPage.toggleTask(id, sAction);
+        }
+
         return {
-            deleteTodo: deleteTodo
+            deleteTodo: deleteTodo,
+            toogle: toogle
         }
     })();
 </script>

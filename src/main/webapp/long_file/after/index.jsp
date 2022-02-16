@@ -61,17 +61,6 @@
         todoForm.submit();
     }
 
-    function toogle(el) {
-        console.log(el)
-        var completed = el.checked;
-        var sAction = "markDone";
-        var id = el.id.substr(12);
-        if (!completed) {
-            sAction = "markUnfinished";
-        }
-
-        rootPage.toggleTask(id, sAction);
-    }
 
     function deleteCompletedTodo() {
         todoForm.sAction.value = "deleteCompleted"

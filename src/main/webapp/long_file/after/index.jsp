@@ -73,13 +73,6 @@
         todoForm.submit();
     }
 
-    function deleteTodo(el) {
-        var id = el.parentElement.id.substr(5);
-        todoForm.sAction.value = "delete"
-        todoForm.id.value = id;
-        todoForm.submit();
-    }
-
     function deleteCompletedTodo() {
         todoForm.sAction.value = "deleteCompleted"
         todoForm.submit();

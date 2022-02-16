@@ -22,3 +22,11 @@
         <%}%>
     </ul>
 </section>
+<script>
+    function deleteTodo(el) {
+        var id = el.parentElement.id.substr(5);
+        todoForm.sAction.value = "delete"
+        todoForm.id.value = id;
+        todoForm.submit();
+    }
+</script>

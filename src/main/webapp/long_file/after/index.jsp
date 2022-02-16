@@ -78,14 +78,14 @@
             todoForm.submit();
         }
 
-        function toggleTask(id, sAction) {
+        function toggleTodo(id, sAction) {
             todoForm.sAction.value = sAction;
             todoForm.id.value = id;
             todoForm.submit();
         }
 
         return {
-            toggleTask: toggleTask,
+            toggleTodo: toggleTodo,
             deleteTodo: deleteTodo
         }
     })();

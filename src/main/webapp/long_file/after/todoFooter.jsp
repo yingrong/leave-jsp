@@ -12,3 +12,9 @@
     <button class="clear-completed" onclick="deleteCompletedTodo()">Clear completed</button>
     <%}%>
 </footer>
+<script>
+    function deleteCompletedTodo() {
+        todoForm.sAction.value = "deleteCompleted"
+        todoForm.submit();
+    }
+</script>

@@ -44,12 +44,6 @@
         todoForm.submit();
     }
 
-
-    function deleteCompletedTodo() {
-        todoForm.sAction.value = "deleteCompleted"
-        todoForm.submit();
-    }
-
     // init
     $('.new-todo').on('keyup', addTodo);
 

@@ -21,7 +21,7 @@
         <h1>todos</h1>
         <input class="new-todo" placeholder="What needs to be done?" autofocus>
     </header>
-    <jsp:include page="main.jsp" />
+    <jsp:include page="todoList.jsp" />
     <footer class="footer">
         <%
             boolean hasCompleted = false;

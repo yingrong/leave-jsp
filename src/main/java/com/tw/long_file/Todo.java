@@ -1,8 +1,9 @@
 package com.tw.long_file;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class Todo {
+public class Todo implements Comparable{
     private String id;
     private String title;
     private Boolean completed;
@@ -44,5 +45,24 @@ public class Todo {
         this.id = id;
         this.title = title;
         this.completed = completed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Todo todo = (Todo) o;
+        return id.equals(todo.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Todo that = (Todo) o;
+        return this.getTitle().compareTo(that.getTitle());
     }
 }

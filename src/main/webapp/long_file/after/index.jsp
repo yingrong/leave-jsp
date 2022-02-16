@@ -22,20 +22,7 @@
         <input class="new-todo" placeholder="What needs to be done?" autofocus>
     </header>
     <jsp:include page="todoList.jsp"/>
-    <footer class="footer">
-        <%
-            boolean hasCompleted = false;
-            for (Todo todo : todoList) {
-                if (todo.getCompleted()) {
-                    hasCompleted = true;
-                    break;
-                }
-            }
-        %>
-        <%if(hasCompleted) {%>
-           <button class="clear-completed" onclick="deleteCompletedTodo()">Clear completed</button>
-        <%}%>
-    </footer>
+    <%@ include file="todoFooter.jsp" %>
 </section>
 
 <script>

@@ -64,13 +64,13 @@
     function toogle(el) {
         console.log(el)
         var completed = el.checked;
-        if (completed) {
-            todoForm.sAction.value = "markDone";
-        } else {
-            todoForm.sAction.value = "markUnfinished";
+        var sAction = "markDone";
+        var id = el.id.substr(12);
+        if (!completed) {
+            sAction = "markUnfinished";
         }
-        todoForm.id.value = el.id.substr(12);
-        todoForm.submit();
+
+        rootPage.toggleTask(id, sAction);
     }
 
     function deleteCompletedTodo() {
@@ -89,7 +89,14 @@
             todoForm.submit();
         }
 
+        function toggleTask(id, sAction) {
+            todoForm.sAction.value = sAction;
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
         return {
+            toggleTask: toggleTask,
             deleteTodo: deleteTodo
         }
     })();

@@ -12,11 +12,7 @@
     List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
 %>
 <section class="todoapp">
-    <form name="todoForm" action="" method="post">
-        <input type="hidden" name="sAction"/>
-        <input type="hidden" name="title"/>
-        <input type="hidden" name="id"/>
-    </form>
+    <%@ include file="todoForm.jspf" %>
     <header class="header">
         <h1>todos</h1>
         <input class="new-todo" placeholder="What needs to be done?" autofocus>

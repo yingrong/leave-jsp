@@ -1,0 +1,5 @@
+<form name="todoForm" action="" method="post">
+    <input type="hidden" name="sAction"/>
+    <input type="hidden" name="title"/>
+    <input type="hidden" name="id"/>
+</form>

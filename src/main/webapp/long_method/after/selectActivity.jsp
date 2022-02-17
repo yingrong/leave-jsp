@@ -134,20 +134,20 @@
         return result;
     }
 
+    function selectActivity(packageId, activityId) {
+        var result = validateActivities(packageId, activityId);
+        if (result.success) {
+            result = createActivity(packageId, activityId);
+        }
+        return result;
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
-            var result = validateActivities(packageId, activityId);
+            var result = selectActivity(packageId, activityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 activityCheckedObject.checked = false;
-                return;
-            }
-
-            result = createActivity(activityCheckedObject, packageId, activityId);
-            if (!result.success) {
-                alert(result.errorMessage);
-                activityCheckedObject.checked = false;
-                return;
             }
         } else {
             var countInput = document.getElementById("activity_" + activityId + "_count");
@@ -172,7 +172,7 @@
         }
     }
 
-    function createActivity(activityCheckedObject, packageId, activityId) {
+    function createActivity(packageId, activityId) {
         if (packageId == 10010 && activityId == 3) {
             console.log('发送请求。创建活动失败：' + activityId);
 

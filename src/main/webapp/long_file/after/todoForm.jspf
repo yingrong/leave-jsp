@@ -5,6 +5,13 @@
 </form>
 <script>
     var todoFormPage = (function () {
+
+        function saveTodo(title) {
+            todoForm.sAction.value = "add";
+            todoForm.title.value = title;
+            todoForm.submit();
+        }
+
         function deleteCompleted() {
             todoForm.sAction.value = "deleteCompleted"
             todoForm.submit();
@@ -23,6 +30,7 @@
         }
 
         return {
+            saveTodo: saveTodo,
             toggleTodo: toggleTodo,
             deleteTodo: deleteTodo,
             deleteCompleted: deleteCompleted

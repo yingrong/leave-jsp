@@ -13,42 +13,18 @@
 %>
 <section class="todoapp">
     <%@ include file="todoForm.jspf" %>
-    <header class="header">
-        <h1>todos</h1>
-        <input class="new-todo" placeholder="What needs to be done?" autofocus>
-    </header>
+    <jsp:include page="todoHeader.jsp"/>
     <jsp:include page="todoList.jsp"/>
     <%@ include file="todoFooter.jsp" %>
 </section>
 
 <script>
-    var ENTER_KEY = 13;
-    var ESCAPE_KEY = 27;
-
-    todos = [];
-
-    function addTodo(e) {
-        console.log("add new todo start");
-        var $input = $(e.target);
-        var val = $input.val().trim();
-        if (e.which !== ENTER_KEY || !val) {
-            return;
-        }
-        $input.val('');
-        saveTodo(val)
-    }
-
-    function saveTodo(title) {
-        todoForm.sAction.value = "add";
-        todoForm.title.value = title;
-        todoForm.submit();
-    }
-
-    // init
-    $('.new-todo').on('keyup', addTodo);
-
-
     var rootPage = (function () {
+
+        function saveTodo(title) {
+            todoFormPage.saveTodo(title);
+        }
+
         function deleteTodo(id) {
             todoFormPage.deleteTodo(id);
         }
@@ -62,6 +38,7 @@
         }
 
         return {
+            saveTodo: saveTodo,
             toggleTodo: toggleTodo,
             deleteTodo: deleteTodo,
             deleteCompleted: deleteCompleted

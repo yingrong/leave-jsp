@@ -105,24 +105,12 @@
         }
     };
 
-    function getMutexActivity(packageId, activityId) {
-        return mutexActivityConfig[packageId] && mutexActivityConfig[packageId][activityId]
-    }
-
-    function getPackageName(packageId) {
-        return packageConfig[packageId];
-    }
-
-    function getActivityName(activityId) {
-        return activityConfig[activityId];
-    }
-
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {
-        var mutexActivityId = getMutexActivity(packageId, activityId);
+        var mutexActivityId = mutexActivityConfig[packageId] && mutexActivityConfig[packageId][activityId];
         if (mutexActivityId) {
             var checkBox = document.getElementById("activity_" + mutexActivityId);
             if (checkBox && checkBox.checked) {
-                alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");
+                alert("在" + packageConfig[packageId] + "中，" + activityConfig[activityId] + "和" + activityConfig[mutexActivityId] + "不能同时选择！");
                 activityCheckedObject.checked = false;
                 return false;
             }

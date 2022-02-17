@@ -1,5 +1,3 @@
-<%@ page import="com.tw.long_file.Todo" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,14 +6,11 @@
     <link rel="stylesheet" href="/long_file/common/index.css">
 </head>
 <body>
-<%
-    List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
-%>
 <section class="todoapp">
     <%@ include file="todoForm.jspf" %>
     <jsp:include page="todoHeader.jsp"/>
     <jsp:include page="todoList.jsp"/>
-    <%@ include file="todoFooter.jsp" %>
+    <jsp:include page="todoFooter.jsp" />
 </section>
 
 <script>

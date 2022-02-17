@@ -1,3 +1,8 @@
+<%@ page import="com.tw.long_file.Todo" %>
+<%@ page import="java.util.List" %>
+<%
+    List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
+%>
 <footer class="footer">
     <%
         boolean hasCompleted = false;

@@ -89,11 +89,23 @@
         if (packageId === 10010 && activityId === 2) {
             return 1;
         }
+
+        if (packageId === 10086 && activityId === 1) {
+            return 11;
+        }
+
+        if (packageId === 10086 && activityId === 11) {
+            return 1;
+        }
     }
 
     function getPackageName(packageId) {
         if (packageId === 10010) {
             return "十万用户团建礼包";
+        }
+
+        if (packageId === 10086) {
+            return "百万用户团建礼包";
         }
     }
 
@@ -117,15 +129,17 @@
         if (activityId === 5) {
             return "住宿";
         }
+
+        if (activityId === 11) {
+            return "自由三日飞";
+        }
     }
 
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {
-        var mutexActivityId;
-        var checkBox;
-
-        if (packageId === 10010 && (activityId === 1 || activityId === 2)) {
-            mutexActivityId = getMutexActivity(packageId, activityId);
-            checkBox = document.getElementById("activity_" + mutexActivityId);
+        if ((packageId === 10010 && (activityId === 1 || activityId === 2)) ||
+            (packageId === 10086 && (activityId === 1 || activityId === 11))) {
+            var mutexActivityId = getMutexActivity(packageId, activityId);
+            var checkBox = document.getElementById("activity_" + mutexActivityId);
             if (checkBox && checkBox.checked) {
                 alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");
                 activityCheckedObject.checked = false;
@@ -133,23 +147,6 @@
             }
         }
 
-        if (packageId === 10086 && activityId === 1) {
-            var checkBox11 = document.getElementById("activity_11");
-            if (checkBox11 && checkBox11.checked) {
-                alert("在百万用户团建礼包中，冬奥两日游和自由三日飞不能同时选择！");
-                activityCheckedObject.checked = false;
-                return false;
-            }
-        }
-
-        if (packageId === 10086 && activityId === 11) {
-            var checkBox1 = document.getElementById("activity_1");
-            if (checkBox1 && checkBox1.checked) {
-                alert("在百万用户团建礼包中，自由三日飞和冬奥两日游不能同时选择！");
-                activityCheckedObject.checked = false;
-                return false;
-            }
-        }
         return true;
     }
 

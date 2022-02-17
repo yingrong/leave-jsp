@@ -136,9 +136,8 @@
     }
 
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {
-        if ((packageId === 10010 && (activityId === 1 || activityId === 2)) ||
-            (packageId === 10086 && (activityId === 1 || activityId === 11))) {
-            var mutexActivityId = getMutexActivity(packageId, activityId);
+        var mutexActivityId = getMutexActivity(packageId, activityId);
+        if (mutexActivityId) {
             var checkBox = document.getElementById("activity_" + mutexActivityId);
             if (checkBox && checkBox.checked) {
                 alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");

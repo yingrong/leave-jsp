@@ -147,7 +147,7 @@
         if (relyer) {
             var checkBox = document.getElementById("activity_" + relyer);
             if (checkBox && checkBox.checked) {
-                checkBox.click();
+                unSelectActivity(checkBox, packageId, relyer);
             }
         }
     }

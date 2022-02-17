@@ -35,6 +35,7 @@
 <head>
     <title>团建活动选择（长函数拆分）</title>
     <script type="text/javascript" src="./config.js"></script>
+    <script type="text/javascript" src="./activityInfoRow.js"></script>
 </head>
 <body>
 <h1 id="product_<%=teamBuildingPackage.getId()%>"><%=teamBuildingPackage.getName()%>
@@ -49,7 +50,7 @@
     <%for (int i = 0; i < activities.size(); i++) {%>
     <tr>
         <td><input id="activity_<%=activities.get(i).getId()%>" type="checkbox"
-                   onclick="clickActivityCheck(this, <%=teamBuildingPackage.getId()%>, <%=activities.get(i).getId()%>)">
+                   onclick="clickActivityCheck(<%=teamBuildingPackage.getId()%>, <%=activities.get(i).getId()%>)">
         </td>
         <td><span><%=activities.get(i).getName()%></span></td>
         <td><input id="activity_<%=activities.get(i).getId()%>_count"></td>
@@ -145,34 +146,34 @@
     function unSelectRelyer(packageId, activityId) {
         var relyer = relierActivityConfig[packageId] && relierActivityConfig[packageId][activityId];
         if (relyer) {
-            var checkBox = document.getElementById("activity_" + relyer);
-            if (checkBox && checkBox.checked) {
-                unSelectActivity(checkBox, packageId, relyer);
+            var activityInfoRow = new ActivityInfoRow(relyer);
+            if (activityInfoRow.isChecked()) {
+                unSelectActivity(activityInfoRow, packageId, relyer);
             }
         }
     }
 
-    function unSelectSingleActivity(activityCheckedObject, packageId, activityId) {
-        var countInput = document.getElementById("activity_" + activityId + "_count");
-        countInput.value = "";
-        activityCheckedObject.checked = false;
-        cancelActivity(activityCheckedObject, packageId, activityId);
+    function unSelectSingleActivity(activityInfoRow, packageId, activityId) {
+        activityInfoRow.setChecked(false);
+        activityInfoRow.clearCount();
+        cancelActivity(packageId, activityId);
     }
 
-    function unSelectActivity(activityCheckedObject, packageId, activityId) {
+    function unSelectActivity(activityInfoRow, packageId, activityId) {
         unSelectRelyer(packageId, activityId);
-        unSelectSingleActivity(activityCheckedObject, packageId, activityId);
+        unSelectSingleActivity(activityInfoRow, packageId, activityId);
     }
 
-    function clickActivityCheck(activityCheckedObject, packageId, activityId) {
-        if (activityCheckedObject.checked) {
+    function clickActivityCheck(packageId, activityId) {
+        let activityInfoRow = new ActivityInfoRow(activityId);
+        if (activityInfoRow.isChecked()) {
             var result = selectActivity(packageId, activityId);
             if (!result.success) {
                 alert(result.errorMessage);
-                activityCheckedObject.checked = false;
+                activityInfoRow.setChecked(false);
             }
         } else {
-            unSelectActivity(activityCheckedObject, packageId, activityId);
+            unSelectActivity(activityInfoRow, packageId, activityId);
         }
     }
 
@@ -190,7 +191,7 @@
         return {success: true};
     }
 
-    function cancelActivity(activityCheckedObject, packageId, activityId) {
+    function cancelActivity(packageId, activityId) {
         console.log('发送请求。取消活动成功:' + activityId);
     }
 </script>

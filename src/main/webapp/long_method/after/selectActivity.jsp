@@ -81,20 +81,62 @@
 
 <script>
 
-    function validateMutexActivities(activityCheckedObject, packageId, activityId) {
+    function getMutexActivity(packageId, activityId) {
         if (packageId === 10010 && activityId === 1) {
-            var checkBox2 = document.getElementById("activity_2");
-            if (checkBox2 && checkBox2.checked) {
-                alert("在十万用户团建礼包中，冬奥两日游和户外探险一日游不能同时选择！");
+            return 2;
+        }
+
+        if (packageId === 10010 && activityId === 2) {
+            return 1;
+        }
+    }
+
+    function getPackageName(packageId) {
+        if (packageId === 10010) {
+            return "十万用户团建礼包";
+        }
+    }
+
+    function getActivityName(activityId) {
+        if (activityId === 1) {
+            return "冬奥两日游";
+        }
+
+        if (activityId === 2) {
+            return "户外探险一日游";
+        }
+
+        if (activityId === 3) {
+            return "唱歌";
+        }
+
+        if (activityId === 4) {
+            return "吃饭";
+        }
+
+        if (activityId === 5) {
+            return "住宿";
+        }
+    }
+
+    function validateMutexActivities(activityCheckedObject, packageId, activityId) {
+        var mutexActivityId;
+        var checkBox;
+        if (packageId === 10010 && activityId === 1) {
+            mutexActivityId = getMutexActivity(packageId, activityId);
+            checkBox = document.getElementById("activity_" + mutexActivityId);
+            if (checkBox && checkBox.checked) {
+                alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");
                 activityCheckedObject.checked = false;
                 return false;
             }
         }
 
         if (packageId === 10010 && activityId === 2) {
-            var checkBox1 = document.getElementById("activity_1");
-            if (checkBox1 && checkBox1.checked) {
-                alert("在十万用户团建礼包中，户外探险一日游和冬奥两日游不能同时选择！");
+            mutexActivityId = getMutexActivity(packageId, activityId);
+            checkBox = document.getElementById("activity_" + mutexActivityId);
+            if (checkBox && checkBox.checked) {
+                alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");
                 activityCheckedObject.checked = false;
                 return false;
             }
@@ -131,7 +173,7 @@
             }
             var validateMutexActivityResult = validateMutexActivities(activityCheckedObject, packageId, activityId);
 
-            if(!validateMutexActivityResult) {
+            if (!validateMutexActivityResult) {
                 return;
             }
 

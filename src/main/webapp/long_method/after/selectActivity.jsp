@@ -152,6 +152,18 @@
         }
     }
 
+    function unSelectSingleActivity(activityCheckedObject, packageId, activityId) {
+        var countInput = document.getElementById("activity_" + activityId + "_count");
+        countInput.value = "";
+        activityCheckedObject.checked = false;
+        cancelActivity(activityCheckedObject, packageId, activityId);
+    }
+
+    function unSelectActivity(activityCheckedObject, packageId, activityId) {
+        unSelectRelyer(packageId, activityId);
+        unSelectSingleActivity(activityCheckedObject, packageId, activityId);
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
             var result = selectActivity(packageId, activityId);
@@ -160,12 +172,7 @@
                 activityCheckedObject.checked = false;
             }
         } else {
-            unSelectRelyer(packageId, activityId);
-
-            var countInput = document.getElementById("activity_" + activityId + "_count");
-            countInput.value = "";
-            activityCheckedObject.checked = false;
-            cancelActivity(activityCheckedObject, packageId, activityId);
+            unSelectActivity(activityCheckedObject, packageId, activityId);
         }
     }
 

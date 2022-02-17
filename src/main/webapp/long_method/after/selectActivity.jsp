@@ -82,13 +82,12 @@
 <script>
 
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {
-        var validateMutexActivityResult = true;
         if (packageId === 10010 && activityId === 1) {
             var checkBox2 = document.getElementById("activity_2");
             if (checkBox2 && checkBox2.checked) {
                 alert("在十万用户团建礼包中，冬奥两日游和户外探险一日游不能同时选择！");
                 activityCheckedObject.checked = false;
-                validateMutexActivityResult = false;
+                return false;
             }
         }
 
@@ -97,7 +96,7 @@
             if (checkBox1 && checkBox1.checked) {
                 alert("在十万用户团建礼包中，户外探险一日游和冬奥两日游不能同时选择！");
                 activityCheckedObject.checked = false;
-                validateMutexActivityResult = false;
+                return false;
             }
         }
 
@@ -106,7 +105,7 @@
             if (checkBox11 && checkBox11.checked) {
                 alert("在百万用户团建礼包中，冬奥两日游和自由三日飞不能同时选择！");
                 activityCheckedObject.checked = false;
-                validateMutexActivityResult = false;
+                return false;
             }
         }
 
@@ -115,10 +114,10 @@
             if (checkBox1 && checkBox1.checked) {
                 alert("在百万用户团建礼包中，自由三日飞和冬奥两日游不能同时选择！");
                 activityCheckedObject.checked = false;
-                validateMutexActivityResult = false;
+                return false;
             }
         }
-        return validateMutexActivityResult;
+        return true;
     }
 
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {

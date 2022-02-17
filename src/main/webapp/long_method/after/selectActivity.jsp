@@ -142,6 +142,16 @@
         return result;
     }
 
+    function unSelectRelyer(packageId, activityId) {
+        var relyer = relierActivityConfig[packageId] && relierActivityConfig[packageId][activityId];
+        if (relyer) {
+            var checkBox = document.getElementById("activity_" + relyer);
+            if (checkBox && checkBox.checked) {
+                checkBox.click();
+            }
+        }
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
             var result = selectActivity(packageId, activityId);
@@ -150,24 +160,11 @@
                 activityCheckedObject.checked = false;
             }
         } else {
+            unSelectRelyer(packageId, activityId);
+
             var countInput = document.getElementById("activity_" + activityId + "_count");
             countInput.value = "";
             activityCheckedObject.checked = false;
-
-            if (packageId === 10010 && activityId === 1) {
-                var checkBox5 = document.getElementById("activity_5");
-                if (checkBox5 && checkBox5.checked) {
-                    checkBox5.click();
-                }
-            }
-
-            if (packageId === 10086 && activityId === 999) {
-                var checkBox12 = document.getElementById("activity_12");
-                if (checkBox12 && checkBox12.checked) {
-                    checkBox12.click();
-                }
-            }
-
             cancelActivity(activityCheckedObject, packageId, activityId);
         }
     }

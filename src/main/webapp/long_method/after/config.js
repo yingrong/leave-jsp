@@ -28,3 +28,12 @@ var reliedActivityConfig = {
         5: 1
     }
 }
+
+var relierActivityConfig = {
+    10010: {
+        1: 5
+    },
+    10086: {
+        999: 12
+    }
+}

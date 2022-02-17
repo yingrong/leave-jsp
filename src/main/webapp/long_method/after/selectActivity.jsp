@@ -80,59 +80,41 @@
 </ul>
 
 <script>
+    var packageConfig = {
+        10010: "十万用户团建礼包",
+        10086: "百万用户团建礼包"
+    };
+
+    var activityConfig = {
+        1: "冬奥两日游",
+        2: "户外探险一日游",
+        3: "唱歌",
+        4: "吃饭",
+        5: "住宿",
+        11: "自由三日飞"
+    };
+
+    var mutexActivityConfig = {
+        10010: {
+            1: 2,
+            2: 1
+        },
+        10086: {
+            1: 11,
+            11: 1
+        }
+    };
 
     function getMutexActivity(packageId, activityId) {
-        if (packageId === 10010 && activityId === 1) {
-            return 2;
-        }
-
-        if (packageId === 10010 && activityId === 2) {
-            return 1;
-        }
-
-        if (packageId === 10086 && activityId === 1) {
-            return 11;
-        }
-
-        if (packageId === 10086 && activityId === 11) {
-            return 1;
-        }
+        return mutexActivityConfig[packageId] && mutexActivityConfig[packageId][activityId]
     }
 
     function getPackageName(packageId) {
-        if (packageId === 10010) {
-            return "十万用户团建礼包";
-        }
-
-        if (packageId === 10086) {
-            return "百万用户团建礼包";
-        }
+        return packageConfig[packageId];
     }
 
     function getActivityName(activityId) {
-        if (activityId === 1) {
-            return "冬奥两日游";
-        }
-
-        if (activityId === 2) {
-            return "户外探险一日游";
-        }
-
-        if (activityId === 3) {
-            return "唱歌";
-        }
-
-        if (activityId === 4) {
-            return "吃饭";
-        }
-
-        if (activityId === 5) {
-            return "住宿";
-        }
-
-        if (activityId === 11) {
-            return "自由三日飞";
-        }
+        return activityConfig[activityId];
     }
 
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {

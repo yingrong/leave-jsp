@@ -125,28 +125,28 @@
 
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
-            var validateCountResult = validateCount(activityId);
-            if (!validateCountResult.success) {
-                alert(validateCountResult.errorMessage);
+            var result = validateCount(activityId);
+            if (!result.success) {
+                alert(result.errorMessage);
                 activityCheckedObject.checked = false;
                 return;
             }
 
-            var validateMutexActivityResult = validateMutexActivities(packageId, activityId);
-            if (!validateMutexActivityResult.success) {
-                alert(validateMutexActivityResult.errorMessage);
+            result = validateMutexActivities(packageId, activityId);
+            if (!result.success) {
+                alert(result.errorMessage);
                 activityCheckedObject.checked = false;
                 return;
             }
 
-            var validateReliedActivityResult = validateReliedActivities(packageId, activityId);
-            if (!validateReliedActivityResult.success) {
-                alert(validateReliedActivityResult.errorMessage);
+            result = validateReliedActivities(packageId, activityId);
+            if (!result.success) {
+                alert(result.errorMessage);
                 activityCheckedObject.checked = false;
                 return;
             }
 
-            var result = createActivity(activityCheckedObject, packageId, activityId);
+            result = createActivity(activityCheckedObject, packageId, activityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 activityCheckedObject.checked = false;

@@ -22,3 +22,9 @@ var mutexActivityConfig = {
         11: 1
     }
 };
+
+var reliedActivityConfig = {
+    10010: {
+        5: 1
+    }
+}

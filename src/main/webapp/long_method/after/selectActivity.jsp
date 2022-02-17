@@ -108,6 +108,21 @@
         return {success: true}
     }
 
+    function validateReliedActivities(packageId, activityId) {
+        var reliedActivityId = reliedActivityConfig[packageId] && reliedActivityConfig[packageId][activityId];
+        if (reliedActivityId) {
+            var checkBox = document.getElementById("activity_" + reliedActivityId);
+            if (!checkBox || !checkBox.checked) {
+                return {
+                    success: false,
+                    errorMessage: "在" + packageConfig[packageId] + "中，选择" + activityConfig[activityId] + "前必须选择" + activityConfig[reliedActivityId] + "！"
+                }
+            }
+        }
+
+        return {success: true};
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
             var validateCountResult = validateCount(activityId);
@@ -124,13 +139,11 @@
                 return;
             }
 
-            if (packageId === 10010 && activityId === 5) {
-                var checkBox1 = document.getElementById("activity_1");
-                if (!checkBox1 || !checkBox1.checked) {
-                    alert("在十万用户团建礼包中，选择住宿前必须选择冬奥两日游！");
-                    activityCheckedObject.checked = false;
-                    return;
-                }
+            var validateReliedActivityResult = validateReliedActivities(packageId, activityId);
+            if (!validateReliedActivityResult.success) {
+                alert(validateReliedActivityResult.errorMessage);
+                activityCheckedObject.checked = false;
+                return;
             }
 
             var result = createActivity(activityCheckedObject, packageId, activityId);

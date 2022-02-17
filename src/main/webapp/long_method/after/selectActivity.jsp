@@ -96,12 +96,23 @@
         return {success: true};
     }
 
+    function validateCount(activityId) {
+        var countInput = document.getElementById("activity_" + activityId + "_count");
+        var count = Number(countInput.value);
+        if (isNaN(count) || (count < 1 || count > 50)) {
+            return {
+                success: false,
+                errorMessage: "参加人数必须在1到50之间！"
+            };
+        }
+        return {success: true}
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
-            var countInput = document.getElementById("activity_" + activityId + "_count");
-            var count = !countInput.value ? -1 : parseInt(countInput.value);
-            if (count < 1 || count > 50) {
-                alert("参加人数必须在1到50之间！");
+            var validateCountResult = validateCount(activityId);
+            if (!validateCountResult.success) {
+                alert(validateCountResult.errorMessage);
                 activityCheckedObject.checked = false;
                 return;
             }

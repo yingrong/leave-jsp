@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Todo List, 重构前</title>
+    <title>Todo List, 重构后</title>
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <link rel="stylesheet" href="/long_file/common/index.css">
 </head>

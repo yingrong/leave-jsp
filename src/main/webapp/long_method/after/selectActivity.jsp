@@ -81,18 +81,19 @@
 </ul>
 
 <script>
-    function validateMutexActivities(activityCheckedObject, packageId, activityId) {
+    function validateMutexActivities(packageId, activityId) {
         var mutexActivityId = mutexActivityConfig[packageId] && mutexActivityConfig[packageId][activityId];
         if (mutexActivityId) {
             var checkBox = document.getElementById("activity_" + mutexActivityId);
             if (checkBox && checkBox.checked) {
-                alert("在" + packageConfig[packageId] + "中，" + activityConfig[activityId] + "和" + activityConfig[mutexActivityId] + "不能同时选择！");
-                activityCheckedObject.checked = false;
-                return false;
+                return {
+                    success: false,
+                    errorMessage: "在" + packageConfig[packageId] + "中，" + activityConfig[activityId] + "和" + activityConfig[mutexActivityId] + "不能同时选择！"
+                }
             }
         }
 
-        return true;
+        return {success: true};
     }
 
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
@@ -104,9 +105,11 @@
                 activityCheckedObject.checked = false;
                 return;
             }
-            var validateMutexActivityResult = validateMutexActivities(activityCheckedObject, packageId, activityId);
 
-            if (!validateMutexActivityResult) {
+            var validateMutexActivityResult = validateMutexActivities(packageId, activityId);
+            if (!validateMutexActivityResult.success) {
+                alert(validateMutexActivityResult.errorMessage);
+                activityCheckedObject.checked = false;
                 return;
             }
 

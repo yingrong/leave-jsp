@@ -122,17 +122,8 @@
     function validateMutexActivities(activityCheckedObject, packageId, activityId) {
         var mutexActivityId;
         var checkBox;
-        if (packageId === 10010 && activityId === 1) {
-            mutexActivityId = getMutexActivity(packageId, activityId);
-            checkBox = document.getElementById("activity_" + mutexActivityId);
-            if (checkBox && checkBox.checked) {
-                alert("在" + getPackageName(packageId) + "中，" + getActivityName(activityId) + "和" + getActivityName(mutexActivityId) + "不能同时选择！");
-                activityCheckedObject.checked = false;
-                return false;
-            }
-        }
 
-        if (packageId === 10010 && activityId === 2) {
+        if (packageId === 10010 && (activityId === 1 || activityId === 2)) {
             mutexActivityId = getMutexActivity(packageId, activityId);
             checkBox = document.getElementById("activity_" + mutexActivityId);
             if (checkBox && checkBox.checked) {

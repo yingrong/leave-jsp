@@ -123,23 +123,20 @@
         return {success: true};
     }
 
+    function validateActivities(packageId, activityId) {
+        var result = validateCount(activityId);
+        if (result.success) {
+            result = validateMutexActivities(packageId, activityId);
+            if (result.success) {
+                result = validateReliedActivities(packageId, activityId);
+            }
+        }
+        return result;
+    }
+
     function clickActivityCheck(activityCheckedObject, packageId, activityId) {
         if (activityCheckedObject.checked) {
-            var result = validateCount(activityId);
-            if (!result.success) {
-                alert(result.errorMessage);
-                activityCheckedObject.checked = false;
-                return;
-            }
-
-            result = validateMutexActivities(packageId, activityId);
-            if (!result.success) {
-                alert(result.errorMessage);
-                activityCheckedObject.checked = false;
-                return;
-            }
-
-            result = validateReliedActivities(packageId, activityId);
+            var result = validateActivities(packageId, activityId);
             if (!result.success) {
                 alert(result.errorMessage);
                 activityCheckedObject.checked = false;

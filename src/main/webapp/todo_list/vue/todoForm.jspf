@@ -1,0 +1,39 @@
+<form name="todoForm" action="" method="post">
+    <input type="hidden" name="sAction"/>
+    <input type="hidden" name="title"/>
+    <input type="hidden" name="id"/>
+</form>
+<script>
+    var todoFormPage = (function () {
+
+        function saveTodo(title) {
+            todoForm.sAction.value = "add";
+            todoForm.title.value = title;
+            todoForm.submit();
+        }
+
+        function deleteCompleted() {
+            todoForm.sAction.value = "deleteCompleted"
+            todoForm.submit();
+        }
+
+        function toggleTodo(id, sAction) {
+            todoForm.sAction.value = sAction;
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
+        function deleteTodo(id) {
+            todoForm.sAction.value = "delete"
+            todoForm.id.value = id;
+            todoForm.submit();
+        }
+
+        return {
+            saveTodo: saveTodo,
+            toggleTodo: toggleTodo,
+            deleteTodo: deleteTodo,
+            deleteCompleted: deleteCompleted
+        }
+    })();
+</script>

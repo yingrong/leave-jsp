@@ -3,6 +3,7 @@
 <head>
     <title>Todo List, 重构后</title>
     <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/vue.js"></script>
     <link rel="stylesheet" href="/todo_list/common/index.css">
 </head>
 <body>

@@ -2,22 +2,19 @@
 <%@ page import="java.util.List" %>
 <%
     List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
+    boolean hasCompleted = false;
+    for (Todo todo : todoList) {
+        if (todo.getCompleted()) {
+            hasCompleted = true;
+            break;
+        }
+    }
 %>
 <footer class="footer">
-    <%
-        boolean hasCompleted = false;
-        for (Todo todo : todoList) {
-            if (todo.getCompleted()) {
-                hasCompleted = true;
-                break;
-            }
-        }
-    %>
-    <%if(hasCompleted) {%>
-    <button class="clear-completed" onclick="todoFooterPage._deleteCompletedTodo()">Clear completed</button>
-    <%}%>
+    <div id="todoFooterContainer"></div>
 </footer>
 <script>
+    var hasCompletedJs = <%=hasCompleted%>;
     var todoFooterPage = (function () {
 
         function deleteCompletedTodo() {
@@ -28,4 +25,16 @@
             _deleteCompletedTodo: deleteCompletedTodo
         }
     })();
+
+    new Vue({
+        el:'#todoFooterContainer',
+        data: function () {
+            return {
+                hasCompletedJs: hasCompletedJs
+            }
+        },
+        template: `
+            <button v-show='hasCompletedJs' class="clear-completed" onclick="todoFooterPage._deleteCompletedTodo()">Clear completed</button>
+        `
+    })
 </script>

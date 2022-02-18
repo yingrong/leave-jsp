@@ -1,4 +1,4 @@
-package com.tw.long_file;
+package com.tw.todo_list;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(value = "/long-file/before")
-public class TodoBeforeServlet extends HttpServlet {
+@WebServlet(value = "/todo-list/jsp")
+public class TodoJSPServlet extends HttpServlet {
 
     TodoRepository todoRepository = new TodoRepository();
 
@@ -18,7 +18,7 @@ public class TodoBeforeServlet extends HttpServlet {
         List<Todo> todoList = todoRepository.getTodoList();
         request.setAttribute("todoList", todoList);
 
-        request.getRequestDispatcher("/long_file/before/index.jsp")
+        request.getRequestDispatcher("/todo_list/jsp/index.jsp")
                 .forward(request, response);
     }
 

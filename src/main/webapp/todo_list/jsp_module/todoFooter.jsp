@@ -1,4 +1,4 @@
-<%@ page import="com.tw.long_file.Todo" %>
+<%@ page import="com.tw.todo_list.Todo" %>
 <%@ page import="java.util.List" %>
 <%
     List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");

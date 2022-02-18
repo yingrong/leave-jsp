@@ -1,11 +1,11 @@
-<%@ page import="com.tw.long_file.Todo" %>
+<%@ page import="com.tw.todo_list.Todo" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Todo List, 重构前</title>
     <script type="text/javascript" src="../../js/jquery.js"></script>
-    <link rel="stylesheet" href="/long_file/common/index.css">
+    <link rel="stylesheet" href="/todo_list/common/index.css">
 </head>
 <body>
 <%

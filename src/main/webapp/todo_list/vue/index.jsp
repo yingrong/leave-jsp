@@ -4,7 +4,8 @@
     <title>Todo List, 重构后</title>
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <script type="text/javascript" src="../../js/vue.js"></script>
-    <link rel="stylesheet" href="/todo_list/common/index.css">
+    <link rel="stylesheet" href="/todo_list/common/index.css" />
+    <script type="text/javascript" src="/todo_list/vue/todoFooter.js"></script>
 </head>
 <body>
 <section class="todoapp">

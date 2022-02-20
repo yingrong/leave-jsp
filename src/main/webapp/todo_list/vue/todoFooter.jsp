@@ -10,11 +10,9 @@
         }
     }
 %>
-<footer class="footer">
-    <div id="todoFooterContainer">
-        <todo-footer-component :hasCompleted="hasCompletedJs" />
-    </div>
-</footer>
+<div id="todoFooterContainer">
+        <todo-footer-component :hasCompleted="hasCompletedJs" v-on:delete-completed-todo="deleteCompletedTodo"/>
+</div>
 <script>
     var hasCompletedJs = <%=hasCompleted%>;
     var todoFooterPage = (function () {
@@ -31,8 +29,15 @@
     var todoFooterComponent = {
         props: ['hascompleted'],
         template: `
-            <button v-show='hascompleted' class="clear-completed" onclick="todoFooterPage._deleteCompletedTodo()">Clear completed</button>
-        `
+<footer class="footer">
+            <button v-show='hascompleted' class="clear-completed" @click="deleteCompletedTodo">Clear completed</button>
+</footer>
+        `,
+        methods: {
+            deleteCompletedTodo: function () {
+                this.$emit('delete-completed-todo');
+            }
+        }
     }
 
     new Vue({
@@ -44,6 +49,11 @@
         },
         components: {
             'todo-footer-component': todoFooterComponent
+        },
+        methods: {
+            deleteCompletedTodo: function () {
+                todoFooterPage._deleteCompletedTodo();
+            }
         }
     })
 </script>

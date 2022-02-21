@@ -28,8 +28,8 @@
 %>
 <body>
 <section class="todoapp">
-    <%@ include file="todoForm.jspf" %>
     <div id="app">
+        <todo-form-component :s-action="sAction" :id="id" :title="title" v-on:submit="submitForm"></todo-form-component>
         <todo-header-component v-on:add-todo="saveTodo"></todo-header-component>
         <todo-list-component :todos="todos" v-on:toggle-todo="toggleCompleted" v-on:delete-todo="deleteTodo" >
         </todo-list-component>
@@ -37,34 +37,6 @@
         </todo-footer-component>
     </div>
 </section>
-
-<script>
-    var rootPage = (function () {
-
-        function saveTodo(title) {
-            todoFormPage.saveTodo(title);
-        }
-
-        function deleteTodo(id) {
-            todoFormPage.deleteTodo(id);
-        }
-
-        function toggleTodo(id, sAction) {
-            todoFormPage.toggleTodo(id, sAction);
-        }
-
-        function deleteCompleted() {
-            todoFormPage.deleteCompleted();
-        }
-
-        return {
-            saveTodo: saveTodo,
-            toggleTodo: toggleTodo,
-            deleteTodo: deleteTodo,
-            deleteCompleted: deleteCompleted
-        }
-    })();
-</script>
 <script>
     var todos = JSON.parse('<%=todoListString%>');
     var hasCompletedJs = <%=hasCompleted%>;
@@ -73,26 +45,38 @@
         data: function () {
             return {
                 todos,
-                hasCompletedJs
+                hasCompletedJs,
+                sAction: '',
+                id: '',
+                title: ''
             }
         },
         components: {
+            'todo-form-component': todoFormComponent,
             'todo-header-component': todoHeaderComponent,
             'todo-list-component': todoListComponent,
             'todo-footer-component': todoFooterComponent
         },
         methods: {
             saveTodo: function (title) {
-                rootPage.saveTodo(title);
+                this.sAction = "add";
+                this.title = title;
             },
             toggleCompleted: function (id, sAction) {
-                rootPage.toggleTodo(id, sAction);
+                this.sAction = sAction;
+                this.id=id;
             },
             deleteTodo: function (id) {
-                rootPage.deleteTodo(id);
+                this.sAction="delete"
+                this.id=id;
             },
             deleteCompletedTodo: function () {
-                rootPage.deleteCompleted();
+                this.sAction="deleteCompleted"
+            },
+            submitForm: function () {
+                this.$nextTick(function () {
+                    todoForm.submit();
+                });
             }
         }
     })

@@ -1,9 +1,5 @@
 <div id="todoFormContainer">
-    <form name="todoForm" action="" method="post">
-        <input type="hidden" name="sAction" v-model="sAction"/>
-        <input type="hidden" name="title" v-model="title"/>
-        <input type="hidden" name="id" v-model="id"/>
-    </form>
+    <todo-form-component :s-action="sAction" :id="id" :title="title" v-on:submit="submitForm"></todo-form-component>
 </div>
 <script>
     var todoFormPage = (function () {
@@ -16,11 +12,12 @@
                     title: ''
                 }
             },
-            watch: {
-                sAction: function () {
-                    this.$nextTick(function () {
-                        submitForm();
-                    });
+            components: {
+                'todo-form-component': todoFormComponent
+            },
+            methods: {
+                submitForm: function () {
+                    this.$nextTick(submitForm);
                 }
             }
         })

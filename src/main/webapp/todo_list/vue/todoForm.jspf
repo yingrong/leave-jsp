@@ -1,31 +1,50 @@
-<form name="todoForm" action="" method="post">
-    <input type="hidden" name="sAction"/>
-    <input type="hidden" name="title"/>
-    <input type="hidden" name="id"/>
-</form>
+<div id="todoFormContainer">
+    <form name="todoForm" action="" method="post">
+        <input type="hidden" name="sAction" v-model="sAction"/>
+        <input type="hidden" name="title" v-model="title"/>
+        <input type="hidden" name="id" v-model="id"/>
+    </form>
+</div>
 <script>
     var todoFormPage = (function () {
+        var todoFormVue = new Vue({
+            el: "#todoFormContainer",
+            data: function () {
+                return {
+                    sAction: '',
+                    id: '',
+                    title: ''
+                }
+            },
+            watch: {
+                sAction: function () {
+                    this.$nextTick(function () {
+                        submitForm();
+                    });
+                }
+            }
+        })
 
         function saveTodo(title) {
-            todoForm.sAction.value = "add";
-            todoForm.title.value = title;
-            todoForm.submit();
+            todoFormVue.title = title;
+            todoFormVue.sAction = "add";
         }
 
         function deleteCompleted() {
-            todoForm.sAction.value = "deleteCompleted"
-            todoForm.submit();
+            todoFormVue.sAction = "deleteCompleted"
         }
 
         function toggleTodo(id, sAction) {
-            todoForm.sAction.value = sAction;
-            todoForm.id.value = id;
-            todoForm.submit();
+            todoFormVue.id = id;
+            todoFormVue.sAction = sAction;
         }
 
         function deleteTodo(id) {
-            todoForm.sAction.value = "delete"
-            todoForm.id.value = id;
+            todoFormVue.id = id;
+            todoFormVue.sAction = "delete"
+        }
+
+        function submitForm() {
             todoForm.submit();
         }
 

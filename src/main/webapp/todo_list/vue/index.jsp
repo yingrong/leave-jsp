@@ -28,18 +28,13 @@
 <body>
 <section class="todoapp">
     <%@ include file="todoForm.jspf" %>
-    <div id="todoHeaderContainer">
-        <todo-header-component v-on:add-todo="saveTodo"/>
+    <div id="app">
+        <todo-header-component v-on:add-todo="saveTodo"></todo-header-component>
+        <todo-list-component :todos="todos" v-on:toggle-todo="toggleCompleted" v-on:delete-todo="deleteTodo" >
+        </todo-list-component>
+        <todo-footer-component :hasCompleted="hasCompletedJs" v-on:delete-completed-todo="deleteCompletedTodo">
+        </todo-footer-component>
     </div>
-
-    <div id="todoListContainer">
-        <todo-list-component :todos="todos" v-on:toggle-todo="toggleCompleted" v-on:delete-todo="deleteTodo" />
-    </div>
-
-    <div id="todoFooterContainer">
-        <todo-footer-component :hasCompleted="hasCompletedJs" v-on:delete-completed-todo="deleteCompletedTodo"/>
-    </div>
-
 </section>
 
 <script>
@@ -70,71 +65,36 @@
     })();
 </script>
 <script>
-    (function () {
-
-        function saveTodo(title) {
-            rootPage.saveTodo(title);
+    var todos = JSON.parse('<%=todoListString%>');
+    var hasCompletedJs = <%=hasCompleted%>;
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                todos,
+                hasCompletedJs
+            }
+        },
+        components: {
+            'todo-header-component': todoHeaderComponent,
+            'todo-list-component': todoListComponent,
+            'todo-footer-component': todoFooterComponent
+        },
+        methods: {
+            saveTodo: function (title) {
+                rootPage.saveTodo(title);
+            },
+            toggleCompleted: function (id, sAction) {
+                rootPage.toggleTodo(id, sAction);
+            },
+            deleteTodo: function (id) {
+                rootPage.deleteTodo(id);
+            },
+            deleteCompletedTodo: function () {
+                rootPage.deleteCompleted();
+            }
         }
-
-        new Vue({
-            el: "#todoHeaderContainer",
-            components: {
-                'todo-header-component': todoHeaderComponent
-            },
-            methods: {
-                saveTodo: function (title) {
-                    saveTodo(title)
-                }
-            }
-        })
-    })();
-</script>
-<script>
-    (function () {
-        var todos = JSON.parse('<%=todoListString%>');
-
-        new Vue({
-            el: "#todoListContainer",
-            data: function () {
-                return {
-                    todos
-                }
-            },
-            components: {
-                'todo-list-component': todoListComponent
-            },
-            methods: {
-                toggleCompleted: function (id, sAction) {
-                    rootPage.toggleTodo(id, sAction);
-                },
-                deleteTodo: function (id) {
-                    rootPage.deleteTodo(id);
-                }
-            }
-        });
-    })();
-</script>
-<script>
-    (function () {
-        var hasCompletedJs = <%=hasCompleted%>;
-        new Vue({
-            el: '#todoFooterContainer',
-            data: function () {
-                return {
-                    hasCompletedJs
-                }
-            },
-            components: {
-                'todo-footer-component': todoFooterComponent
-            },
-            methods: {
-                deleteCompletedTodo: function () {
-                    rootPage.deleteCompleted();
-                }
-            }
-        })
-    })();
-
+    })
 </script>
 </body>
 </html>

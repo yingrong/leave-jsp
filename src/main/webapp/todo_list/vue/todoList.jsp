@@ -1,49 +1,49 @@
 <%@ page import="com.tw.todo_list.Todo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 
-<% List<Todo> todoList = (List<Todo>) request.getAttribute("todoList"); %>
-<section class="main">
-    <input id="toggle-all" class="toggle-all" type="checkbox">
-    <label for="toggle-all">Mark all as complete</label>
+<%
+    List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
+    ObjectMapper objectMapper = new ObjectMapper();
+    String todoListString = objectMapper.writeValueAsString(todoList);
+%>
+<div id="todoListContainer"></div>
+<script>
+    (function () {
+        var todos = JSON.parse('<%=todoListString%>');
+
+        new Vue({
+            el: "#todoListContainer",
+            data: function () {
+                return {
+                    todos
+                }
+            },
+            template:`
+<section class="main" v-show="todos.length">
     <ul class="todo-list">
-        <% for (int i = 0; i < todoList.size(); i++) {
-            Todo todo = todoList.get(i);
-        %>
-        <li <%if (todo.getCompleted()) {%> class="completed"<%}%> data-id="<%=todo.getId()%>">
-            <div class="view" id="todo_<%=todo.getId()%>">
-                <input class="toggle" id="todo_toggle_<%=todo.getId()%>" onchange="todoListPage._toggle(this)"
-                       type="checkbox" <%if (todo.getCompleted()) {%> checked <%}%> />
-                <label><%=todo.getTitle()%>
-                </label>
-                <button class="destroy" onclick="todoListPage._deleteTodo(this)"></button>
+        <li v-for="todo in todos" :key="todo.id" :class="{completed: todo.completed}">
+            <div class="view">
+                <input class="toggle" v-model="todo.completed" type="checkbox" @change="toggleComplted(todo)"/>
+                <label>{{todo.title}}</label>
+                <button class="destroy" @click="deleteTodo(todo)"></button>
             </div>
-            <%--            <input class="edit" value="<%=todo.getTitle()%>">--%>
         </li>
-        <%}%>
     </ul>
 </section>
-<script>
-    var todoListPage = (function () {
-        function deleteTodo(el) {
-            var id = el.parentElement.id.substr(5);
-            rootPage.deleteTodo(id);
-        }
-
-        function toggle(el) {
-            console.log(el)
-            var completed = el.checked;
-            var sAction = "markDone";
-            var id = el.id.substr(12);
-            if (!completed) {
-                sAction = "markUnfinished";
+            `,
+            methods: {
+                toggleComplted: function (todo) {
+                    var sAction = "markDone";
+                    if (!todo.completed) {
+                        sAction = "markUnfinished";
+                    }
+                    rootPage.toggleTodo(todo.id, sAction);
+                },
+                deleteTodo: function (todo) {
+                    rootPage.deleteTodo(todo.id);
+                }
             }
-
-            rootPage.toggleTodo(id, sAction);
-        }
-
-        return {
-            _deleteTodo: deleteTodo,
-            _toggle: toggle
-        }
+        });
     })();
 </script>

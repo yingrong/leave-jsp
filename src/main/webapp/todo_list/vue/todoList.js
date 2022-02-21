@@ -23,10 +23,10 @@ var todoListComponent = {
             if (!todo.completed) {
                 sAction = "markUnfinished";
             }
-            rootPage.toggleTodo(todo.id, sAction);
+            this.$emit("toggle-todo", todo.id, sAction);
         },
         deleteTodo: function (todo) {
-            rootPage.deleteTodo(todo.id);
+            this.$emit("delete-todo", todo.id);
         }
     }
 }

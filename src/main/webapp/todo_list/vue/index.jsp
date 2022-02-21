@@ -33,7 +33,7 @@
     </div>
 
     <div id="todoListContainer">
-        <todo-list-component :todos="todos"/>
+        <todo-list-component :todos="todos" v-on:toggle-todo="toggleCompleted" v-on:delete-todo="deleteTodo" />
     </div>
 
     <div id="todoFooterContainer">
@@ -102,6 +102,14 @@
             },
             components: {
                 'todo-list-component': todoListComponent
+            },
+            methods: {
+                toggleCompleted: function (id, sAction) {
+                    rootPage.toggleTodo(id, sAction);
+                },
+                deleteTodo: function (id) {
+                    rootPage.deleteTodo(id);
+                }
             }
         });
     })();

@@ -1,6 +1,3 @@
-<%@ page import="com.tw.todo_list.Todo" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,19 +10,7 @@
     <script type="text/javascript" src="/todo_list/vue/todoList.js"></script>
     <script type="text/javascript" src="/todo_list/vue/todoFooter.js"></script>
 </head>
-<%
-    List<Todo> todoList = (List<Todo>) request.getAttribute("todoList");
-    ObjectMapper objectMapper = new ObjectMapper();
-    String todoListString = objectMapper.writeValueAsString(todoList);
 
-    boolean hasCompleted = false;
-    for (Todo todo : todoList) {
-        if (todo.getCompleted()) {
-            hasCompleted = true;
-            break;
-        }
-    }
-%>
 <body>
 <section class="todoapp">
     <div id="app">
@@ -38,17 +23,19 @@
     </div>
 </section>
 <script>
-    var todos = JSON.parse('<%=todoListString%>');
-    var hasCompletedJs = <%=hasCompleted%>;
     new Vue({
         el: '#app',
         data: function () {
             return {
-                todos,
-                hasCompletedJs,
+                todos: [],
                 sAction: '',
                 id: '',
                 title: ''
+            }
+        },
+        computed: {
+            hasCompletedJs: function () {
+                return this.todos.filter(function(todo){return todo.completed}).length > 0
             }
         },
         components: {
@@ -56,6 +43,16 @@
             'todo-header-component': todoHeaderComponent,
             'todo-list-component': todoListComponent,
             'todo-footer-component': todoFooterComponent
+        },
+        created: function () {
+            var _this = this;
+            $.ajax({
+                url: "/todo-list/vue?sAction=get",
+                dataType: "json",
+                success: function (data) {
+                    _this.todos = data;
+                }
+            })
         },
         methods: {
             saveTodo: function (title) {

@@ -31,7 +31,7 @@ public class TodoVueServlet extends HttpServlet {
             out.write(objectMapper.writeValueAsString(todoList));
             out.flush();
         } else {
-            request.getRequestDispatcher("/todo_list/vue/index.jsp")
+            request.getRequestDispatcher("/todo_list/vue/index.html")
                     .forward(request, response);
         }
     }

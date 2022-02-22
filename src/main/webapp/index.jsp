@@ -11,5 +11,7 @@
 <a href="todo-list/jsp">重构前</a> <a href="todo-list/jsp-module">重构后</a><a href="#">代码比较</a>
 <h2>去Java，Vue basic</h2>
 <a href="todo-list/jsp-module">重构前</a> <a href="todo-list/vue">重构后</a><a href="#">代码比较</a>
+<h2>Vue 改造完成后，form 表单改ajax</h2>
+<a href="todo-list/vue">重构前</a> <a href="todo-list/ajax">重构后</a><a href="#">代码比较</a>
 </body>
 </html>

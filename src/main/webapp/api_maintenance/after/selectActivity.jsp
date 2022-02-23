@@ -66,7 +66,6 @@
 
 <h2>当前实现存在的问题：</h2>
 <ul style="color: red;">
-    <li>GET API更改数据（只有GET API）</li>
     <li>API中传入的参数来部分自于后端</li>
     <li>错误处理不统一（有的API失败时返回Code为200，且错误时数据结构不统一）</li>
     <li>部分数据校验只存在于jsp</li>
@@ -202,6 +201,7 @@
         };
 
         $.ajax({
+            type: "POST",
             url: "/api-maintenance/after?sAction=check-mutex",
             data: requestBody,
             dataType: "json",
@@ -227,6 +227,7 @@
         };
 
         $.ajax({
+            type: "POST",
             url: "/api-maintenance/after?sAction=select",
             data: requestBody,
             async: false,
@@ -250,6 +251,7 @@
         };
 
         $.ajax({
+            type: "POST",
             url: "/api-maintenance/after?sAction=unselect",
             data: requestBody,
             async: false,

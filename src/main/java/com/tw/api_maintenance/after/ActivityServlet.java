@@ -24,16 +24,18 @@ public class ActivityServlet extends HttpServlet {
     ActivityRepository activityRepository = new ActivityRepository();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String action = request.getParameter("sAction");
-        System.out.println("get request. action:" + action);
-        if (action == null) {
-            System.out.println("get request");
-            TeamBuildingPackageItem teamBuildingPackageItem = teamBuildingPackageItemRepository.findById(80010L);
-            TeamBuildingPackageItemDto teamBuildingPackageItemDto = convertToTeamBuildingPackageItemDto(teamBuildingPackageItem);
-            request.setAttribute("teamBuildingPackageItem", teamBuildingPackageItemDto);
+        System.out.println("get request");
+        TeamBuildingPackageItem teamBuildingPackageItem = teamBuildingPackageItemRepository.findById(80010L);
+        TeamBuildingPackageItemDto teamBuildingPackageItemDto = convertToTeamBuildingPackageItemDto(teamBuildingPackageItem);
+        request.setAttribute("teamBuildingPackageItem", teamBuildingPackageItemDto);
+        request.getRequestDispatcher("/api_maintenance/after/selectActivity.jsp").forward(request, response);
+    }
 
-            request.getRequestDispatcher("/api_maintenance/after/selectActivity.jsp").forward(request, response);
-        } else if ("select".equals(action)) {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("sAction");
+        System.out.println("post request. action:" + action);
+        if ("select".equals(action)) {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
             Integer count = Integer.parseInt(request.getParameter("count"));
@@ -99,7 +101,6 @@ public class ActivityServlet extends HttpServlet {
                 }
             }
         }
-
     }
 
     private TeamBuildingPackageItemDto convertToTeamBuildingPackageItemDto(TeamBuildingPackageItem teamBuildingPackageItem) {

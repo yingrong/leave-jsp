@@ -64,7 +64,15 @@
                 this.todos = newTodos;
             },
             deleteCompletedTodo: function () {
-                this.sAction="deleteCompleted"
+                var _this = this;
+                $.ajax({
+                    url: "/todo-list/ajax?sAction=deleteCompleted",
+                    method: 'post',
+                    success: function () {
+                        var newTodos = _this.todos.filter(todo => !todo.completed);
+                        _this.todos = newTodos;
+                    }
+                })
             },
             submitForm: function () {
                 this.$nextTick(function () {

@@ -49,22 +49,17 @@ public class TodoAjaxServlet extends HttpServlet {
             PrintWriter writer = response.getWriter();
             writer.write(new ObjectMapper().writeValueAsString(todo));
             writer.flush();
-            return;
         } else if ("delete".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.deleteTodo(id);
-            return;
         } else if ("markDone".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.markDone(id);
-            return;
         } else if ("markUnfinished".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.markUnfinished(id);
-            return;
         } else if ("deleteCompleted".equals(action)) {
             todoRepository.deleteCompleted();
         }
-        doGet(request, response);
     }
 }

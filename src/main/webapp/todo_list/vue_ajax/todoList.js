@@ -23,7 +23,16 @@ var todoListComponent = {
             if (!todo.completed) {
                 sAction = "markUnfinished";
             }
-            this.$emit("toggle-todo", todo.id, sAction);
+            $.ajax({
+                url: "/todo-list/ajax?sAction=" + sAction,
+                method: 'post',
+                data: {
+                    id: todo.id
+                },
+                error: function () {
+                    todo.completed = !todo.completed;
+                }
+            })
         },
         deleteTodo: function (todo) {
             var _this = this;

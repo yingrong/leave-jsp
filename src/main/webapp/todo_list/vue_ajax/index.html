@@ -17,7 +17,7 @@
     <div id="app">
         <todo-form-component :s-action="sAction" :id="id" :title="title" v-on:submit="submitForm"></todo-form-component>
         <todo-header-component v-on:add-todo="saveTodo"></todo-header-component>
-        <todo-list-component :todos="todos" v-on:toggle-todo="toggleCompleted" v-on:delete-todo="deleteTodo" >
+        <todo-list-component :todos="todos" v-on:delete-todo="deleteTodo" >
         </todo-list-component>
         <todo-footer-component :hasCompleted="hasCompletedJs" v-on:delete-completed-todo="deleteCompletedTodo">
         </todo-footer-component>
@@ -58,10 +58,6 @@
         methods: {
             saveTodo: function (todo) {
                 this.todos.push(todo);
-            },
-            toggleCompleted: function (id, sAction) {
-                this.sAction = sAction;
-                this.id=id;
             },
             deleteTodo: function (id) {
                 var newTodos = this.todos.filter(todo => todo.id != id);

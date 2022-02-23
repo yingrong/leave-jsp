@@ -43,8 +43,7 @@ var todoListComponent = {
                     id: todo.id
                 },
                 success: function () {
-                    var newTodos = _this.todos.filter(ctodo => ctodo.id != todo.id);
-                    _this.todos = newTodos;
+                    _this.$emit('delete-todo', todo.id);
                 }
             })
         }

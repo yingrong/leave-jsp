@@ -26,7 +26,17 @@ var todoListComponent = {
             this.$emit("toggle-todo", todo.id, sAction);
         },
         deleteTodo: function (todo) {
-            this.$emit("delete-todo", todo.id);
+            var _this = this;
+            $.ajax({
+                url: "/todo-list/ajax?sAction=delete",
+                method: 'post',
+                data: {
+                    id: todo.id
+                },
+                success: function () {
+                    _this.$emit('delete-todo', todo.id);
+                }
+            })
         }
     }
 }

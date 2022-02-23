@@ -64,8 +64,8 @@
                 this.id=id;
             },
             deleteTodo: function (id) {
-                this.sAction="delete"
-                this.id=id;
+                var newTodos = this.todos.filter(todo => todo.id != id);
+                this.todos = newTodos;
             },
             deleteCompletedTodo: function () {
                 this.sAction="deleteCompleted"

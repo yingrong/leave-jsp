@@ -53,6 +53,7 @@ public class TodoAjaxServlet extends HttpServlet {
         } else if ("delete".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.deleteTodo(id);
+            return;
         } else if ("markDone".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.markDone(id);

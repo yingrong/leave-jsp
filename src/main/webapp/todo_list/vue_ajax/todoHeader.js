@@ -16,7 +16,19 @@ var todoHeaderComponent = {
             if (!value) {
                 return;
             }
-            this.$emit('add-todo', value);
+            var _this = this;
+            $.ajax({
+                url: "/todo-list/ajax?sAction=add",
+                dataType: "json",
+                method: 'post',
+                data: {
+                    title: this.newTodo
+                },
+                success: function (todo) {
+                    _this.$emit('add-todo', todo);
+                }
+            })
+            this.newTodo = '';
         }
     }
 }

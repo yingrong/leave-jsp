@@ -41,7 +41,15 @@ public class TodoAjaxServlet extends HttpServlet {
         System.out.println("post new --------" + action);
         if ("add".equals(action)) {
             String title = request.getParameter("title");
-            todoRepository.addTodo(new Todo(title));
+            Todo todo = new Todo(title);
+            todoRepository.addTodo(todo);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            PrintWriter writer = response.getWriter();
+            writer.write(new ObjectMapper().writeValueAsString(todo));
+            writer.flush();
+            return;
         } else if ("delete".equals(action)) {
             String id = request.getParameter("id");
             todoRepository.deleteTodo(id);

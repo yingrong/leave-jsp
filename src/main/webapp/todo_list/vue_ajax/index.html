@@ -6,7 +6,6 @@
     <script type="text/javascript" src="../../js/jquery.js"></script>
     <script type="text/javascript" src="../../js/vue.js"></script>
     <link rel="stylesheet" href="/todo_list/common/index.css"/>
-    <script type="text/javascript" src="/todo_list/vue_ajax/todoForm.js"></script>
     <script type="text/javascript" src="/todo_list/vue_ajax/todoHeader.js"></script>
     <script type="text/javascript" src="/todo_list/vue_ajax/todoList.js"></script>
     <script type="text/javascript" src="/todo_list/vue_ajax/todoFooter.js"></script>
@@ -15,7 +14,6 @@
 <body>
 <section class="todoapp">
     <div id="app">
-        <todo-form-component :s-action="sAction" :id="id" :title="title" v-on:submit="submitForm"></todo-form-component>
         <todo-header-component v-on:add-todo="saveTodo"></todo-header-component>
         <todo-list-component :todos="todos" v-on:delete-todo="deleteTodo" >
         </todo-list-component>
@@ -28,10 +26,7 @@
         el: '#app',
         data: function () {
             return {
-                todos: [],
-                sAction: '',
-                id: '',
-                title: ''
+                todos: []
             }
         },
         computed: {
@@ -40,7 +35,6 @@
             }
         },
         components: {
-            'todo-form-component': todoFormComponent,
             'todo-header-component': todoHeaderComponent,
             'todo-list-component': todoListComponent,
             'todo-footer-component': todoFooterComponent
@@ -73,11 +67,6 @@
                         _this.todos = newTodos;
                     }
                 })
-            },
-            submitForm: function () {
-                this.$nextTick(function () {
-                    todoForm.submit();
-                });
             }
         }
     })

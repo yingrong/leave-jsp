@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class TeamBuildingServiceTest {
 
         TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
                 new ActivityItem(11L, 13L, true, 5),
-                new ActivityItem(12L, 14L, false, null)));
+                new ActivityItem(12L, 14L, false, null)), new Date(2021, 5, 1), true);
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
         when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "团建测试包", Arrays.asList(13L, 14L)));
@@ -50,6 +51,8 @@ public class TeamBuildingServiceTest {
         Assert.assertEquals(teamBuildingPackageItemId, teamBuildingPackageItemDto.getId().longValue());
         Assert.assertEquals(101L, teamBuildingPackageItemDto.getPackageId().longValue());
         Assert.assertEquals("团建测试包", teamBuildingPackageItemDto.getName());
+        Assert.assertEquals(new Date(2021, 5, 1).toString(), teamBuildingPackageItemDto.getDate().toString());
+        Assert.assertTrue(teamBuildingPackageItemDto.isCompleted());
 
         Assert.assertEquals(2, teamBuildingPackageItemDto.getActivityItemDtos().size());
 
@@ -72,7 +75,7 @@ public class TeamBuildingServiceTest {
 
         TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
                 new ActivityItem(11L, 13L, true, 5),
-                new ActivityItem(12L, 14L, false, null)));
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
 
@@ -85,6 +88,8 @@ public class TeamBuildingServiceTest {
         Assert.assertEquals(teamBuildingPackageItemId, captorValue.getId().longValue());
         Assert.assertEquals(101L, captorValue.getPackageId().longValue());
         Assert.assertEquals(2, captorValue.getActivityItems().size());
+        Assert.assertEquals(new Date(2022, 2, 1).toString(), captorValue.getDate().toString());
+        Assert.assertFalse(captorValue.isCompleted());
 
         ActivityItem activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 11L).findFirst().get();
         Assert.assertEquals(13L, activityItem.getActivityId().longValue());
@@ -103,7 +108,7 @@ public class TeamBuildingServiceTest {
 
         TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
                 new ActivityItem(11L, 13L, true, 5),
-                new ActivityItem(12L, 14L, false, null)));
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
 
@@ -116,6 +121,8 @@ public class TeamBuildingServiceTest {
         Assert.assertEquals(teamBuildingPackageItemId, captorValue.getId().longValue());
         Assert.assertEquals(101L, captorValue.getPackageId().longValue());
         Assert.assertEquals(2, captorValue.getActivityItems().size());
+        Assert.assertEquals(new Date(2022, 2, 1).toString(), captorValue.getDate().toString());
+        Assert.assertFalse(captorValue.isCompleted());
 
         ActivityItem activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 11L).findFirst().get();
         Assert.assertEquals(13L, activityItem.getActivityId().longValue());

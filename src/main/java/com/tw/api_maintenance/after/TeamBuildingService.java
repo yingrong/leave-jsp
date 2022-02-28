@@ -33,7 +33,9 @@ public class TeamBuildingService {
         return new TeamBuildingPackageItemDto(teamBuildingPackageItem.getId(),
                 teamBuildingPackage.getId(),
                 teamBuildingPackage.getName(),
-                activityItemDtos);
+                activityItemDtos,
+                teamBuildingPackageItem.getDate(),
+                teamBuildingPackageItem.isCompleted());
 
     }
 

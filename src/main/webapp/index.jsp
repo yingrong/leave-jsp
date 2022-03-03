@@ -13,5 +13,10 @@
 <a href="todo-list/jsp-module">重构前</a> <a href="todo-list/vue">重构后</a><a href="#">代码比较</a>
 <h2>Vue 改造完成后，form 表单改ajax</h2>
 <a href="todo-list/vue">重构前</a> <a href="todo-list/ajax">重构后</a><a href="#">代码比较</a>
+<h2>前端工程化，vue-cli</h2>
+<p>注意以下两个页面url不一样，功能相同</p>
+<a href="todo-list/vue-cli-basic">重构后，通过servlet转到html</a>
+<p></p>
+<a href="todo_list/vue_cli_basic/dist/index.html">重构后，直接访问html</a>
 </body>
 </html>

@@ -1,9 +1,6 @@
 package com.tw.api_maintenance.after;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TeamBuildingPackageItemRepository {
     Map<Long, TeamBuildingPackageItem> packageItemData = new HashMap<>();
@@ -34,5 +31,17 @@ public class TeamBuildingPackageItemRepository {
 
     public void save(TeamBuildingPackageItem packageItem) {
         packageItemData.put(packageItem.getId(), packageItem);
+    }
+
+    public TeamBuildingPackageItem findLastCompleted() {
+        Comparator<TeamBuildingPackageItem> dateDescendComparator = (item1, item2) -> {
+            if (item1.getDate().before(item2.getDate())) {
+                return -1;
+            } else if (item1.getDate().after(item2.getDate())) {
+                return 1;
+            }
+            return 0;
+        };
+        return packageItemData.values().stream().filter(p -> p.isCompleted()).sorted(dateDescendComparator).findFirst().get();
     }
 }

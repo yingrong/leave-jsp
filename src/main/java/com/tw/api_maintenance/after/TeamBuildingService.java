@@ -43,8 +43,14 @@ public class TeamBuildingService {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
         ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
 
-        if (packageItem.getPackageId() == 10010 && activityItem.getActivityId() == 3) {
-            return new Error("上次已经举办过唱歌活动，本次不可选择！");
+        TeamBuildingPackageItem lastPackageItem = teamBuildingPackageItemRepository.findLastCompleted();
+
+        if(lastPackageItem != null && lastPackageItem.getPackageId() == packageItem.getPackageId() &&
+                lastPackageItem.getActivityItems().stream()
+                        .filter(ai -> ai.getSelected()).anyMatch(ai -> ai.getActivityId() == activityItem.getActivityId())) {
+            List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));
+            String message = "上次已经举办过"+ activities.get(0).getName() + "活动，本次不可选择！";
+            return new Error(message);
         } else {
             activityItem.setSelected(true);
             activityItem.setCount(count);

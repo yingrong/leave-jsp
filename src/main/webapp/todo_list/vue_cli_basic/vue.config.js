@@ -10,5 +10,9 @@ module.exports = defineConfig({
         $: "jquery"
       })
     ]
+  },
+  devServer: {
+    port: 8081,
+    proxy: "http://localhost:8080/"
   }
 })

@@ -60,6 +60,7 @@ public class ActivityServlet extends HttpServlet {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 PrintWriter out = response.getWriter();
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.write(objectMapper.writeValueAsString(result));
                 out.flush();
             }

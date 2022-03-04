@@ -66,7 +66,7 @@
 
 <h2>当前实现存在的问题：</h2>
 <ul style="color: red;">
-    <li>错误处理不统一（有的API失败时返回Code为200，且错误时数据结构不统一）</li>
+    <li>错误处理不统一（错误时数据结构不统一）</li>
     <li>部分数据校验只存在于jsp</li>
     <li>一个原子业务通过多个API调用完成（校验和保存数据应该在一个API，取消依赖活动应该也在同一个API）</li>
 </ul>
@@ -202,15 +202,15 @@
             type: "POST",
             url: "/api-maintenance/after?sAction=check-mutex",
             data: requestBody,
-            dataType: "json",
             async: false,
-            success: function (data) {
-                if(data.errorMessage) {
-                    result.errorMessage = data.errorMessage;
-                    result.success = false;
-                }
-
-                console.log('发送"校验互斥"请求成功:' + JSON.stringify(requestBody));
+            success: function () {
+                result.success = true;
+                console.log('发送"校验互斥"请求结果成功:' + JSON.stringify(requestBody));
+            },
+            error: function (jqXHR) {
+                result.success = false;
+                result.errorMessage = jqXHR.responseJSON.errorMessage;
+                console.log('发送"选择活动"请求结果失败:' + JSON.stringify(requestBody));
             }
         });
         return result;

@@ -66,7 +66,6 @@
 
 <h2>当前实现存在的问题：</h2>
 <ul style="color: red;">
-    <li>API中传入的参数来部分自于后端</li>
     <li>错误处理不统一（有的API失败时返回Code为200，且错误时数据结构不统一）</li>
     <li>部分数据校验只存在于jsp</li>
     <li>一个原子业务通过多个API调用完成（校验和保存数据应该在一个API，取消依赖活动应该也在同一个API）</li>
@@ -196,8 +195,7 @@
         var result = {success: true};
         let requestBody = {
             teamBuildingPackageItemId: packageItemId,
-            activityItemId: activityItemId,
-            mutexActivityIds: JSON.stringify(mutexActivityConfig)
+            activityItemId: activityItemId
         };
 
         $.ajax({

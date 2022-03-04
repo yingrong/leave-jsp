@@ -10,18 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @WebServlet(value = "/api-maintenance/after")
 public class ActivityServlet extends HttpServlet {
     TeamBuildingService teamBuildingService;
 
     public ActivityServlet() {
-        teamBuildingService = new TeamBuildingService(new TeamBuildingPackageItemRepository(), new TeamBuildingPackageRepository(), new ActivityRepository());
+        teamBuildingService = new TeamBuildingService(new TeamBuildingPackageItemRepository(), new TeamBuildingPackageRepository(), new ActivityRepository(), new ActivityMutexRepository());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -57,11 +54,7 @@ public class ActivityServlet extends HttpServlet {
         } else if ("check-mutex".equals(action)) {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
-            String mutexActivityIds = request.getParameter("mutexActivityIds");
-
-            Map<Long, Map<Long, Long>> mutexActivityIdMap = objectMapper.readValue(mutexActivityIds, new TypeReference<Map<Long, Map<Long, Long>>>() {
-            });
-            HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, activityItemId, mutexActivityIdMap);
+            HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, activityItemId);
 
             if (result != null) {
                 response.setContentType("application/json;charset=UTF-8");

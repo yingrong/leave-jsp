@@ -7,11 +7,13 @@ public class TeamBuildingService {
     TeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
     TeamBuildingPackageRepository teamBuildingPackageRepository;
     ActivityRepository activityRepository;
+    private ActivityMutexRepository activityMutexRepository;
 
-    public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository) {
+    public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;
+        this.activityMutexRepository = activityMutexRepository;
     }
 
     public TeamBuildingPackageItemDto queryTeamBuildingPackage(Long packageId) {
@@ -42,11 +44,11 @@ public class TeamBuildingService {
 
         TeamBuildingPackageItem lastPackageItem = teamBuildingPackageItemRepository.findLastCompleted();
 
-        if(lastPackageItem != null && Objects.equals(lastPackageItem.getPackageId(), packageItem.getPackageId()) &&
+        if (lastPackageItem != null && Objects.equals(lastPackageItem.getPackageId(), packageItem.getPackageId()) &&
                 lastPackageItem.getActivityItems().stream()
                         .filter(ai -> ai.getSelected()).anyMatch(ai -> ai.getActivityId() == activityItem.getActivityId())) {
             List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));
-            String message = "上次已经举办过"+ activities.get(0).getName() + "活动，本次不可选择！";
+            String message = "上次已经举办过" + activities.get(0).getName() + "活动，本次不可选择！";
             return new Error(message);
         } else {
             activityItem.setSelected(true);
@@ -66,23 +68,21 @@ public class TeamBuildingService {
 
     }
 
-    public HashMap<String, String> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId,  Map<Long, Map<Long, Long>> mutexActivityIdMap) {
+    public HashMap<String, String> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
         ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
 
-        if (mutexActivityIdMap.get(packageItem.getPackageId()) != null) {
-            Long mutexActivityId = mutexActivityIdMap.get(packageItem.getPackageId()).get(activityItem.getActivityId());
-            if (mutexActivityId != null) {
-                ActivityItem mutexActivity = packageItem.getActivityItems().stream().filter(i -> i.getActivityId() == mutexActivityId).findFirst().get();
-                if (mutexActivity.getSelected()) {
-                    String packageName = teamBuildingPackageRepository.findById(packageItem.getPackageId()).getName();
-                    Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))
-                            .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
-                    String errorMessage = "在" + packageName + "中，" + activityIdToName.get(activityItem.getActivityId()) + "和" + activityIdToName.get(mutexActivityId) + "不能同时选择！";
-                    HashMap<String, String> result = new HashMap<>();
-                    result.put("errorMessage", errorMessage);
-                    return result;
-                }
+        Long mutexActivityId = activityMutexRepository.findByMutexActivityId(packageItem.getPackageId(), activityItem.getActivityId());
+        if (mutexActivityId != null) {
+            ActivityItem mutexActivity = packageItem.getActivityItems().stream().filter(i -> i.getActivityId() == mutexActivityId).findFirst().get();
+            if (mutexActivity.getSelected()) {
+                String packageName = teamBuildingPackageRepository.findById(packageItem.getPackageId()).getName();
+                Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))
+                        .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
+                String errorMessage = "在" + packageName + "中，" + activityIdToName.get(activityItem.getActivityId()) + "和" + activityIdToName.get(mutexActivityId) + "不能同时选择！";
+                HashMap<String, String> result = new HashMap<>();
+                result.put("errorMessage", errorMessage);
+                return result;
             }
         }
         return null;

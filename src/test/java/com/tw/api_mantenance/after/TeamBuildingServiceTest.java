@@ -21,6 +21,7 @@ public class TeamBuildingServiceTest {
     TeamBuildingPackageRepository mockTeamBuildingPackageRepository;
     ActivityRepository mockActivityRepository;
     TeamBuildingService teamBuildingService;
+    ActivityMutexRepository activityMutexRepository;
 
     @Captor
     ArgumentCaptor<List<Long>> longListCaptor;
@@ -30,7 +31,8 @@ public class TeamBuildingServiceTest {
         mockTeamBuildingPackageItemRepository = mock(TeamBuildingPackageItemRepository.class);
         mockTeamBuildingPackageRepository = mock(TeamBuildingPackageRepository.class);
         mockActivityRepository = mock(ActivityRepository.class);
-        teamBuildingService = new TeamBuildingService(mockTeamBuildingPackageItemRepository, mockTeamBuildingPackageRepository, mockActivityRepository);
+        activityMutexRepository = mock(ActivityMutexRepository.class);
+        teamBuildingService = new TeamBuildingService(mockTeamBuildingPackageItemRepository, mockTeamBuildingPackageRepository, mockActivityRepository, activityMutexRepository);
     }
 
     @Test
@@ -176,18 +178,15 @@ public class TeamBuildingServiceTest {
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
         when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
-        when(mockActivityRepository.findByIds(anyListOf(Long.class))).thenReturn(anyListOf(Activity.class));
+        when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
-        HashMap<Long, Map<Long, Long>> mutexActivityIdMap = new HashMap<>();
-        HashMap<Long, Long> mutexActivityMap = new HashMap<>();
-        mutexActivityMap.put(14L, 112L);
-        mutexActivityIdMap.put(101L, mutexActivityMap);
 
-        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L, mutexActivityIdMap);
+        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
         assertNull(result);
 
         verify(mockTeamBuildingPackageRepository, times(0)).findById(anyLong());
         verify(mockActivityRepository, times(0)).findByIds(anyListOf(Long.class));
+        verify(activityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
     }
 
     @Test
@@ -203,18 +202,15 @@ public class TeamBuildingServiceTest {
         when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
         when(mockActivityRepository.findByIds(anyListOf(Long.class))).thenReturn(Arrays.asList(
         new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
+        when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
-        HashMap<Long, Map<Long, Long>> mutexActivityIdMap = new HashMap<>();
-        HashMap<Long, Long> mutexActivityMap = new HashMap<>();
-        mutexActivityMap.put(14L, 112L);
-        mutexActivityIdMap.put(101L, mutexActivityMap);
-
-        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L, mutexActivityIdMap);
+        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
         assertTrue(result.containsKey("errorMessage"));
         assertEquals("在测试团建包名字中，14L活动名称和112L活动名称不能同时选择！", result.get("errorMessage"));
 
         verify(mockTeamBuildingPackageRepository, times(1)).findById(101L);
         verify(mockActivityRepository, times(1)).findByIds(longListCaptor.capture());
+        verify(activityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
 
         List<Long> activityIds = longListCaptor.getValue();
         assertEquals(2, activityIds.size());

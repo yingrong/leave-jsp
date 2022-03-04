@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -21,6 +21,9 @@ public class TeamBuildingServiceTest {
     TeamBuildingPackageRepository mockTeamBuildingPackageRepository;
     ActivityRepository mockActivityRepository;
     TeamBuildingService teamBuildingService;
+
+    @Captor
+    ArgumentCaptor<List<Long>> longListCaptor;
 
     @Before
     public void init() {
@@ -160,5 +163,62 @@ public class TeamBuildingServiceTest {
         assertEquals(14L, activityItem.getActivityId().longValue());
         assertNull(activityItem.getCount());
         assertFalse(activityItem.getSelected());
+    }
+
+    @Test
+    public void testCheckMutex() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, false, null),
+                new ActivityItem(111L, 112L, false, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+        when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
+        when(mockActivityRepository.findByIds(anyListOf(Long.class))).thenReturn(anyListOf(Activity.class));
+
+        HashMap<Long, Map<Long, Long>> mutexActivityIdMap = new HashMap<>();
+        HashMap<Long, Long> mutexActivityMap = new HashMap<>();
+        mutexActivityMap.put(14L, 112L);
+        mutexActivityIdMap.put(101L, mutexActivityMap);
+
+        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L, mutexActivityIdMap);
+        assertNull(result);
+
+        verify(mockTeamBuildingPackageRepository, times(0)).findById(anyLong());
+        verify(mockActivityRepository, times(0)).findByIds(anyListOf(Long.class));
+    }
+
+    @Test
+    public void testCheckMutexWhenCurrentMutexIsSelected() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, false, null),
+                new ActivityItem(111L, 112L, true, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+        when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
+        when(mockActivityRepository.findByIds(anyListOf(Long.class))).thenReturn(Arrays.asList(
+        new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
+
+        HashMap<Long, Map<Long, Long>> mutexActivityIdMap = new HashMap<>();
+        HashMap<Long, Long> mutexActivityMap = new HashMap<>();
+        mutexActivityMap.put(14L, 112L);
+        mutexActivityIdMap.put(101L, mutexActivityMap);
+
+        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L, mutexActivityIdMap);
+        assertTrue(result.containsKey("errorMessage"));
+        assertEquals("在测试团建包名字中，14L活动名称和112L活动名称不能同时选择！", result.get("errorMessage"));
+
+        verify(mockTeamBuildingPackageRepository, times(1)).findById(101L);
+        verify(mockActivityRepository, times(1)).findByIds(longListCaptor.capture());
+
+        List<Long> activityIds = longListCaptor.getValue();
+        assertEquals(2, activityIds.size());
+        assertTrue(activityIds.contains(14L));
+        assertTrue(activityIds.contains(112L));
     }
 }

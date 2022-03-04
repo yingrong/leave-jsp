@@ -63,6 +63,7 @@ public class TeamBuildingService {
         activityItem.setCount(null);
 
         teamBuildingPackageItemRepository.save(packageItem);
+
     }
 
     public HashMap<String, String> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId,  Map<Long, Map<Long, Long>> mutexActivityIdMap) {

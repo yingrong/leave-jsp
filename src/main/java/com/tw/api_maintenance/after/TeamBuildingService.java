@@ -1,9 +1,6 @@
 package com.tw.api_maintenance.after;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TeamBuildingService {
@@ -45,7 +42,7 @@ public class TeamBuildingService {
 
         TeamBuildingPackageItem lastPackageItem = teamBuildingPackageItemRepository.findLastCompleted();
 
-        if(lastPackageItem != null && lastPackageItem.getPackageId() == packageItem.getPackageId() &&
+        if(lastPackageItem != null && Objects.equals(lastPackageItem.getPackageId(), packageItem.getPackageId()) &&
                 lastPackageItem.getActivityItems().stream()
                         .filter(ai -> ai.getSelected()).anyMatch(ai -> ai.getActivityId() == activityItem.getActivityId())) {
             List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));

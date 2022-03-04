@@ -13,7 +13,7 @@ public class TeamBuildingPackageItemRepository {
                 new ActivityItem(804L, 4L, false, null),
                 new ActivityItem(805L, 5L, false, null)), new Date(2021, 10, 5), false));
 
-        packageItemData.put(80010L, new TeamBuildingPackageItem(80011L, 10010L, Arrays.asList(
+        packageItemData.put(80011L, new TeamBuildingPackageItem(80011L, 10010L, Arrays.asList(
                 new ActivityItem(806L, 3L, true, null),
                 new ActivityItem(807L, 4L, false, null),
                 new ActivityItem(808L, 5L, false, null)), new Date(2021, 9, 1), true));

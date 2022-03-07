@@ -181,8 +181,8 @@ public class TeamBuildingServiceTest {
         when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
 
-        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
-        assertNull(result);
+        Error error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
+        assertNull(error);
 
         verify(mockTeamBuildingPackageRepository, times(0)).findById(anyLong());
         verify(mockActivityRepository, times(0)).findByIds(anyListOf(Long.class));
@@ -204,9 +204,8 @@ public class TeamBuildingServiceTest {
         new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
         when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
-        HashMap<String, String> result = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
-        assertTrue(result.containsKey("errorMessage"));
-        assertEquals("在测试团建包名字中，14L活动名称和112L活动名称不能同时选择！", result.get("errorMessage"));
+        Error error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
+        assertEquals("在测试团建包名字中，14L活动名称和112L活动名称不能同时选择！", error.getMessage());
 
         verify(mockTeamBuildingPackageRepository, times(1)).findById(101L);
         verify(mockActivityRepository, times(1)).findByIds(longListCaptor.capture());

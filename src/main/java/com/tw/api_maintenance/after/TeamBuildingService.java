@@ -68,7 +68,7 @@ public class TeamBuildingService {
 
     }
 
-    public HashMap<String, String> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId) {
+    public Error checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
         ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
 
@@ -79,10 +79,8 @@ public class TeamBuildingService {
                 String packageName = teamBuildingPackageRepository.findById(packageItem.getPackageId()).getName();
                 Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))
                         .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
-                String errorMessage = "在" + packageName + "中，" + activityIdToName.get(activityItem.getActivityId()) + "和" + activityIdToName.get(mutexActivityId) + "不能同时选择！";
-                HashMap<String, String> result = new HashMap<>();
-                result.put("errorMessage", errorMessage);
-                return result;
+
+                return new Error("在" + packageName + "中，" + activityIdToName.get(activityItem.getActivityId()) + "和" + activityIdToName.get(mutexActivityId) + "不能同时选择！");
             }
         }
         return null;

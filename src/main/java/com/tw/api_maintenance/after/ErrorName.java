@@ -1,14 +1,15 @@
 package com.tw.api_maintenance.after;
 
-public class Error<T extends ErrorDetail> {
+public enum ErrorName {
+    AlreadySelectedLastTime("AlreadySelectedLastTime", "上次已经赔付过"),
+    MutexActivity("MutexActivity", "互斥的活动");
+
     private String code;
     private String description;
-    private T detail;
 
-    Error(String code, String description, T detail) {
+    ErrorName(String code, String description) {
         this.code = code;
         this.description = description;
-        this.detail = detail;
     }
 
     public String getCode() {
@@ -18,9 +19,4 @@ public class Error<T extends ErrorDetail> {
     public String getDescription() {
         return description;
     }
-
-    public T getDetail() {
-        return detail;
-    }
 }
-

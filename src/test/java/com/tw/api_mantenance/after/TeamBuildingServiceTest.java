@@ -130,8 +130,14 @@ public class TeamBuildingServiceTest {
 
         when(mockActivityRepository.findByIds(Arrays.asList(13L))).thenReturn(Arrays.asList(new Activity(13L, "ABC")));
 
-        Error error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 11L, 10);
-        assertEquals(error.getMessage(),"上次已经举办过ABC活动，本次不可选择！");
+        Error<AlreadySelectedLastTimeErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 11L, 10);
+        assertEquals(ErrorName.AlreadySelectedLastTime.getCode(), error.getCode());
+        assertEquals(ErrorName.AlreadySelectedLastTime.getDescription(), error.getDescription());
+
+        AlreadySelectedLastTimeErrorDetail detail = error.getDetail();
+        assertEquals(11L, detail.getActivityItemId().longValue());
+        assertEquals(13L, detail.getActivityId().longValue());
+        assertEquals("ABC", detail.getName());
     }
 
     @Test
@@ -204,8 +210,20 @@ public class TeamBuildingServiceTest {
         new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
         when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
-        Error error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
-        assertEquals("在测试团建包名字中，14L活动名称和112L活动名称不能同时选择！", error.getMessage());
+        Error<MutexActivityErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
+
+        assertEquals(ErrorName.MutexActivity.getCode(), error.getCode());
+        assertEquals(ErrorName.MutexActivity.getDescription(), error.getDescription());
+
+        MutexActivityErrorDetail detail = error.getDetail();
+        assertEquals(teamBuildingPackageItemId, detail.getPackageItemId().longValue());
+        assertEquals(101L, detail.getPackageId().longValue());
+        assertEquals("测试团建包名字", detail.getPackageName());
+        assertEquals(12L, detail.getCurrentActivityItemId().longValue());
+        assertEquals(14L, detail.getCurrentActivityId().longValue());
+        assertEquals("14L活动名称", detail.getCurrentActivityName());
+        assertEquals(112L, detail.getMutexActivityId().longValue());
+        assertEquals("112L活动名称", detail.getMutexActivityName());
 
         verify(mockTeamBuildingPackageRepository, times(1)).findById(101L);
         verify(mockActivityRepository, times(1)).findByIds(longListCaptor.capture());

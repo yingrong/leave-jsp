@@ -208,7 +208,7 @@
             },
             error: function (jqXHR) {
                 result.success = false;
-                result.errorMessage = jqXHR.responseJSON.errorMessage;
+                result.errorMessage = generateErrorMessage(jqXHR.responseJSON);
                 console.log('发送"选择活动"请求结果失败:' + JSON.stringify(requestBody));
             }
         });
@@ -234,11 +234,21 @@
             },
             error: function (jqXHR) {
                 result.success = false;
-                result.errorMessage = jqXHR.responseJSON.message;
+                result.errorMessage = generateErrorMessage(jqXHR.responseJSON)
                 console.log('发送"选择活动"请求失败:' + JSON.stringify(requestBody));
             }
         });
         return result;
+    }
+
+    function generateErrorMessage(error) {
+        if("AlreadySelectedLastTime" === error.code) {
+            return "上次已经举办过\"" + error.detail.name + "\"活动，本次不可选择！";
+        }
+
+        if("MutexActivity" === error.code) {
+            return "在[" + error.detail.packageName + "]中，\'" + error.detail.currentActivityName + "\'和\'" + error.detail.mutexActivityName + "\'不能同时选择！"
+        }
     }
 
     function cancelActivity(packageItemId, activityItemId) {

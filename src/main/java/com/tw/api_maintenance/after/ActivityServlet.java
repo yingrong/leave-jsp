@@ -38,7 +38,7 @@ public class ActivityServlet extends HttpServlet {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
             Integer count = Integer.parseInt(request.getParameter("count"));
-            Error error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, activityItemId, count);
+            Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, activityItemId, count);
             if (error != null) {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
@@ -54,7 +54,7 @@ public class ActivityServlet extends HttpServlet {
         } else if ("check-mutex".equals(action)) {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
-            Error error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, activityItemId);
+            Error<? extends ErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, activityItemId);
 
             if (error != null) {
                 response.setContentType("application/json;charset=UTF-8");

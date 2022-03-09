@@ -102,6 +102,13 @@
     }
 
     function validateCount(activityInfoRow) {
+        if (!activityInfoRow.isNumber()) {
+            return {
+                success: false,
+                errorMessage: "参加人数必须是整数！"
+            };
+        }
+
         if (!activityInfoRow.isCountBetween(1, 50)) {
             return {
                 success: false,
@@ -242,12 +249,20 @@
     }
 
     function generateErrorMessage(error) {
-        if("AlreadySelectedLastTime" === error.code) {
+        if ("AlreadySelectedLastTime" === error.code) {
             return "上次已经举办过\"" + error.detail.name + "\"活动，本次不可选择！";
         }
 
-        if("MutexActivity" === error.code) {
+        if ("MutexActivity" === error.code) {
             return "在[" + error.detail.packageName + "]中，\'" + error.detail.currentActivityName + "\'和\'" + error.detail.mutexActivityName + "\'不能同时选择！"
+        }
+
+        if ("UnexpectedType" === error.code) {
+            return "参加人数必须是" + (error.detail.expectedType === 'java.lang.Integer' ? "整数" : "其他类型") + "!";
+        }
+
+        if ("NotInRange" === error.code) {
+            return "参加人数必须在" + error.detail.min + "到" + error.detail.max + "之间！";
         }
     }
 

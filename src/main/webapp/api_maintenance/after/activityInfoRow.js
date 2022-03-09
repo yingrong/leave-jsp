@@ -23,15 +23,22 @@ ActivityInfoRow.prototype.clearCount = function () {
     }
 }
 
+ActivityInfoRow.prototype.isNumber = function () {
+    if (this.isExist()) {
+        var count = Number(this.countInput.value);
+        return !isNaN(count) && count % 1 === 0;
+    }
+}
+
 ActivityInfoRow.prototype.isCountBetween = function (min, max) {
     if (this.isExist()) {
         var count = Number(this.countInput.value);
-        return !isNaN(count) && count >= min && count <= max;
+        return !isNaN(count) && count % 1 === 0 && count >= min && count <= max;
     }
 }
 
 ActivityInfoRow.prototype.getCount = function () {
     if(this.isExist()) {
-        return Number(this.countInput.value);
+        return this.countInput.value;
     }
 }

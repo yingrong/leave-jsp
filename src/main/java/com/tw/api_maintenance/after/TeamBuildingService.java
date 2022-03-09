@@ -38,7 +38,22 @@ public class TeamBuildingService {
 
     }
 
-    public Error<AlreadySelectedLastTimeErrorDetail> selectActivityItem(Long teamBuildingPackageItemId, Long activityItemId, Integer count) {
+    public Error<? extends ErrorDetail> selectActivityItem(Long teamBuildingPackageItemId, Long activityItemId, String requestCount) {
+
+        Integer count = null;
+        try {
+            count = Integer.parseInt(requestCount);
+        } catch (NumberFormatException ex) {
+            return new Error<>(ErrorName.UnexpectedType.getCode(), ErrorName.UnexpectedType.getDescription(),
+                    new UnexpectedTypeErrorDetail(requestCount, Integer.class.getName()));
+        }
+
+        if(count < 1 || count > 50) {
+            return new Error<>(ErrorName.NotInRange.getCode(), ErrorName.NotInRange.getDescription(),
+                    new NotInRangeErrorDetail(requestCount, 1, 50));
+        }
+
+
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
         ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
 

@@ -37,8 +37,7 @@ public class ActivityServlet extends HttpServlet {
         if ("select".equals(action)) {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
-            Integer count = Integer.parseInt(request.getParameter("count"));
-            Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, activityItemId, count);
+            Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, activityItemId, request.getParameter("count"));
             if (error != null) {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");

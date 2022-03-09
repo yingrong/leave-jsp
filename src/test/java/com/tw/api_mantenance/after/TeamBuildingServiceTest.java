@@ -89,7 +89,7 @@ public class TeamBuildingServiceTest {
         when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
 
 
-        Error error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, 10);
+        Error error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, "10");
         assertNull(error);
 
         ArgumentCaptor<TeamBuildingPackageItem> argumentCaptor = ArgumentCaptor.forClass(TeamBuildingPackageItem.class);
@@ -130,14 +130,79 @@ public class TeamBuildingServiceTest {
 
         when(mockActivityRepository.findByIds(Arrays.asList(13L))).thenReturn(Arrays.asList(new Activity(13L, "ABC")));
 
-        Error<AlreadySelectedLastTimeErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 11L, 10);
+        Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 11L, "10");
         assertEquals(ErrorName.AlreadySelectedLastTime.getCode(), error.getCode());
         assertEquals(ErrorName.AlreadySelectedLastTime.getDescription(), error.getDescription());
 
-        AlreadySelectedLastTimeErrorDetail detail = error.getDetail();
+        AlreadySelectedLastTimeErrorDetail detail = (AlreadySelectedLastTimeErrorDetail)error.getDetail();
         assertEquals(11L, detail.getActivityItemId().longValue());
         assertEquals(13L, detail.getActivityId().longValue());
         assertEquals("ABC", detail.getName());
+    }
+
+    @Test
+    public void testSelectActivityItemWhenTheCountIsNOTExpectedType() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+
+        TeamBuildingPackageItem completedTeamBuildingPackageItem = new TeamBuildingPackageItem(2329L, 101L, Arrays.asList(
+                new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), false);
+
+        when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
+
+
+        List<String> requestCounts = Arrays.asList("abc", "@", "怪异");
+
+        for (String requestCount : requestCounts) {
+            Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, requestCount);
+
+            assertEquals(ErrorName.UnexpectedType.getCode(), error.getCode());
+            assertEquals(ErrorName.UnexpectedType.getDescription(), error.getDescription());
+
+            UnexpectedTypeErrorDetail detail = (UnexpectedTypeErrorDetail) error.getDetail();
+            assertEquals(requestCount, detail.getInputValue());
+            assertEquals("java.lang.Integer", detail.getExpectedType());
+
+            verify(mockTeamBuildingPackageItemRepository, times(0)).save(any());
+        }
+    }
+
+    @Test
+    public void testSelectActivityItemWhenTheCountIsNOTBetween1and50() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+
+        TeamBuildingPackageItem completedTeamBuildingPackageItem = new TeamBuildingPackageItem(2329L, 101L, Arrays.asList(
+                new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), false);
+
+        when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
+
+
+        List<String> requestCounts = Arrays.asList("0", "51", "-2");
+
+        for (String requestCount : requestCounts) {
+            Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, requestCount);
+
+            assertEquals(ErrorName.NotInRange.getCode(), error.getCode());
+            assertEquals(ErrorName.NotInRange.getDescription(), error.getDescription());
+
+            NotInRangeErrorDetail detail = (NotInRangeErrorDetail) error.getDetail();
+            assertEquals(requestCount, detail.getInputValue());
+            assertEquals(50, detail.getMax().intValue());
+            assertEquals(1, detail.getMin().intValue());
+
+            verify(mockTeamBuildingPackageItemRepository, times(0)).save(any());
+        }
     }
 
     @Test

@@ -1,11 +1,11 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public class NotInRangeErrorDetail extends ErrorDetail {
     private String inputValue;
     private Integer min;
     private Integer max;
 
-    NotInRangeErrorDetail(String inputValue, Integer min, Integer max) {
+    public NotInRangeErrorDetail(String inputValue, Integer min, Integer max) {
 
         this.inputValue = inputValue;
         this.min = min;

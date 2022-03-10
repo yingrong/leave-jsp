@@ -1,4 +1,7 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.infrastructure;
+
+import com.tw.api_maintenance.after.domain.entity.ActivityItem;
+import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 
 import java.util.*;
 

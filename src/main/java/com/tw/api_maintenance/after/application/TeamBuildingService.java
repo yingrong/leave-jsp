@@ -1,4 +1,12 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.application;
+
+import com.tw.api_maintenance.after.domain.error_handling.*;
+import com.tw.api_maintenance.after.domain.entity.Activity;
+import com.tw.api_maintenance.after.domain.entity.ActivityItem;
+import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
+import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
+import com.tw.api_maintenance.after.domain.error_handling.Error;
+import com.tw.api_maintenance.after.infrastructure.*;
 
 import java.util.*;
 import java.util.stream.Collectors;

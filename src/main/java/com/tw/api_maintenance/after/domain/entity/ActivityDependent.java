@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.entity;
 
 public class ActivityDependent {
     private final Long id;
@@ -6,7 +6,7 @@ public class ActivityDependent {
     private final Long activityId;
     private final Long dependentActivityId;
 
-    ActivityDependent(Long id, Long teamBuildingPackageId, Long activityId, Long dependentActivityId) {
+    public ActivityDependent(Long id, Long teamBuildingPackageId, Long activityId, Long dependentActivityId) {
 
         this.id = id;
         this.teamBuildingPackageId = teamBuildingPackageId;

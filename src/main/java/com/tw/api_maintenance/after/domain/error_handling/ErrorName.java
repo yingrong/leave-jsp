@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public enum ErrorName {
     AlreadySelectedLastTime("AlreadySelectedLastTime", "上次已经赔付过"),

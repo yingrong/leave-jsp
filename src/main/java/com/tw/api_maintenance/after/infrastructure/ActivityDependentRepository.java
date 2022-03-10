@@ -1,10 +1,10 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.infrastructure;
+
+import com.tw.api_maintenance.after.domain.entity.ActivityDependent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ActivityDependentRepository {
     Map<Long, ActivityDependent> activityDependentData = new HashMap<>();

@@ -1,4 +1,6 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.entity;
+
+import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 
 import java.util.Date;
 import java.util.List;

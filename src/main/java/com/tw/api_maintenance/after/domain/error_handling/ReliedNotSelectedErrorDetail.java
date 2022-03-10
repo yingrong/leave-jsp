@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public class ReliedNotSelectedErrorDetail extends ErrorDetail {
 
@@ -43,7 +43,7 @@ public class ReliedNotSelectedErrorDetail extends ErrorDetail {
         return reliedActivityName;
     }
 
-    ReliedNotSelectedErrorDetail(Long packageItemId, Long packageId, String packageName,
+    public ReliedNotSelectedErrorDetail(Long packageItemId, Long packageId, String packageName,
                                  Long currentActivityItemId, Long currentActivityId, String currentActivityName,
                                  Long reliedActivityId, String reliedActivityName){
 

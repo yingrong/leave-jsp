@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.entity;
 
 public class Activity {
     private Long id;

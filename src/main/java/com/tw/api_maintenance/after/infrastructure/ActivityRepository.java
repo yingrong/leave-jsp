@@ -1,4 +1,6 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.infrastructure;
+
+import com.tw.api_maintenance.after.domain.entity.Activity;
 
 import java.util.HashMap;
 import java.util.List;

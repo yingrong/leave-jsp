@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public class MutexActivityErrorDetail extends ErrorDetail {
 
@@ -11,7 +11,7 @@ public class MutexActivityErrorDetail extends ErrorDetail {
     private Long mutexActivityId;
     private String mutexActivityName;
 
-    MutexActivityErrorDetail(Long packageItemId, Long packageId, String packageName,
+    public MutexActivityErrorDetail(Long packageItemId, Long packageId, String packageName,
                              Long currentActivityItemId, Long currentActivityId, String currentActivityName,
                              Long mutexActivityId, String mutexActivityName) {
         this.packageItemId = packageItemId;

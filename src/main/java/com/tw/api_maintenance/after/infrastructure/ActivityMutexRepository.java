@@ -1,7 +1,8 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.infrastructure;
+
+import com.tw.api_maintenance.after.domain.entity.ActivityMutex;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ActivityMutexRepository {
     Map<Long, ActivityMutex> activityMutexData = new HashMap<>();

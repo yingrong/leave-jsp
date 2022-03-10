@@ -1,11 +1,11 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public class Error<T extends ErrorDetail> {
     private String code;
     private String description;
     private T detail;
 
-    Error(String code, String description, T detail) {
+    public Error(String code, String description, T detail) {
         this.code = code;
         this.description = description;
         this.detail = detail;

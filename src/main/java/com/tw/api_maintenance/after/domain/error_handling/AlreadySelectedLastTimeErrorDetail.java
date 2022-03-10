@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.error_handling;
 
 public class AlreadySelectedLastTimeErrorDetail extends ErrorDetail {
 
@@ -6,7 +6,7 @@ public class AlreadySelectedLastTimeErrorDetail extends ErrorDetail {
     private Long activityId;
     private String name;
 
-    AlreadySelectedLastTimeErrorDetail(Long activityItemId, Long activityId, String name){
+    public AlreadySelectedLastTimeErrorDetail(Long activityItemId, Long activityId, String name){
         this.activityItemId = activityItemId;
         this.activityId = activityId;
         this.name = name;

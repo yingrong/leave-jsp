@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after;
+package com.tw.api_maintenance.after.domain.entity;
 
 public class ActivityMutex {
     private final Long id;
@@ -6,7 +6,7 @@ public class ActivityMutex {
     private final Long activityId;
     private final Long mutexActivityId;
 
-    ActivityMutex(Long id, Long teamBuildingPackageId, Long activityId, Long mutexActivityId) {
+    public ActivityMutex(Long id, Long teamBuildingPackageId, Long activityId, Long mutexActivityId) {
 
         this.id = id;
         this.teamBuildingPackageId = teamBuildingPackageId;

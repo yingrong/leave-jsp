@@ -311,12 +311,12 @@ public class TeamBuildingServiceTest {
         new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
         when(mockActivityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
-        Error<MutexActivityErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
+        Error<? extends ErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
 
         assertEquals(ErrorName.MutexActivity.getCode(), error.getCode());
         assertEquals(ErrorName.MutexActivity.getDescription(), error.getDescription());
 
-        MutexActivityErrorDetail detail = error.getDetail();
+        MutexActivityErrorDetail detail = (MutexActivityErrorDetail)error.getDetail();
         assertEquals(teamBuildingPackageItemId, detail.getPackageItemId().longValue());
         assertEquals(101L, detail.getPackageId().longValue());
         assertEquals("测试团建包名字", detail.getPackageName());

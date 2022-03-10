@@ -64,11 +64,6 @@
     </li>
 </ul>
 
-<h2>当前实现存在的问题：</h2>
-<ul style="color: red;">
-    <li>一个原子业务通过多个API调用完成（校验和保存数据应该在一个API，取消依赖活动应该也在同一个API）</li>
-</ul>
-
 <script>
     var activityItemIdToActivityId = {};
     <%for(int i = 0; i < activityItems.size(); i ++) {%>
@@ -175,9 +170,16 @@
         cancelActivity(packageItemId, activityItemId);
     }
 
+
     function unSelectActivity(activityInfoRow, packageItemId, activityItemId) {
-        unSelectRelyer(packageItemId, activityItemId);
-        unSelectSingleActivity(activityInfoRow, packageItemId, activityItemId);
+        activityInfoRow.setChecked(false);
+        activityInfoRow.clearCount();
+        var unselectedDependentActivityId = cancelActivity(packageItemId, activityItemId);
+        if(unselectedDependentActivityId) {
+            let dependentActivityInfoRow = new ActivityInfoRow(unselectedDependentActivityId);
+            dependentActivityInfoRow.setChecked(false);
+            dependentActivityInfoRow.clearCount();
+        }
     }
 
     function clickActivityCheck(packageItemId, activityItemId) {
@@ -247,15 +249,20 @@
             activityItemId: activityItemId,
         };
 
+        var unselectedDependentActivityId = null;
+
         $.ajax({
             type: "POST",
             url: "/api-maintenance/after?sAction=unselect",
             data: requestBody,
             async: false,
-            success: function () {
+            success: function (data) {
+                unselectedDependentActivityId = data.unselectedDependentActivityId;
                 console.log('发送"取消活动"请求成功:' + JSON.stringify(requestBody));
             }
         });
+
+        return unselectedDependentActivityId;
     }
 </script>
 </body>

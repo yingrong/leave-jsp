@@ -118,14 +118,26 @@ public class TeamBuildingService {
         return null;
     }
 
-    public void unSelectActivityItem(Long teamBuildingPackageItemId, Long activityItemId) {
+    public Long unSelectActivityItem(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
         ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
+
+        Long unselectedDependentActivityId = null;
+        Long dependentActivityId = activityDependentRepository.findByDependentId(packageItem.getPackageId(), activityItem.getActivityId());
+        if(dependentActivityId != null) {
+            ActivityItem dependentActivityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getActivityId(), dependentActivityId)).findFirst().get();
+            if (dependentActivityItem.getSelected()) {
+                dependentActivityItem.setSelected(false);
+                dependentActivityItem.setCount(null);
+                unselectedDependentActivityId = dependentActivityItem.getId();
+            }
+        }
+
         activityItem.setSelected(false);
         activityItem.setCount(null);
 
         teamBuildingPackageItemRepository.save(packageItem);
-
+        return unselectedDependentActivityId;
     }
 
 

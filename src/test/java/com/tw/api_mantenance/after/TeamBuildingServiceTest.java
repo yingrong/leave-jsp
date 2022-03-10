@@ -283,7 +283,7 @@ public class TeamBuildingServiceTest {
     }
 
     @Test
-    public void testUnselectActivityItem() {
+    public void testUnselectActivityItemWhenNoDependent() {
         long teamBuildingPackageItemId = 1234223L;
 
         TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
@@ -291,8 +291,80 @@ public class TeamBuildingServiceTest {
                 new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+        when(mockActivityDependentRepository.findByDependentId(101L, 13L)).thenReturn(null);
 
-        teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, 11L);
+        Long unselectedDependentActivityId = teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, 11L);
+        assertNull(unselectedDependentActivityId);
+
+        ArgumentCaptor<TeamBuildingPackageItem> argumentCaptor = ArgumentCaptor.forClass(TeamBuildingPackageItem.class);
+        verify(mockTeamBuildingPackageItemRepository, times(1)).save(argumentCaptor.capture());
+
+        TeamBuildingPackageItem captorValue = argumentCaptor.getValue();
+        assertEquals(teamBuildingPackageItemId, captorValue.getId().longValue());
+        assertEquals(101L, captorValue.getPackageId().longValue());
+        assertEquals(2, captorValue.getActivityItems().size());
+        assertEquals(new Date(2022, 2, 1).toString(), captorValue.getDate().toString());
+        assertFalse(captorValue.isCompleted());
+
+        ActivityItem activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 11L).findFirst().get();
+        assertEquals(13L, activityItem.getActivityId().longValue());
+        assertNull(activityItem.getCount());
+        assertFalse(activityItem.getSelected());
+
+        activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 12L).findFirst().get();
+        assertEquals(14L, activityItem.getActivityId().longValue());
+        assertNull(activityItem.getCount());
+        assertFalse(activityItem.getSelected());
+    }
+
+    @Test
+    public void testUnselectActivityItemWhenDependentIsUnSelected() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+        when(mockActivityDependentRepository.findByDependentId(101L, 13L)).thenReturn(14L);
+
+        Long unselectedDependentActivityId = teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, 11L);
+        assertNull(unselectedDependentActivityId);
+
+        ArgumentCaptor<TeamBuildingPackageItem> argumentCaptor = ArgumentCaptor.forClass(TeamBuildingPackageItem.class);
+        verify(mockTeamBuildingPackageItemRepository, times(1)).save(argumentCaptor.capture());
+
+        TeamBuildingPackageItem captorValue = argumentCaptor.getValue();
+        assertEquals(teamBuildingPackageItemId, captorValue.getId().longValue());
+        assertEquals(101L, captorValue.getPackageId().longValue());
+        assertEquals(2, captorValue.getActivityItems().size());
+        assertEquals(new Date(2022, 2, 1).toString(), captorValue.getDate().toString());
+        assertFalse(captorValue.isCompleted());
+
+        ActivityItem activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 11L).findFirst().get();
+        assertEquals(13L, activityItem.getActivityId().longValue());
+        assertNull(activityItem.getCount());
+        assertFalse(activityItem.getSelected());
+
+        activityItem = captorValue.getActivityItems().stream().filter(i -> i.getId() == 12L).findFirst().get();
+        assertEquals(14L, activityItem.getActivityId().longValue());
+        assertNull(activityItem.getCount());
+        assertFalse(activityItem.getSelected());
+    }
+
+    @Test
+    public void testUnselectActivityItemWhenDependentIsSelected() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, true, 5),
+                new ActivityItem(12L, 14L, true, 6)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+        when(mockActivityDependentRepository.findByDependentId(101L, 13L)).thenReturn(14L);
+
+        Long unselectedDependentActivityId = teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, 11L);
+        assertEquals(12L, unselectedDependentActivityId.longValue());
 
         ArgumentCaptor<TeamBuildingPackageItem> argumentCaptor = ArgumentCaptor.forClass(TeamBuildingPackageItem.class);
         verify(mockTeamBuildingPackageItemRepository, times(1)).save(argumentCaptor.capture());

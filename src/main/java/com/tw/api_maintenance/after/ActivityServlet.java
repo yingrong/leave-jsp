@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 @WebServlet(value = "/api-maintenance/after")
 public class ActivityServlet extends HttpServlet {
@@ -46,7 +47,15 @@ public class ActivityServlet extends HttpServlet {
         } else if ("unselect".equals(action)) {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
-            teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, activityItemId);
+            Long unselectedDependentActivityId = teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, activityItemId);
+            HashMap<String, Long> result = new HashMap<>();
+            result.put("unselectedDependentActivityId", unselectedDependentActivityId);
+            response.setContentType("application/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            response.setStatus(HttpServletResponse.SC_OK);
+            out.write(objectMapper.writeValueAsString(result));
+            out.flush();
         }
     }
 

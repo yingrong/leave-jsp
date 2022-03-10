@@ -21,7 +21,8 @@ public class TeamBuildingServiceTest {
     TeamBuildingPackageRepository mockTeamBuildingPackageRepository;
     ActivityRepository mockActivityRepository;
     TeamBuildingService teamBuildingService;
-    ActivityMutexRepository activityMutexRepository;
+    ActivityMutexRepository mockActivityMutexRepository;
+    ActivityDependentRepository mockActivityDependentRepository;
 
     @Captor
     ArgumentCaptor<List<Long>> longListCaptor;
@@ -31,8 +32,9 @@ public class TeamBuildingServiceTest {
         mockTeamBuildingPackageItemRepository = mock(TeamBuildingPackageItemRepository.class);
         mockTeamBuildingPackageRepository = mock(TeamBuildingPackageRepository.class);
         mockActivityRepository = mock(ActivityRepository.class);
-        activityMutexRepository = mock(ActivityMutexRepository.class);
-        teamBuildingService = new TeamBuildingService(mockTeamBuildingPackageItemRepository, mockTeamBuildingPackageRepository, mockActivityRepository, activityMutexRepository);
+        mockActivityMutexRepository = mock(ActivityMutexRepository.class);
+        mockActivityDependentRepository = mock(ActivityDependentRepository.class);
+        teamBuildingService = new TeamBuildingService(mockTeamBuildingPackageItemRepository, mockTeamBuildingPackageRepository, mockActivityRepository, mockActivityMutexRepository, mockActivityDependentRepository);
     }
 
     @Test
@@ -87,7 +89,7 @@ public class TeamBuildingServiceTest {
                 new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), false);
 
         when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
-
+        when(mockActivityDependentRepository.findByReliedId(101L, 14L)).thenReturn(null);
 
         Error error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, "10");
         assertNull(error);
@@ -114,6 +116,39 @@ public class TeamBuildingServiceTest {
     }
 
     @Test
+    public void testSelectActivityItemWhenReliedIsNotSelected() {
+        long teamBuildingPackageItemId = 1234223L;
+
+        TeamBuildingPackageItem teamBuildingPackageItem = new TeamBuildingPackageItem(teamBuildingPackageItemId, 101L, Arrays.asList(
+                new ActivityItem(11L, 13L, false, null),
+                new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
+
+        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+
+        when(mockActivityDependentRepository.findByReliedId(101L, 14L)).thenReturn(13L);
+
+        when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "当前的团建包", Arrays.asList(13L, 14L)));
+        when(mockActivityRepository.findByIds(Arrays.asList(14L, 13L))).thenReturn(Arrays.asList(
+                        new Activity(13L, "被依赖的活动"),
+                        new Activity(14L, "当前的活动")));
+
+
+        Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, "10");
+        assertEquals(ErrorName.ReliedNotSelected.getCode(), error.getCode());
+        assertEquals(ErrorName.ReliedNotSelected.getDescription(), error.getDescription());
+
+        ReliedNotSelectedErrorDetail detail = (ReliedNotSelectedErrorDetail)error.getDetail();
+        assertEquals(teamBuildingPackageItemId, detail.getPackageItemId().longValue());
+        assertEquals(101L, detail.getPackageId().longValue());
+        assertEquals("当前的团建包", detail.getPackageName());
+        assertEquals(12L, detail.getCurrentActivityItemId().longValue());
+        assertEquals(14L, detail.getCurrentActivityId().longValue());
+        assertEquals("当前的活动", detail.getCurrentActivityName());
+        assertEquals(13L, detail.getReliedActivityId().longValue());
+        assertEquals("被依赖的活动", detail.getReliedActivityName());
+    }
+
+    @Test
     public void testSelectActivityItemFailedWhenTheActivityIsSelectedLastTime() {
         long teamBuildingPackageItemId = 1234223L;
 
@@ -126,6 +161,7 @@ public class TeamBuildingServiceTest {
         TeamBuildingPackageItem completedTeamBuildingPackageItem = new TeamBuildingPackageItem(2329L, 101L, Arrays.asList(
                 new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), true);
 
+        when(mockActivityDependentRepository.findByReliedId(101L, 13L)).thenReturn(null);
         when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
 
         when(mockActivityRepository.findByIds(Arrays.asList(13L))).thenReturn(Arrays.asList(new Activity(13L, "ABC")));
@@ -249,7 +285,7 @@ public class TeamBuildingServiceTest {
 
         when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
         when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
-        when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
+        when(mockActivityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
 
         Error error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
@@ -257,7 +293,7 @@ public class TeamBuildingServiceTest {
 
         verify(mockTeamBuildingPackageRepository, times(0)).findById(anyLong());
         verify(mockActivityRepository, times(0)).findByIds(anyListOf(Long.class));
-        verify(activityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
+        verify(mockActivityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
     }
 
     @Test
@@ -273,7 +309,7 @@ public class TeamBuildingServiceTest {
         when(mockTeamBuildingPackageRepository.findById(101L)).thenReturn(new TeamBuildingPackage(101L, "测试团建包名字", Arrays.asList(13L, 14L)));
         when(mockActivityRepository.findByIds(anyListOf(Long.class))).thenReturn(Arrays.asList(
         new Activity(14L, "14L活动名称"), new Activity(112L, "112L活动名称")));
-        when(activityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
+        when(mockActivityMutexRepository.findByMutexActivityId(101L, 14L)).thenReturn(112L);
 
         Error<MutexActivityErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, 12L);
 
@@ -292,7 +328,7 @@ public class TeamBuildingServiceTest {
 
         verify(mockTeamBuildingPackageRepository, times(1)).findById(101L);
         verify(mockActivityRepository, times(1)).findByIds(longListCaptor.capture());
-        verify(activityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
+        verify(mockActivityMutexRepository, times(1)).findByMutexActivityId(101L, 14L);
 
         List<Long> activityIds = longListCaptor.getValue();
         assertEquals(2, activityIds.size());

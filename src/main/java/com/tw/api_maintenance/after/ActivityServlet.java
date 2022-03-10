@@ -1,6 +1,5 @@
 package com.tw.api_maintenance.after;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -10,15 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet(value = "/api-maintenance/after")
 public class ActivityServlet extends HttpServlet {
     TeamBuildingService teamBuildingService;
 
     public ActivityServlet() {
-        teamBuildingService = new TeamBuildingService(new TeamBuildingPackageItemRepository(), new TeamBuildingPackageRepository(), new ActivityRepository(), new ActivityMutexRepository());
+        teamBuildingService = new TeamBuildingService(new TeamBuildingPackageItemRepository(), new TeamBuildingPackageRepository(), new ActivityRepository(), new ActivityMutexRepository(), new ActivityDependentRepository());
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

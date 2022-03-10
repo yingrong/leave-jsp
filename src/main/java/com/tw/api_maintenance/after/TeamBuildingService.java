@@ -8,12 +8,14 @@ public class TeamBuildingService {
     TeamBuildingPackageRepository teamBuildingPackageRepository;
     ActivityRepository activityRepository;
     private ActivityMutexRepository activityMutexRepository;
+    private ActivityDependentRepository activityDependentRepository;
 
-    public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository) {
+    public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository, ActivityDependentRepository activityDependentRepository) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;
         this.activityMutexRepository = activityMutexRepository;
+        this.activityDependentRepository = activityDependentRepository;
     }
 
     public TeamBuildingPackageItemDto queryTeamBuildingPackage(Long packageId) {
@@ -55,13 +57,28 @@ public class TeamBuildingService {
 
 
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
+        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
+        Long reliedId = activityDependentRepository.findByReliedId(packageItem.getPackageId(), activityItem.getActivityId());
+
+        if(reliedId != null) {
+            ActivityItem reliedActivityItem = packageItem.getActivityItems().stream().filter(a -> Objects.equals(a.getActivityId(), reliedId)).findFirst().get();
+            if(!reliedActivityItem.getSelected()) {
+                TeamBuildingPackage packageEntity = teamBuildingPackageRepository.findById(packageItem.getPackageId());
+                Map<Long, String> idToActivityName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), reliedId))
+                        .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
+
+                return new Error<>(ErrorName.ReliedNotSelected.getCode(), ErrorName.ReliedNotSelected.getDescription(),
+                        new ReliedNotSelectedErrorDetail(packageItem.getId(), packageItem.getPackageId(), packageEntity.getName(),
+                                activityItem.getId(), activityItem.getActivityId(), idToActivityName.get(activityItem.getActivityId()),
+                                reliedId, idToActivityName.get(reliedId)));
+            }
+        }
 
         TeamBuildingPackageItem lastPackageItem = teamBuildingPackageItemRepository.findLastCompleted();
 
         if (lastPackageItem != null && Objects.equals(lastPackageItem.getPackageId(), packageItem.getPackageId()) &&
                 lastPackageItem.getActivityItems().stream()
-                        .filter(ai -> ai.getSelected()).anyMatch(ai -> ai.getActivityId() == activityItem.getActivityId())) {
+                        .filter(ai -> ai.getSelected()).anyMatch(ai -> Objects.equals(ai.getActivityId(), activityItem.getActivityId()))) {
             List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));
             return new Error<>(ErrorName.AlreadySelectedLastTime.getCode(),
                     ErrorName.AlreadySelectedLastTime.getDescription(),
@@ -76,7 +93,7 @@ public class TeamBuildingService {
 
     public void unSelectActivityItem(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
+        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
         activityItem.setSelected(false);
         activityItem.setCount(null);
 
@@ -86,11 +103,11 @@ public class TeamBuildingService {
 
     public Error<MutexActivityErrorDetail> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> i.getId() == activityItemId).findFirst().get();
+        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
 
         Long mutexActivityId = activityMutexRepository.findByMutexActivityId(packageItem.getPackageId(), activityItem.getActivityId());
         if (mutexActivityId != null) {
-            ActivityItem mutexActivity = packageItem.getActivityItems().stream().filter(i -> i.getActivityId() == mutexActivityId).findFirst().get();
+            ActivityItem mutexActivity = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getActivityId(), mutexActivityId)).findFirst().get();
             if (mutexActivity.getSelected()) {
                 String packageName = teamBuildingPackageRepository.findById(packageItem.getPackageId()).getName();
                 Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))

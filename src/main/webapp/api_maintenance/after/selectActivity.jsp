@@ -66,7 +66,6 @@
 
 <h2>当前实现存在的问题：</h2>
 <ul style="color: red;">
-    <li>部分数据校验只存在于jsp</li>
     <li>一个原子业务通过多个API调用完成（校验和保存数据应该在一个API，取消依赖活动应该也在同一个API）</li>
 </ul>
 
@@ -263,6 +262,10 @@
 
         if ("NotInRange" === error.code) {
             return "参加人数必须在" + error.detail.min + "到" + error.detail.max + "之间！";
+        }
+
+        if("ReliedNotSelected" === error.code) {
+            return "在[" + error.detail.packageName + "]中，选择@" + error.detail.currentActivityName + "@前必须选择@" + error.detail.reliedActivityName + "@！"
         }
     }
 

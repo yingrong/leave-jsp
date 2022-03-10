@@ -47,19 +47,6 @@ public class ActivityServlet extends HttpServlet {
             Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
             Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
             teamBuildingService.unSelectActivityItem(teamBuildingPackageItemId, activityItemId);
-        } else if ("check-mutex".equals(action)) {
-            Long teamBuildingPackageItemId = Long.parseLong(request.getParameter("teamBuildingPackageItemId"));
-            Long activityItemId = Long.parseLong(request.getParameter("activityItemId"));
-            Error<? extends ErrorDetail> error = teamBuildingService.checkMutexActivity(teamBuildingPackageItemId, activityItemId);
-
-            if (error != null) {
-                response.setContentType("application/json;charset=UTF-8");
-                response.setCharacterEncoding("UTF-8");
-                PrintWriter out = response.getWriter();
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.write(objectMapper.writeValueAsString(error));
-                out.flush();
-            }
         }
     }
 

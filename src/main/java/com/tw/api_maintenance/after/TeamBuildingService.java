@@ -128,11 +128,6 @@ public class TeamBuildingService {
 
     }
 
-    public Error<? extends ErrorDetail> checkMutexActivity(Long teamBuildingPackageItemId, Long activityItemId) {
-        TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
-        return validateMutexActivity(packageItem, activityItem);
-    }
 
     private Error<? extends ErrorDetail> validateMutexActivity(TeamBuildingPackageItem packageItem, ActivityItem activityItem) {
         Long mutexActivityId = activityMutexRepository.findByMutexActivityId(packageItem.getPackageId(), activityItem.getActivityId());

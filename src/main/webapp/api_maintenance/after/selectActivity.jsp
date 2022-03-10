@@ -151,10 +151,7 @@
     function selectActivity(activityInfoRow, packageItemId, activityItemId) {
         var result = validateActivities(activityInfoRow, packageItemId, activityItemId);
         if (result.success) {
-            result = checkMutexActivity(packageItemId, activityItemId)
-            if (result.success) {
-                result = createActivity(activityInfoRow, packageItemId, activityItemId);
-            }
+            result = createActivity(activityInfoRow, packageItemId, activityItemId);
         }
         return result;
     }
@@ -194,31 +191,6 @@
         } else {
             unSelectActivity(activityInfoRow, packageItemId, activityItemId);
         }
-    }
-
-    function checkMutexActivity(packageItemId, activityItemId) {
-        var result = {success: true};
-        let requestBody = {
-            teamBuildingPackageItemId: packageItemId,
-            activityItemId: activityItemId
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "/api-maintenance/after?sAction=check-mutex",
-            data: requestBody,
-            async: false,
-            success: function () {
-                result.success = true;
-                console.log('发送"校验互斥"请求结果成功:' + JSON.stringify(requestBody));
-            },
-            error: function (jqXHR) {
-                result.success = false;
-                result.errorMessage = generateErrorMessage(jqXHR.responseJSON);
-                console.log('发送"选择活动"请求结果失败:' + JSON.stringify(requestBody));
-            }
-        });
-        return result;
     }
 
     function createActivity(activityInfoRow, packageItemId, activityItemId) {
@@ -264,7 +236,7 @@
             return "参加人数必须在" + error.detail.min + "到" + error.detail.max + "之间！";
         }
 
-        if("ReliedNotSelected" === error.code) {
+        if ("ReliedNotSelected" === error.code) {
             return "在[" + error.detail.packageName + "]中，选择@" + error.detail.currentActivityName + "@前必须选择@" + error.detail.reliedActivityName + "@！"
         }
     }

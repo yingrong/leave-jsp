@@ -55,6 +55,9 @@ public class TeamBuildingService {
         error = validateAlreadySelectedLastTime(packageItem, activityItem);
         if (error != null) return error;
 
+        error = validateMutexActivity(packageItem, activityItem);
+        if (error != null) return error;
+
         activityItem.setSelected(true);
         activityItem.setCount(Integer.parseInt(requestCount));
         teamBuildingPackageItemRepository.save(packageItem);

@@ -6,12 +6,15 @@ import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.Error;
+import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
+import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
 import com.tw.api_maintenance.after.infrastructure.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TeamBuildingService {
+    private final TeamBuildingDomainService teamBuildingDomainService;
     TeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
     TeamBuildingPackageRepository teamBuildingPackageRepository;
     ActivityRepository activityRepository;
@@ -24,6 +27,8 @@ public class TeamBuildingService {
         this.activityRepository = activityRepository;
         this.activityMutexRepository = activityMutexRepository;
         this.activityDependentRepository = activityDependentRepository;
+        this.teamBuildingDomainService = new TeamBuildingDomainService(teamBuildingPackageItemRepository, teamBuildingPackageRepository, activityRepository,
+                activityMutexRepository, activityDependentRepository);
     }
 
     public TeamBuildingPackageItemDto queryTeamBuildingPackage(Long packageId) {
@@ -49,124 +54,32 @@ public class TeamBuildingService {
     }
 
     public Error<? extends ErrorDetail> selectActivityItem(Long teamBuildingPackageItemId, Long activityItemId, String requestCount) {
-
-        TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
-
-        Error<? extends ErrorDetail> error = validateCount(requestCount);
-        if (error != null) return error;
-
-        error = validateReliedActivitySelect(packageItem, activityItem);
-        if (error != null)
-            return error;
-
-        error = validateAlreadySelectedLastTime(packageItem, activityItem);
-        if (error != null) return error;
-
-        error = validateMutexActivity(packageItem, activityItem);
-        if (error != null) return error;
-
-        activityItem.setSelected(true);
-        activityItem.setCount(Integer.parseInt(requestCount));
-        teamBuildingPackageItemRepository.save(packageItem);
-        return null;
-
-    }
-
-    private Error<AlreadySelectedLastTimeErrorDetail> validateAlreadySelectedLastTime(TeamBuildingPackageItem packageItem, ActivityItem activityItem) {
-        TeamBuildingPackageItem lastPackageItem = teamBuildingPackageItemRepository.findLastCompleted();
-
-        if (lastPackageItem != null && Objects.equals(lastPackageItem.getPackageId(), packageItem.getPackageId()) &&
-                lastPackageItem.getActivityItems().stream()
-                        .filter(ai -> ai.getSelected()).anyMatch(ai -> Objects.equals(ai.getActivityId(), activityItem.getActivityId()))) {
-            List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));
-            return new Error<>(ErrorName.AlreadySelectedLastTime.getCode(),
-                    ErrorName.AlreadySelectedLastTime.getDescription(),
-                    new AlreadySelectedLastTimeErrorDetail(activityItem.getId(), activityItem.getActivityId(), activities.get(0).getName()));
-        }
-        return null;
-    }
-
-    private Error<ReliedNotSelectedErrorDetail> validateReliedActivitySelect(TeamBuildingPackageItem packageItem, ActivityItem activityItem) {
-        Long reliedId = activityDependentRepository.findByReliedId(packageItem.getPackageId(), activityItem.getActivityId());
-
-        if (reliedId != null) {
-            ActivityItem reliedActivityItem = packageItem.getActivityItems().stream().filter(a -> Objects.equals(a.getActivityId(), reliedId)).findFirst().get();
-            if (!reliedActivityItem.getSelected()) {
-                TeamBuildingPackage packageEntity = teamBuildingPackageRepository.findById(packageItem.getPackageId());
-                Map<Long, String> idToActivityName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), reliedId))
-                        .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
-
-                return new Error<>(ErrorName.ReliedNotSelected.getCode(), ErrorName.ReliedNotSelected.getDescription(),
-                        new ReliedNotSelectedErrorDetail(packageItem.getId(), packageItem.getPackageId(), packageEntity.getName(),
-                                activityItem.getId(), activityItem.getActivityId(), idToActivityName.get(activityItem.getActivityId()),
-                                reliedId, idToActivityName.get(reliedId)));
-            }
-        }
-        return null;
-    }
-
-    private Error<? extends ErrorDetail> validateCount(String requestCount) {
-        Error<? extends ErrorDetail> error = null;
-
+        Integer count = null;
         try {
-            Integer count = Integer.parseInt(requestCount);
-            if (count < 1 || count > 50) {
-                error = new Error<>(ErrorName.NotInRange.getCode(), ErrorName.NotInRange.getDescription(),
-                        new NotInRangeErrorDetail(requestCount, 1, 50));
-            }
+            count = Integer.parseInt(requestCount);
         } catch (NumberFormatException ex) {
-            error = new Error<>(ErrorName.UnexpectedType.getCode(), ErrorName.UnexpectedType.getDescription(),
+            return new Error<>(ErrorName.UnexpectedType.getCode(), ErrorName.UnexpectedType.getDescription(),
                     new UnexpectedTypeErrorDetail(requestCount, Integer.class.getName()));
         }
 
-        if (error != null) {
-            return error;
+        TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
+
+        try {
+            teamBuildingDomainService.selectActivityItem(packageItem, activityItemId, count);
+            teamBuildingPackageItemRepository.save(packageItem);
+        } catch (SelectActivityException ex) {
+            return new Error<>(ex.getErrorName().getCode(), ex.getErrorName().getDescription(), ex.getErrorDetail());
         }
+
         return null;
     }
 
     public Long unSelectActivityItem(Long teamBuildingPackageItemId, Long activityItemId) {
         TeamBuildingPackageItem packageItem = teamBuildingPackageItemRepository.findById(teamBuildingPackageItemId);
-        ActivityItem activityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
 
-        Long unselectedDependentActivityId = null;
-        Long dependentActivityId = activityDependentRepository.findByDependentId(packageItem.getPackageId(), activityItem.getActivityId());
-        if(dependentActivityId != null) {
-            ActivityItem dependentActivityItem = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getActivityId(), dependentActivityId)).findFirst().get();
-            if (dependentActivityItem.getSelected()) {
-                dependentActivityItem.setSelected(false);
-                dependentActivityItem.setCount(null);
-                unselectedDependentActivityId = dependentActivityItem.getId();
-            }
-        }
-
-        activityItem.setSelected(false);
-        activityItem.setCount(null);
-
+        Long unselectedDependentActivityId = teamBuildingDomainService.unSelectActivityItem(packageItem, activityItemId);
         teamBuildingPackageItemRepository.save(packageItem);
         return unselectedDependentActivityId;
     }
-
-
-    private Error<? extends ErrorDetail> validateMutexActivity(TeamBuildingPackageItem packageItem, ActivityItem activityItem) {
-        Long mutexActivityId = activityMutexRepository.findByMutexActivityId(packageItem.getPackageId(), activityItem.getActivityId());
-        if (mutexActivityId != null) {
-            ActivityItem mutexActivity = packageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getActivityId(), mutexActivityId)).findFirst().get();
-            if (mutexActivity.getSelected()) {
-                String packageName = teamBuildingPackageRepository.findById(packageItem.getPackageId()).getName();
-                Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))
-                        .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
-
-                return new Error<>(ErrorName.MutexActivity.getCode(),
-                        ErrorName.MutexActivity.getDescription(),
-                        new MutexActivityErrorDetail(packageItem.getId(), packageItem.getPackageId(), packageName,
-                                activityItem.getId(), activityItem.getActivityId(), activityIdToName.get(activityItem.getActivityId()),
-                                mutexActivityId, activityIdToName.get(mutexActivityId)));
-            }
-        }
-        return null;
-    }
-
 
 }

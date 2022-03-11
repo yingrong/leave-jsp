@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TeamBuildingServiceTest {
+public class TeamBuildingDomainServiceTest {
 
     TeamBuildingPackageItemRepository mockTeamBuildingPackageItemRepository;
     TeamBuildingPackageRepository mockTeamBuildingPackageRepository;
@@ -282,7 +282,7 @@ public class TeamBuildingServiceTest {
             assertEquals(ErrorName.NotInRange.getDescription(), error.getDescription());
 
             NotInRangeErrorDetail detail = (NotInRangeErrorDetail) error.getDetail();
-            assertEquals(requestCount, detail.getInputValue());
+            assertEquals(Integer.parseInt(requestCount), detail.getInputValue().intValue());
             assertEquals(50, detail.getMax().intValue());
             assertEquals(1, detail.getMin().intValue());
 

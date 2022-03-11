@@ -4,6 +4,7 @@ import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class TeamBuildingPackageItem {
     private Long id;
@@ -42,5 +43,13 @@ public class TeamBuildingPackageItem {
 
     public boolean isCompleted() {
         return isCompleted;
+    }
+
+    public ActivityItem getActivityItemByItemId(Long activityItemId) {
+        return getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
+    }
+
+    public ActivityItem getActivityItemByActivityId(Long activityId) {
+        return getActivityItems().stream().filter(i -> Objects.equals(i.getActivityId(), activityId)).findFirst().get();
     }
 }

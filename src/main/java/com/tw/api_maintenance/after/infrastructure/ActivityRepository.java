@@ -1,13 +1,14 @@
 package com.tw.api_maintenance.after.infrastructure;
 
 import com.tw.api_maintenance.after.domain.entity.Activity;
+import com.tw.api_maintenance.after.domain.repository.IActivityRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ActivityRepository {
+public class ActivityRepository implements IActivityRepository {
     Map<Long, Activity> activityData = new HashMap<>();
 
     public ActivityRepository() {
@@ -19,6 +20,7 @@ public class ActivityRepository {
         activityData.put(11L, new Activity(11L, "自由三日飞"));
     }
 
+    @Override
     public List<Activity> findByIds(List<Long> ids) {
         return ids.stream().map(id -> activityData.get(id)).collect(Collectors.toList());
     }

@@ -6,7 +6,7 @@ import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.*;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
-import com.tw.api_maintenance.after.infrastructure.*;
+import com.tw.api_maintenance.after.domain.repository.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TeamBuildingDomainService {
-    TeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
-    TeamBuildingPackageRepository teamBuildingPackageRepository;
-    ActivityRepository activityRepository;
-    private ActivityMutexRepository activityMutexRepository;
-    private ActivityDependentRepository activityDependentRepository;
+    ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
+    ITeamBuildingPackageRepository teamBuildingPackageRepository;
+    IActivityRepository activityRepository;
+    IActivityMutexRepository activityMutexRepository;
+    IActivityDependentRepository activityDependentRepository;
 
-    public TeamBuildingDomainService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository, ActivityDependentRepository activityDependentRepository) {
+    public TeamBuildingDomainService(ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository, ITeamBuildingPackageRepository teamBuildingPackageRepository, IActivityRepository activityRepository, IActivityMutexRepository activityMutexRepository, IActivityDependentRepository activityDependentRepository) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;

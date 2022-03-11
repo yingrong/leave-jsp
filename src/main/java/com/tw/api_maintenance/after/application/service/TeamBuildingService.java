@@ -2,25 +2,28 @@ package com.tw.api_maintenance.after.application.service;
 
 import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
 import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
-import com.tw.api_maintenance.after.domain.error_handling.*;
+import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.domain.entity.Activity;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
-import com.tw.api_maintenance.after.application.error_handling.Error;
+import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
+import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.UnexpectedTypeErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
+import com.tw.api_maintenance.after.domain.repository.*;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
-import com.tw.api_maintenance.after.infrastructure.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TeamBuildingService {
     private final TeamBuildingDomainService teamBuildingDomainService;
-    TeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
-    TeamBuildingPackageRepository teamBuildingPackageRepository;
-    ActivityRepository activityRepository;
+    ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
+    ITeamBuildingPackageRepository teamBuildingPackageRepository;
+    IActivityRepository activityRepository;
 
-    public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository, ActivityDependentRepository activityDependentRepository) {
+    public TeamBuildingService(ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository, ITeamBuildingPackageRepository teamBuildingPackageRepository, IActivityRepository activityRepository, IActivityMutexRepository activityMutexRepository, IActivityDependentRepository activityDependentRepository) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;

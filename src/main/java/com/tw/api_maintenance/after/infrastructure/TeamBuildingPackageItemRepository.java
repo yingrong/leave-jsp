@@ -2,10 +2,11 @@ package com.tw.api_maintenance.after.infrastructure;
 
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
+import com.tw.api_maintenance.after.domain.repository.ITeamBuildingPackageItemRepository;
 
 import java.util.*;
 
-public class TeamBuildingPackageItemRepository {
+public class TeamBuildingPackageItemRepository implements ITeamBuildingPackageItemRepository {
     Map<Long, TeamBuildingPackageItem> packageItemData = new HashMap<>();
 
     public TeamBuildingPackageItemRepository() {

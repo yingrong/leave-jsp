@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.tw.api_maintenance.after.application.TeamBuildingPackageItemDto" %>
-<%@ page import="com.tw.api_maintenance.after.application.ActivityItemDto" %>
+<%@ page import="com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto" %>
+<%@ page import="com.tw.api_maintenance.after.application.dto.ActivityItemDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     TeamBuildingPackageItemDto teamBuildingPackageItem = (TeamBuildingPackageItemDto) request.getAttribute("teamBuildingPackageItem");

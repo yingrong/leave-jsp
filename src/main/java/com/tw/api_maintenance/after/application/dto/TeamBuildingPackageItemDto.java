@@ -1,6 +1,4 @@
-package com.tw.api_maintenance.after.application;
-
-import com.tw.api_maintenance.after.application.ActivityItemDto;
+package com.tw.api_maintenance.after.application.dto;
 
 import java.util.Date;
 import java.util.List;

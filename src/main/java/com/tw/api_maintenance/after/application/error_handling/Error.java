@@ -1,4 +1,6 @@
-package com.tw.api_maintenance.after.domain.error_handling;
+package com.tw.api_maintenance.after.application.error_handling;
+
+import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
 
 public class Error<T extends ErrorDetail> {
     private String code;

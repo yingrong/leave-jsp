@@ -1,14 +1,14 @@
 package com.tw.api_mantenance.after;
 
 import com.tw.api_maintenance.after.domain.error_handling.*;
-import com.tw.api_maintenance.after.application.ActivityItemDto;
-import com.tw.api_maintenance.after.application.TeamBuildingPackageItemDto;
-import com.tw.api_maintenance.after.application.TeamBuildingService;
+import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
+import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
+import com.tw.api_maintenance.after.application.service.TeamBuildingService;
 import com.tw.api_maintenance.after.domain.entity.Activity;
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
-import com.tw.api_maintenance.after.domain.error_handling.Error;
+import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.infrastructure.*;
 import org.junit.Before;
 import org.junit.Test;

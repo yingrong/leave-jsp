@@ -1,4 +1,4 @@
-package com.tw.api_maintenance.after.application;
+package com.tw.api_maintenance.after.application.dto;
 
 public class ActivityItemDto {
     private Long id;

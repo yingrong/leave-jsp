@@ -1,11 +1,12 @@
-package com.tw.api_maintenance.after.application;
+package com.tw.api_maintenance.after.application.service;
 
+import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
+import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
 import com.tw.api_maintenance.after.domain.error_handling.*;
 import com.tw.api_maintenance.after.domain.entity.Activity;
-import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
-import com.tw.api_maintenance.after.domain.error_handling.Error;
+import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
 import com.tw.api_maintenance.after.infrastructure.*;
@@ -18,15 +19,11 @@ public class TeamBuildingService {
     TeamBuildingPackageItemRepository teamBuildingPackageItemRepository;
     TeamBuildingPackageRepository teamBuildingPackageRepository;
     ActivityRepository activityRepository;
-    private ActivityMutexRepository activityMutexRepository;
-    private ActivityDependentRepository activityDependentRepository;
 
     public TeamBuildingService(TeamBuildingPackageItemRepository teamBuildingPackageItemRepository, TeamBuildingPackageRepository teamBuildingPackageRepository, ActivityRepository activityRepository, ActivityMutexRepository activityMutexRepository, ActivityDependentRepository activityDependentRepository) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;
-        this.activityMutexRepository = activityMutexRepository;
-        this.activityDependentRepository = activityDependentRepository;
         this.teamBuildingDomainService = new TeamBuildingDomainService(teamBuildingPackageItemRepository, teamBuildingPackageRepository, activityRepository,
                 activityMutexRepository, activityDependentRepository);
     }

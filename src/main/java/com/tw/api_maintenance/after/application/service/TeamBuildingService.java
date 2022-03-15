@@ -12,6 +12,7 @@ import com.tw.api_maintenance.after.domain.error_handling.UnexpectedTypeErrorDet
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.*;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
+import com.tw.api_maintenance.after.domain.service.TeamBuildingPackageItemValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,9 @@ public class TeamBuildingService {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;
-        this.teamBuildingDomainService = new TeamBuildingDomainService(teamBuildingPackageItemRepository, teamBuildingPackageRepository, activityRepository,
-                activityMutexRepository, activityDependentRepository);
+        this.teamBuildingDomainService = new TeamBuildingDomainService(new TeamBuildingPackageItemValidator(teamBuildingPackageItemRepository,
+                teamBuildingPackageRepository, activityRepository, activityMutexRepository, activityDependentRepository),
+                activityDependentRepository);
     }
 
     public TeamBuildingPackageItemDto queryTeamBuildingPackage(Long packageId) {

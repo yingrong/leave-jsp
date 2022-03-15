@@ -1,4 +1,4 @@
-package com.tw.api_mantenance.after;
+package com.tw.api_mantenance.after.application;
 
 import com.tw.api_maintenance.after.domain.error_handling.*;
 import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TeamBuildingDomainServiceTest {
+public class TeamBuildingServiceTest {
 
     TeamBuildingPackageItemRepository mockTeamBuildingPackageItemRepository;
     TeamBuildingPackageRepository mockTeamBuildingPackageRepository;

@@ -2,13 +2,13 @@ package com.tw.api_maintenance.after.application.service;
 
 import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
 import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
+import com.tw.api_maintenance.after.application.error_handling.ApplicationErrorName;
 import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.domain.entity.Activity;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
-import com.tw.api_maintenance.after.domain.error_handling.UnexpectedTypeErrorDetail;
+import com.tw.api_maintenance.after.application.error_handling.UnexpectedTypeErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.IActivityRepository;
 import com.tw.api_maintenance.after.domain.repository.ITeamBuildingPackageItemRepository;
@@ -59,7 +59,7 @@ public class TeamBuildingService {
         try {
             count = Integer.parseInt(requestCount);
         } catch (NumberFormatException ex) {
-            return new Error<>(ErrorName.UnexpectedType.getCode(), ErrorName.UnexpectedType.getDescription(),
+            return new Error<>(ApplicationErrorName.UnexpectedType.getCode(), ApplicationErrorName.UnexpectedType.getDescription(),
                     new UnexpectedTypeErrorDetail(requestCount, Integer.class.getName()));
         }
 

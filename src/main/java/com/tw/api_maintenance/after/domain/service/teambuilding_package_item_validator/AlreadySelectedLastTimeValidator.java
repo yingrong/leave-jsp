@@ -4,7 +4,7 @@ import com.tw.api_maintenance.after.domain.entity.Activity;
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.AlreadySelectedLastTimeErrorDetail;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.DomainErrorName;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.IActivityRepository;
 import com.tw.api_maintenance.after.domain.repository.ITeamBuildingPackageItemRepository;
@@ -31,7 +31,7 @@ public class AlreadySelectedLastTimeValidator implements TeamBuildingPackageItem
                 lastPackageItem.getActivityItems().stream()
                         .filter(ai -> ai.getSelected()).anyMatch(ai -> Objects.equals(ai.getActivityId(), activityItem.getActivityId()))) {
             List<Activity> activities = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId()));
-            throw new SelectActivityException(ErrorName.AlreadySelectedLastTime,
+            throw new SelectActivityException(DomainErrorName.AlreadySelectedLastTime,
                     new AlreadySelectedLastTimeErrorDetail(activityItem.getId(), activityItem.getActivityId(), activities.get(0).getName()));
         }
     }

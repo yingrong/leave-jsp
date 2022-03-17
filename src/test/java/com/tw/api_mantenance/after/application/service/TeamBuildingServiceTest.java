@@ -2,6 +2,7 @@ package com.tw.api_mantenance.after.application.service;
 
 import com.tw.api_maintenance.after.application.dto.ActivityItemDto;
 import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
+import com.tw.api_maintenance.after.application.error_handling.ApplicationErrorName;
 import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.application.service.TeamBuildingService;
 import com.tw.api_maintenance.after.domain.entity.Activity;
@@ -9,8 +10,7 @@ import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
-import com.tw.api_maintenance.after.domain.error_handling.UnexpectedTypeErrorDetail;
+import com.tw.api_maintenance.after.application.error_handling.UnexpectedTypeErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.*;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
@@ -127,8 +127,8 @@ public class TeamBuildingServiceTest {
         for (String requestCount : requestCounts) {
             Error<? extends ErrorDetail> error = teamBuildingService.selectActivityItem(teamBuildingPackageItemId, 12L, requestCount);
 
-            assertEquals(ErrorName.UnexpectedType.getCode(), error.getCode());
-            assertEquals(ErrorName.UnexpectedType.getDescription(), error.getDescription());
+            assertEquals(ApplicationErrorName.UnexpectedType.getCode(), error.getCode());
+            assertEquals(ApplicationErrorName.UnexpectedType.getDescription(), error.getDescription());
 
             UnexpectedTypeErrorDetail detail = (UnexpectedTypeErrorDetail) error.getDetail();
             assertEquals(requestCount, detail.getInputValue());

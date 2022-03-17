@@ -3,7 +3,7 @@ package com.tw.api_mantenance.after.domain.service;
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.DomainErrorName;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.IActivityDependentRepository;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
@@ -70,10 +70,10 @@ public class TeamBuildingDomainServiceTest {
                 new ActivityItem(11L, 13L, true, 5),
                 new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
 
-        ErrorName expectedErrorName = ErrorName.NotInRange;
+        DomainErrorName expectedDomainErrorName = DomainErrorName.NotInRange;
         ErrorDetail expectedErrorDetail = new ErrorDetail();
 
-        doThrow(new SelectActivityException(expectedErrorName, expectedErrorDetail)).when(mockTeamBuildingPackageItemValidationService).validate(teamBuildingPackageItem, 12L, 10);
+        doThrow(new SelectActivityException(expectedDomainErrorName, expectedErrorDetail)).when(mockTeamBuildingPackageItemValidationService).validate(teamBuildingPackageItem, 12L, 10);
 
         SelectActivityException actualException = null;
         try {
@@ -82,7 +82,7 @@ public class TeamBuildingDomainServiceTest {
             actualException = ex;
         }
 
-        assertEquals(expectedErrorName, actualException.getErrorName());
+        assertEquals(expectedDomainErrorName, actualException.getErrorName());
         assertEquals(expectedErrorDetail, actualException.getErrorDetail());
     }
 

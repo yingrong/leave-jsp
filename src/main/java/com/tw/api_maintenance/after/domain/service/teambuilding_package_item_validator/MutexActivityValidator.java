@@ -2,7 +2,7 @@ package com.tw.api_maintenance.after.domain.service.teambuilding_package_item_va
 
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.DomainErrorName;
 import com.tw.api_maintenance.after.domain.error_handling.MutexActivityErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.IActivityMutexRepository;
@@ -39,7 +39,7 @@ public class MutexActivityValidator implements TeamBuildingPackageItemValidator{
                 Map<Long, String> activityIdToName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), mutexActivityId))
                         .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
 
-                throw new SelectActivityException(ErrorName.MutexActivity, new MutexActivityErrorDetail(teamBuildingPackageItem.getId(), teamBuildingPackageItem.getPackageId(), packageName,
+                throw new SelectActivityException(DomainErrorName.MutexActivity, new MutexActivityErrorDetail(teamBuildingPackageItem.getId(), teamBuildingPackageItem.getPackageId(), packageName,
                         activityItem.getId(), activityItem.getActivityId(), activityIdToName.get(activityItem.getActivityId()),
                         mutexActivityId, activityIdToName.get(mutexActivityId)));
             }

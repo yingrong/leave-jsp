@@ -1,19 +1,19 @@
 package com.tw.api_maintenance.after.domain.exception;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.DomainErrorName;
 
 public class SelectActivityException extends Throwable {
-    private ErrorName errorName;
+    private DomainErrorName domainErrorName;
     private ErrorDetail errorDetail;
 
-    public SelectActivityException(ErrorName errorName, ErrorDetail errorDetail) {
+    public SelectActivityException(DomainErrorName domainErrorName, ErrorDetail errorDetail) {
 
-        this.errorName = errorName;
+        this.domainErrorName = domainErrorName;
         this.errorDetail = errorDetail;
     }
 
-    public ErrorName getErrorName() {
-        return errorName;
+    public DomainErrorName getErrorName() {
+        return domainErrorName;
     }
 
     public ErrorDetail getErrorDetail() {

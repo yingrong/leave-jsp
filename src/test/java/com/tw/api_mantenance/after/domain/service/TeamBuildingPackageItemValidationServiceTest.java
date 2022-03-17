@@ -69,7 +69,7 @@ public class TeamBuildingPackageItemValidationServiceTest {
             expectedException = e;
         }
 
-        assertEquals(ErrorName.MutexActivity, expectedException.getErrorName());
+        assertEquals(DomainErrorName.MutexActivity, expectedException.getErrorName());
         MutexActivityErrorDetail detail = (MutexActivityErrorDetail)expectedException.getErrorDetail();
 
         assertEquals(teamBuildingPackageItemId, detail.getPackageItemId().longValue());
@@ -114,7 +114,7 @@ public class TeamBuildingPackageItemValidationServiceTest {
             expectedException = e;
         }
 
-        assertEquals(ErrorName.ReliedNotSelected, expectedException.getErrorName());
+        assertEquals(DomainErrorName.ReliedNotSelected, expectedException.getErrorName());
         ReliedNotSelectedErrorDetail detail = (ReliedNotSelectedErrorDetail)expectedException.getErrorDetail();
 
         assertEquals(teamBuildingPackageItemId, detail.getPackageItemId().longValue());
@@ -150,7 +150,7 @@ public class TeamBuildingPackageItemValidationServiceTest {
             expectedException = e;
         }
 
-        assertEquals(ErrorName.AlreadySelectedLastTime, expectedException.getErrorName());
+        assertEquals(DomainErrorName.AlreadySelectedLastTime, expectedException.getErrorName());
         AlreadySelectedLastTimeErrorDetail detail = (AlreadySelectedLastTimeErrorDetail)expectedException.getErrorDetail();
 
         assertEquals(11L, detail.getActivityItemId().longValue());
@@ -183,7 +183,7 @@ public class TeamBuildingPackageItemValidationServiceTest {
                 expectedException = e;
             }
 
-            assertEquals(ErrorName.NotInRange, expectedException.getErrorName());
+            assertEquals(DomainErrorName.NotInRange, expectedException.getErrorName());
             NotInRangeErrorDetail detail = (NotInRangeErrorDetail)expectedException.getErrorDetail();
 
             assertEquals(requestCount, detail.getInputValue());

@@ -3,7 +3,7 @@ package com.tw.api_maintenance.after.domain.service.teambuilding_package_item_va
 import com.tw.api_maintenance.after.domain.entity.ActivityItem;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackage;
 import com.tw.api_maintenance.after.domain.entity.TeamBuildingPackageItem;
-import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
+import com.tw.api_maintenance.after.domain.error_handling.DomainErrorName;
 import com.tw.api_maintenance.after.domain.error_handling.ReliedNotSelectedErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.IActivityDependentRepository;
@@ -38,7 +38,7 @@ public class ReliedActivitySelectValidator implements TeamBuildingPackageItemVal
                 TeamBuildingPackage packageEntity = teamBuildingPackageRepository.findById(teamBuildingPackageItem.getPackageId());
                 Map<Long, String> idToActivityName = activityRepository.findByIds(Arrays.asList(activityItem.getActivityId(), reliedId))
                         .stream().collect(Collectors.toMap(a -> a.getId(), a -> a.getName()));
-                throw new SelectActivityException(ErrorName.ReliedNotSelected, new ReliedNotSelectedErrorDetail(teamBuildingPackageItem.getId(), teamBuildingPackageItem.getPackageId(), packageEntity.getName(),
+                throw new SelectActivityException(DomainErrorName.ReliedNotSelected, new ReliedNotSelectedErrorDetail(teamBuildingPackageItem.getId(), teamBuildingPackageItem.getPackageId(), packageEntity.getName(),
                         activityItem.getId(), activityItem.getActivityId(), idToActivityName.get(activityItem.getActivityId()),
                         reliedId, idToActivityName.get(reliedId)));
             }

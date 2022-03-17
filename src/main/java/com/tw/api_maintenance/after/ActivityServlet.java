@@ -5,6 +5,9 @@ import com.tw.api_maintenance.after.application.dto.TeamBuildingPackageItemDto;
 import com.tw.api_maintenance.after.application.service.TeamBuildingService;
 import com.tw.api_maintenance.after.application.error_handling.Error;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
+import com.tw.api_maintenance.after.domain.repository.*;
+import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
+import com.tw.api_maintenance.after.domain.service.TeamBuildingPackageItemValidationService;
 import com.tw.api_maintenance.after.infrastructure.*;
 
 import javax.servlet.ServletException;
@@ -21,7 +24,21 @@ public class ActivityServlet extends HttpServlet {
     TeamBuildingService teamBuildingService;
 
     public ActivityServlet() {
-        teamBuildingService = new TeamBuildingService(new TeamBuildingPackageItemRepository(), new TeamBuildingPackageRepository(), new ActivityRepository(), new ActivityMutexRepository(), new ActivityDependentRepository());
+        ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository = new TeamBuildingPackageItemRepository();
+        ITeamBuildingPackageRepository teamBuildingPackageRepository = new TeamBuildingPackageRepository();
+        IActivityRepository activityRepository = new ActivityRepository();
+        IActivityMutexRepository activityMutexRepository = new ActivityMutexRepository();
+        IActivityDependentRepository activityDependentRepository = new ActivityDependentRepository();
+
+        TeamBuildingPackageItemValidationService teamBuildingPackageItemValidationService = new TeamBuildingPackageItemValidationService(
+                teamBuildingPackageItemRepository,teamBuildingPackageRepository, activityRepository, activityMutexRepository, activityDependentRepository);
+
+        TeamBuildingDomainService teamBuildingDomainService = new TeamBuildingDomainService(teamBuildingPackageItemValidationService, activityDependentRepository);
+
+        teamBuildingService = new TeamBuildingService(teamBuildingPackageItemRepository,
+                teamBuildingPackageRepository,
+                activityRepository,
+                teamBuildingDomainService);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

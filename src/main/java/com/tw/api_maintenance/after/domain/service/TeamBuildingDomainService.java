@@ -9,16 +9,16 @@ import java.util.Objects;
 
 public class TeamBuildingDomainService {
     IActivityDependentRepository activityDependentRepository;
-    TeamBuildingPackageItemValidator teamBuildingPackageItemValidator;
+    TeamBuildingPackageItemValidationService teamBuildingPackageItemValidationService;
 
-    public TeamBuildingDomainService(TeamBuildingPackageItemValidator teamBuildingPackageItemValidator,
+    public TeamBuildingDomainService(TeamBuildingPackageItemValidationService teamBuildingPackageItemValidationService,
                                      IActivityDependentRepository activityDependentRepository) {
         this.activityDependentRepository = activityDependentRepository;
-        this.teamBuildingPackageItemValidator = teamBuildingPackageItemValidator;
+        this.teamBuildingPackageItemValidationService = teamBuildingPackageItemValidationService;
     }
 
     public void selectActivityItem(TeamBuildingPackageItem teamBuildingPackageItem, Long activityItemId, Integer count) throws SelectActivityException {
-        teamBuildingPackageItemValidator.validate(teamBuildingPackageItem, activityItemId, count);
+        teamBuildingPackageItemValidationService.validate(teamBuildingPackageItem, activityItemId, count);
         ActivityItem activityItem = teamBuildingPackageItem.getActivityItems().stream().filter(i -> Objects.equals(i.getId(), activityItemId)).findFirst().get();
         activityItem.setSelected(true);
         activityItem.setCount(count);

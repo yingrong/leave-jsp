@@ -10,9 +10,10 @@ import com.tw.api_maintenance.after.domain.error_handling.ErrorDetail;
 import com.tw.api_maintenance.after.domain.error_handling.ErrorName;
 import com.tw.api_maintenance.after.domain.error_handling.UnexpectedTypeErrorDetail;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
-import com.tw.api_maintenance.after.domain.repository.*;
+import com.tw.api_maintenance.after.domain.repository.IActivityRepository;
+import com.tw.api_maintenance.after.domain.repository.ITeamBuildingPackageItemRepository;
+import com.tw.api_maintenance.after.domain.repository.ITeamBuildingPackageRepository;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingDomainService;
-import com.tw.api_maintenance.after.domain.service.TeamBuildingPackageItemValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -24,13 +25,11 @@ public class TeamBuildingService {
     ITeamBuildingPackageRepository teamBuildingPackageRepository;
     IActivityRepository activityRepository;
 
-    public TeamBuildingService(ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository, ITeamBuildingPackageRepository teamBuildingPackageRepository, IActivityRepository activityRepository, IActivityMutexRepository activityMutexRepository, IActivityDependentRepository activityDependentRepository) {
+    public TeamBuildingService(ITeamBuildingPackageItemRepository teamBuildingPackageItemRepository, ITeamBuildingPackageRepository teamBuildingPackageRepository, IActivityRepository activityRepository,TeamBuildingDomainService teamBuildingDomainService) {
         this.teamBuildingPackageItemRepository = teamBuildingPackageItemRepository;
         this.teamBuildingPackageRepository = teamBuildingPackageRepository;
         this.activityRepository = activityRepository;
-        this.teamBuildingDomainService = new TeamBuildingDomainService(new TeamBuildingPackageItemValidator(teamBuildingPackageItemRepository,
-                teamBuildingPackageRepository, activityRepository, activityMutexRepository, activityDependentRepository),
-                activityDependentRepository);
+        this.teamBuildingDomainService = teamBuildingDomainService;
     }
 
     public TeamBuildingPackageItemDto queryTeamBuildingPackage(Long packageId) {

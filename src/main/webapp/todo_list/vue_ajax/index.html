@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo List, 重构后</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/vue.js"></script>
+    <link rel="stylesheet" href="/todo_list/common/index.css"/>
+    <script type="text/javascript" src="/todo_list/vue_ajax/todoHeader.js"></script>
+    <script type="text/javascript" src="/todo_list/vue_ajax/todoList.js"></script>
+    <script type="text/javascript" src="/todo_list/vue_ajax/todoFooter.js"></script>
+</head>
+
+<body>
+<section class="todoapp">
+    <div id="app">
+        <todo-header-component v-on:add-todo="saveTodo"></todo-header-component>
+        <todo-list-component :todos="todos" v-on:delete-todo="deleteTodo" >
+        </todo-list-component>
+        <todo-footer-component :hasCompleted="hasCompletedJs" v-on:delete-completed-todo="deleteCompletedTodo">
+        </todo-footer-component>
+    </div>
+</section>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                todos: []
+            }
+        },
+        computed: {
+            hasCompletedJs: function () {
+                return this.todos.filter(function(todo){return todo.completed}).length > 0
+            }
+        },
+        components: {
+            'todo-header-component': todoHeaderComponent,
+            'todo-list-component': todoListComponent,
+            'todo-footer-component': todoFooterComponent
+        },
+        created: function () {
+            var _this = this;
+            $.ajax({
+                url: "/todo-list/ajax?sAction=get",
+                dataType: "json",
+                success: function (data) {
+                    _this.todos = data;
+                }
+            })
+        },
+        methods: {
+            saveTodo: function (todo) {
+                this.todos.push(todo);
+            },
+            deleteTodo: function (id) {
+                var newTodos = this.todos.filter(todo => todo.id != id);
+                this.todos = newTodos;
+            },
+            deleteCompletedTodo: function () {
+                var _this = this;
+                $.ajax({
+                    url: "/todo-list/ajax?sAction=deleteCompleted",
+                    method: 'post',
+                    success: function () {
+                        var newTodos = _this.todos.filter(todo => !todo.completed);
+                        _this.todos = newTodos;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

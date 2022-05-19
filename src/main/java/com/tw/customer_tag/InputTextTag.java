@@ -36,7 +36,7 @@ public class InputTextTag extends BodyTagSupport {
         }
 
         if (null != onblur) {
-            builder.append("onblue=\"" + onblur + "\" ");
+            builder.append("onblur=\"" + onblur + "\" ");
         }
 
         builder.append(">");

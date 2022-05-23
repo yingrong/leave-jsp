@@ -5,6 +5,7 @@
 <head>
     <title>test jsp customer tag, Hello</title>
     <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="./inputTextTag.js"></script>
 
 </head>
 <body>
@@ -17,6 +18,11 @@
 <hr>
 <span>iput text will alert on "onblur" event(vue):</span>
 <div id="it"></div>
+<hr>
+<span>iput text will alert on "onblur" event(vue callback):</span>
+<div id="itc">
+    <input-text-tag-component :id="id" :name="name" :cb="myVueOnblur"></input-text-tag-component>
+</div>
 </body>
 
 <script>
@@ -41,5 +47,24 @@
             },
         }
     })
+
+    new Vue({
+        el: "#itc",
+        data: function () {
+            return {
+                id: "id3",
+                name: "name3"
+            }
+        },
+        components: {
+            "input-text-tag-component": inputTextTagComponent
+        },
+        methods: {
+            myVueOnblur: function () {
+                alert("my vue onblur !")
+            },
+        }
+    })
+
 </script>
 </html>

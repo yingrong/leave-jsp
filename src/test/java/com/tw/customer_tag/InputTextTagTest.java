@@ -57,7 +57,7 @@ public class InputTextTagTest {
         inputTextTag.doStartTag();
 
         // then
-        verify(jspWriter).println("<input type=\"text\"  id=\"id1\"  name=\"name1\" onblue=\"onblur()\" >");
+        verify(jspWriter).println("<input type=\"text\"  id=\"id1\"  name=\"name1\" onblur=\"onblur()\" >");
     }
 
 

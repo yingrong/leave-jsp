@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test form event VS Vue event</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+<body>
+
+
+<form name="form1" action="">
+    <div id="example-4">
+        <input type="radio" id="one" value="One" v-model="picked" onchange="formchange()" @change="vuechange">
+        <label for="one">One</label>
+        <br>
+        <input type="radio" id="two" value="Two" v-model="picked" onchange="formchange()" @change="vuechange">
+        <label for="two">Two</label>
+        <br>
+        <span>Picked: {{ picked }}</span>
+    </div>
+    <br>
+    <table>
+        <tr>
+            <td>表头第一列</td>
+            <td>表头第二列</td>
+        </tr>
+        <tr id="rowContainer">
+        </tr>
+
+    </table>
+</form>
+</body>
+
+<script>
+    let row = {
+        props: {
+            id: {
+                type: String
+            },
+            tdText: {
+                type: String
+            }
+        },
+
+        template: `
+        <tr id="'id">
+            <td>{{ tdText }} -1</td>
+            <td>{{ tdText }} -2</td>
+        </tr>
+        `
+    }
+
+    let rows = [
+        {id: 1, tdText: "a td:"}
+    ]
+
+    function createRows(rows) {
+
+        let rowsVue = new Vue({
+            el: '#rowContainer',
+            components: {
+                'row': row
+            },
+            template: `
+                <tbody>
+                    <row v-for="row in rows" :key="row.id" :ref="row.id" :row="row"></row>
+                </tbody>
+            `,
+            data: {
+                rows: rows
+            }
+        })
+
+        return rowsVue;
+    }
+
+
+    var vv = new Vue({
+        el: '#example-4',
+        data: {
+            picked: ''
+        },
+        methods: {
+
+
+            vuechange: function () {
+                debugger
+                console.log("vue change:v=" + this.picked)
+            },
+        },
+        computed: {
+            rowId: function () {
+                return 'row_';
+            },
+        }
+    })
+
+    function formchange() {
+        debugger
+        console.log("form change:v=" + vv.picked)
+        form1.one.checked = false;
+    }
+</script>
+</html>

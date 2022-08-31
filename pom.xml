@@ -25,7 +25,7 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
-<!--      <scope>provided</scope>-->
+      <scope>provided</scope>
     </dependency>
 
     <!--  for jsp customer tag  -->
@@ -33,7 +33,7 @@
       <groupId>javax.servlet.jsp</groupId>
       <artifactId>javax.servlet.jsp-api</artifactId>
       <version>2.3.3</version>
-<!--      <scope>provided</scope>-->
+      <scope>provided</scope>
     </dependency>
 
     <!-- Some containers like Tomcat don't have jstl library -->
@@ -77,6 +77,19 @@
 
   <build>
     <finalName>leave-jsp</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <port>8080</port>
+                      <path>/</path>
+<!--          <path>/${project.artifactId}</path>-->
+          <uriEncoding>UTF-8</uriEncoding>
+        </configuration>
+      </plugin>
+    </plugins>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

@@ -114,12 +114,12 @@ public class TeamBuildingServiceTest {
                 new ActivityItem(11L, 13L, true, 5),
                 new ActivityItem(12L, 14L, false, null)), new Date(2022, 2, 1), false);
 
-        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
+//        when(mockTeamBuildingPackageItemRepository.findById(teamBuildingPackageItemId)).thenReturn(teamBuildingPackageItem);
 
         TeamBuildingPackageItem completedTeamBuildingPackageItem = new TeamBuildingPackageItem(2329L, 101L, Arrays.asList(
                 new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), false);
 
-        when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
+//        when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
 
 
         List<String> requestCounts = Arrays.asList("abc", "@", "怪异");

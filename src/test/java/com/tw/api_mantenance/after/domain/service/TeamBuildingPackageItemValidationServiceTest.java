@@ -8,6 +8,8 @@ import com.tw.api_maintenance.after.domain.error_handling.*;
 import com.tw.api_maintenance.after.domain.exception.SelectActivityException;
 import com.tw.api_maintenance.after.domain.repository.*;
 import com.tw.api_maintenance.after.domain.service.TeamBuildingPackageItemValidationService;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -168,8 +170,6 @@ public class TeamBuildingPackageItemValidationServiceTest {
 
         TeamBuildingPackageItem completedTeamBuildingPackageItem = new TeamBuildingPackageItem(2329L, 101L, Arrays.asList(
                 new ActivityItem(223L, 13L, true, 5)), new Date(2022, 1, 3), false);
-
-        when(mockTeamBuildingPackageItemRepository.findLastCompleted()).thenReturn(completedTeamBuildingPackageItem);
 
 
         List<Integer> requestCounts = Arrays.asList(0, 51, -2);

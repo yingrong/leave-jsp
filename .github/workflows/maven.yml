@@ -28,4 +28,4 @@ jobs:
       uses: browser-actions/setup-chrome@latest
 
     - name: Build with Maven
-      run: mvn -B test --file pom.xml
+      run: mvn -B verify --file pom.xml

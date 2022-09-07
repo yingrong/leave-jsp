@@ -35,13 +35,11 @@ public class TodoListTest {
     public void should_add_new_todo() {
         // 打开首页，点击进入totoList demo ：jsp版本
         HomePage homePage = new HomePage(driver);
-        homePage.open();
-        TodoListPage todoListPage = homePage.gotoTodoListPage();
+        TodoListPage todoListPage = homePage.open()
+                .gotoTodoListPage();
 
-        // 新增一个 todo项
-        todoListPage.addTodo("todo1");
-
-        assertTrue(todoListPage.todoListContains("todo1"));
+        // 新增一个 todo项后，list会增加
+        assertTrue(todoListPage.addTodo("todo1").todoListContains("todo1"));
     }
 
     @After

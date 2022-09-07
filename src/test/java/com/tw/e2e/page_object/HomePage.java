@@ -12,8 +12,9 @@ public class HomePage {
         this.driver = driver;
     }
 
-    public void open() {
+    public HomePage open() {
         driver.get("http://localhost:8080/");
+        return this;
     }
 
     public TodoListPage gotoTodoListPage() {

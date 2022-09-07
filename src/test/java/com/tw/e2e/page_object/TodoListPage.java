@@ -18,9 +18,11 @@ public class TodoListPage {
         this.driver = driver;
     }
 
-    public void addTodo(String todo) {
+    public TodoListPage addTodo(String todo) {
         WebElement todoInput = driver.findElement(todoInputBy);
         todoInput.sendKeys(todo + Keys.ENTER);
+
+        return this;
     }
 
     public boolean todoListContains(String todo) {

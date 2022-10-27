@@ -20,7 +20,7 @@ npm run build
 npm run lint
 ```
 
-### add jest unit test
+### add vue test
 ```shell
 # add jest to exist project
 vue add unit-jest

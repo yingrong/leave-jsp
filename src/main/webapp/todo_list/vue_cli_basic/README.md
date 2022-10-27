@@ -24,6 +24,8 @@ npm run lint
 ```shell
 # add jest to exist project
 vue add unit-jest
+# add testing-library
+npm install --save-dev @testing-library/vue@5
 # run test
 npm run test:unit
 ```

@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
+import { render} from "@testing-library/vue";
 import HelloWorld from '@/components/HelloWorld.vue'
 
 describe('HelloWorld.vue', () => {
@@ -9,4 +10,16 @@ describe('HelloWorld.vue', () => {
     })
     expect(wrapper.text()).toMatch(msg)
   })
+
+
+  it('should renders msg when mounted', () => {
+      const { getByText } = render(HelloWorld, {
+        props: {
+          msg: 'new message for testing-library'
+        }
+      });
+
+      getByText('new message for testing-library')
+
+  });
 })

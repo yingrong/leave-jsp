@@ -20,6 +20,15 @@ npm run build
 npm run lint
 ```
 
+### add jest unit test
+```shell
+# add jest to exist project
+vue add unit-jest
+# run test
+npm run test:unit
+```
+
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 

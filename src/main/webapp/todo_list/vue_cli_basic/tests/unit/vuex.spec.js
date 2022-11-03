@@ -22,11 +22,11 @@ describe('test vuex', () => {
         // need to do that.
         const { getByText} = render(VuexTest, {store})
 
-        // await fireEvent.click(getByText('+'))
-        // expect(getByTestId('count-value')).toHaveTextContent('1000')
-        //
-        // await fireEvent.click(getByText('-'))
-        // expect(getByTestId('count-value')).toHaveTextContent('1000')
+        await fireEvent.click(getByText('+'))
+        getByText('1000')
+
+        await fireEvent.click(getByText('-'))
+        getByText('1000')
     });
 
     it('should render2', async () => {
@@ -53,5 +53,11 @@ describe('test vuex', () => {
                 },
             }),
         })
+
+        await fireEvent.click(getByText('+'))
+        getByText('4')
+
+        await fireEvent.click(getByText('-'))
+        getByText('3')
     });
 })

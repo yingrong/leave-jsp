@@ -18,14 +18,14 @@
 </head>
 
 <body onload="asyncInit()">
-    <!-- FCP -->
-    <h3>Performance demo</h3>
-    <label for="boxNumber"></label><input id="boxNumber" type="number" placeholder="number to add" value="1">
-    <input type="button" onclick="addBoxFromClick()" value="add more box">
-    <!--  LCP -->
-    <div id="lcp" style="word-wrap: normal; overflow-wrap: break-word;">
-    </div>
-    <div id="box-container" class="container"></div>
+<!-- FCP -->
+<h3>Performance demo</h3>
+<label for="boxNumber"></label><input id="boxNumber" type="number" placeholder="number to add" value="1">
+<input type="button" onclick="addBoxFromClick()" value="add more box">
+<!--  LCP -->
+<div id="lcp" style="word-wrap: normal; overflow-wrap: break-word;">
+</div>
+<div id="box-container" class="container"></div>
 </body>
 <script>
 
@@ -109,7 +109,7 @@
 
     function addBoxFromClick() {
         let boxNumber = document.getElementById('boxNumber').value
-        if(!boxNumber) {
+        if (!boxNumber) {
             boxNumber = 1;
         }
         addBox(boxNumber)
@@ -129,7 +129,7 @@
             let newContent = document.createTextNode(String(originalLength))
             newDiv.appendChild(newContent);
 
-            let child = Math.floor((newLength-1) * Math.random())
+            let child = Math.floor((newLength - 1) * Math.random())
             let curNode = document.getElementById('box-container').childNodes[child]
             document.getElementById('box-container').insertBefore(newDiv, curNode)
             // document.getElementById('box-container').appendChild(newDiv)
@@ -140,11 +140,11 @@
         }
     }
 
-    function sorted(arr){
+    function sorted(arr) {
         let second_index;
-        for(let first_index = 0; first_index < arr.length; first_index++){
+        for (let first_index = 0; first_index < arr.length; first_index++) {
             second_index = first_index + 1;
-            if(arr[second_index] - arr[first_index] < 0) {
+            if (arr[second_index] - arr[first_index] < 0) {
                 return false
             }
         }

@@ -116,6 +116,8 @@
     }
 
     function addBox(boxNumber) {
+        let originalLength = document.getElementById('box-container').childNodes.length
+        let newLength = originalLength + Number(boxNumber);
         for (let i = 0; i < boxNumber; i++) {
             let newDiv = document.createElement("div");
             let width = 100 * (1 + Math.random())
@@ -123,11 +125,11 @@
             newDiv.style.width = width + 'px'
             newDiv.style.height = height + 'px'
             newDiv.style.backgroundColor = `rgb(${255 * Math.random()}, ${255 * Math.random()},${255 * Math.random()})`
-            let newContent = document.createTextNode(new Date().getTime()%10000000);
+            originalLength++;
+            let newContent = document.createTextNode(String(originalLength))
             newDiv.appendChild(newContent);
 
-            let length = document.getElementById('box-container').childNodes.length
-            let child = Math.floor((length-1) * Math.random())
+            let child = Math.floor((newLength-1) * Math.random())
             let curNode = document.getElementById('box-container').childNodes[child]
             document.getElementById('box-container').insertBefore(newDiv, curNode)
             // document.getElementById('box-container').appendChild(newDiv)

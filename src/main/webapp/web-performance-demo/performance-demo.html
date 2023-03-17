@@ -224,11 +224,11 @@
             let newContent = document.createTextNode(String(originalLength))
             newDiv.appendChild(newContent);
 
-            let child = Math.floor((newLength - 1) * Math.random())
-            let curNode = document.getElementById('box-container').childNodes[child]
             if(document.getElementById('insert-method-toggle').checked) {
                 document.getElementById('box-container').appendChild(newDiv)
             } else {
+                let child = Math.floor((newLength - 1) * Math.random())
+                let curNode = document.getElementById('box-container').childNodes[child]
                 document.getElementById('box-container').insertBefore(newDiv, curNode)
             }
         }

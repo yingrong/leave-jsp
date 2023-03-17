@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance demo</title>
+    <style>
+        .container {
+            margin-top: 20px;
+            width: auto;
+            max-width: 1600px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body onload="asyncInit()">
+    <!-- FCP -->
+    <h3>Performance demo</h3>
+    <label for="boxNumber"></label><input id="boxNumber" type="number" placeholder="number to add" value="1">
+    <input type="button" onclick="addBoxFromClick()" value="add more box">
+    <!--  LCP -->
+    <div id="lcp" style="word-wrap: normal; overflow-wrap: break-word;">
+    </div>
+    <div id="box-container" class="container"></div>
+</body>
+<script>
+
+    function asyncInit() {
+        setTimeout(() => {
+            init()
+        }, 10);
+    }
+
+    /**
+     * FCP 与 LCP 演示
+     * 火焰图讲解
+     * 基础：
+     * 层级：函数调用栈
+     * 宽度：函数执行时长
+     * 火焰图就是看顶层的哪个函数占据的宽度最大。只要有"平顶"（plateaus），就表示该函数可能存在性能问题。
+     * 浏览器的火焰图与标准火焰图有两点差异：它是倒置的（即调用栈最顶端的函数在最下方）；x 轴是时间轴，而不是抽样次数。
+     * 
+     */
+    function init() {
+        console.log('init start');
+        shortFunction()
+        let params = new URLSearchParams(new URL(window.location).search)
+        let factor = params.get('factor') || 1
+        someTask(factor)
+        let boxNumber = params.get('box') || 1
+        addBox(boxNumber)
+
+        mediumFunction()
+
+        factor = 10000
+        let sum = 0;
+        for (let i = 0; i < factor; i++) {
+            for (let j = 0; j < factor; j++) {
+                sum = sum + i + j;
+            }
+        }
+
+        longFunction()
+
+        setLCP()
+        console.log('init end');
+    }
+
+    function setLCP() {
+        let lcp = document.getElementById('lcp')
+        lcp.textContent = 'LCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCPLCP'
+        lcp.style.height = '100px'
+        lcp.style.backgroundColor = '#ee6d83'
+    }
+
+    function someTask(factor) {
+        console.log('some task start:', factor);
+        let sum = 0;
+        for (let i = 0; i < factor; i++) {
+            for (let j = 0; j < factor; j++) {
+                sum = sum + i + j;
+            }
+        }
+        console.log('some task end sum:', sum)
+    }
+
+    function shortFunction() {
+        let sum = 0;
+        for (let i = 0; i < 100; i++) {
+            sum = sum + i
+        }
+    }
+
+    function mediumFunction() {
+        for (let i = 0; i < 100; i++) {
+            shortFunction()
+        }
+    }
+
+    function longFunction() {
+        for (let i = 0; i < 10000; i++) {
+            mediumFunction()
+        }
+    }
+
+    function addBoxFromClick() {
+        let boxNumber = document.getElementById('boxNumber').value
+        if(!boxNumber) {
+            boxNumber = 1;
+        }
+        addBox(boxNumber)
+    }
+
+    function addBox(boxNumber) {
+        for (let i = 0; i < boxNumber; i++) {
+            let newDiv = document.createElement("div");
+            let width = 100 * (1 + Math.random())
+            let height = 50 + 30 * (1 + Math.random())
+            newDiv.style.width = width + 'px'
+            newDiv.style.height = height + 'px'
+            newDiv.style.backgroundColor = `rgb(${255 * Math.random()}, ${255 * Math.random()},${255 * Math.random()})`
+            let newContent = document.createTextNode(new Date().getTime()%10000000);
+            newDiv.appendChild(newContent);
+
+            let length = document.getElementById('box-container').childNodes.length
+            let child = Math.floor((length-1) * Math.random())
+            let curNode = document.getElementById('box-container').childNodes[child]
+            document.getElementById('box-container').insertBefore(newDiv, curNode)
+            // document.getElementById('box-container').appendChild(newDiv)
+        }
+    }
+
+</script>
+
+</html>

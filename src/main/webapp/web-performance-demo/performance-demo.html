@@ -43,7 +43,7 @@
      * 宽度：函数执行时长
      * 火焰图就是看顶层的哪个函数占据的宽度最大。只要有"平顶"（plateaus），就表示该函数可能存在性能问题。
      * 浏览器的火焰图与标准火焰图有两点差异：它是倒置的（即调用栈最顶端的函数在最下方）；x 轴是时间轴，而不是抽样次数。
-     * 
+     *
      */
     function init() {
         console.log('init start');
@@ -133,7 +133,22 @@
             let curNode = document.getElementById('box-container').childNodes[child]
             document.getElementById('box-container').insertBefore(newDiv, curNode)
             // document.getElementById('box-container').appendChild(newDiv)
+
+            let nodesContent = []
+            document.getElementById('box-container').childNodes.forEach(node => nodesContent.push(node.innerHTML))
+            console.log('************* 顺序插入：' + sorted(nodesContent))
         }
+    }
+
+    function sorted(arr){
+        let second_index;
+        for(let first_index = 0; first_index < arr.length; first_index++){
+            second_index = first_index + 1;
+            if(arr[second_index] - arr[first_index] < 0) {
+                return false
+            }
+        }
+        return true
     }
 
 </script>
